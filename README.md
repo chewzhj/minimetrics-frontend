@@ -14,8 +14,8 @@ If there are (or arent) any changes to the packages used (when cloning from gith
 Then run the React App with `npm start`
 
 The git model that I followed during capstone is: https://nvie.com/posts/a-successful-git-branching-model/
-..* `develop` is the main branch where we use for development
-..* `feature-dashboard` is the branch name you might use for a dashboard, where you push your commits to.
+  * `develop` is the main branch where we use for development
+  * `feature-dashboard` is the branch name you might use for a dashboard, where you push your commits to.
 
 Install Babel Language Support on your editor: https://babeljs.io/docs/en/editors/
 
