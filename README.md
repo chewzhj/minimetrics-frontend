@@ -3,17 +3,21 @@ Will update this readme if we need more FAQ.
 
 ### Setup Information
 
-Install node.js on your computer.
-Clone the repository into the folder of your choice.
-On your terminal (node.js cmd, git bash, powershell), run `npm install` to install the node.js packages required by this project.
-To run the React App, run `npm start` on the terminal.
+1. Install node.js on your computer.
+2. Clone the repository into the folder of your choice.
+3. On your terminal (node.js cmd, git bash, powershell), run `npm install` to install the node.js packages required by this project.
 
 ### Typical Usage
 
 If there are (or arent) any changes to the packages used (when cloning from github), run `npm install` again to update the packages.
 
 Then run the React App with `npm start`
-Hopefully your editor has JSX/ES2015 support so it looks nice.
+
+The git model that I followed during capstone is: https://nvie.com/posts/a-successful-git-branching-model/
+..* `develop` is the main branch where we use for development
+..* `feature-dashboard` is the branch name you might use for a dashboard, where you push your commits to.
+
+Install Babel Language Support on your editor: https://babeljs.io/docs/en/editors/
 
 ### Folder Structure
 
