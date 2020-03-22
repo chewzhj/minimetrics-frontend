@@ -1,5 +1,5 @@
 import React from 'react'
-import { Layout, Menu, Avatar, Popover } from 'antd';
+import { Layout, Menu, Avatar, Popover, PageHeader } from 'antd';
 import {
   UserOutlined,
   BarChartOutlined,
@@ -8,26 +8,26 @@ import {
   PieChartOutlined,
   DownOutlined,
 } from '@ant-design/icons';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Wordless_Logo from '../assets/img/mm_wordless_logo.png'
 import '../assets/css/Sidebar.css'
 
 const { Header, Content, Footer, Sider } = Layout;
-const {SubMenu} = Menu
+const { SubMenu } = Menu
 
 export default class SideBar extends React.Component {
 
-  state={
+  state = {
     visible: false
   }
 
-  onVisibleChange = (visible) => this.setState({visible})
+  onVisibleChange = (visible) => this.setState({ visible })
 
   render() {
-    const {activeTab} = this.props
+    const { activeTab } = this.props
 
     return (
-      <Layout style={{minHeight: '100vh'}}>
+      <Layout style={{ minHeight: '100vh' }}>
         <Sider
           breakpoint="lg"
           collapsedWidth="0"
@@ -38,9 +38,9 @@ export default class SideBar extends React.Component {
             console.log(collapsed, type);
           }}
         >
-          <div style={{height: 40, margin: 24}}>
+          <div style={{ height: 40, margin: 24 }}>
             <Link to='/'>
-              <img src={Wordless_Logo} alt="MiniMetrics" style={{height: 39, width: 152}}/>
+              <img src={Wordless_Logo} alt="MiniMetrics" style={{ height: 39, width: 152 }} />
             </Link>
           </div>
           <Menu theme="dark" mode="inline" defaultSelectedKeys={[activeTab]} defaultOpenKeys={[activeTab]}>
@@ -86,23 +86,30 @@ export default class SideBar extends React.Component {
           </Menu>
         </Sider>
         <Layout>
-          <Header style={{ padding: 0, background: '#fff' }}>
-            <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems:'center', height: '100%'}}>
+          <Header style={{ padding: 0, background: '#fff', boxShadow: '1px 1px 4px 0px #bcbcbc', zIndex: 1 }}>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', height: '100%' }}>
               <Popover
                 content='Logout'
                 trigger='click'
                 visible={this.state.visible}
                 onVisibleChange={this.onVisibleChange}
               >
-                <div style={{marginRight: 20}}>
-                  <Avatar icon={<UserOutlined/>} style={{marginRight: 12}}/>
+                <div style={{ marginRight: 20 }}>
+                  <Avatar icon={<UserOutlined />} style={{ marginRight: 12 }} />
                   <span>Manager</span>
-                  <DownOutlined style={{marginLeft: 12}}/>
+                  <DownOutlined style={{ marginLeft: 12 }} />
                 </div>
               </Popover>
             </div>
 
           </Header>
+          <PageHeader
+            className="site-page-header"
+            title="Title"
+            breadcrumb={{}}
+            subTitle="This is a subtitle"
+            style= {{ background: '#fff', paddingLeft: 50, zIndex: 0 }}
+          />
           <Content style={{ margin: '24px 16px 0' }}>
             <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
               {this.props.children}
