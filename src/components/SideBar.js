@@ -1,5 +1,5 @@
 import React from 'react'
-import { Layout, Menu, Avatar, Popover, PageHeader } from 'antd';
+import { Layout, Menu, Avatar, Popover, PageHeader, Breadcrumb } from 'antd';
 import {
   UserOutlined,
   BarChartOutlined,
@@ -24,7 +24,9 @@ export default class SideBar extends React.Component {
   onVisibleChange = (visible) => this.setState({ visible })
 
   render() {
-    const { activeTab } = this.props
+    const { activeTab, title, subtitle } = this.props
+    const phtitle = title || "Title"
+    const phsubtitle = subtitle || "Subtitle"
 
     return (
       <Layout style={{ minHeight: '100vh' }}>
@@ -105,9 +107,8 @@ export default class SideBar extends React.Component {
           </Header>
           <PageHeader
             className="site-page-header"
-            title="Title"
-            breadcrumb={{}}
-            subTitle="This is a subtitle"
+            title={phtitle}
+            subTitle={phsubtitle}
             style= {{ background: '#fff', paddingLeft: 50, zIndex: 0 }}
           />
           <Content style={{ margin: '24px 16px 0' }}>

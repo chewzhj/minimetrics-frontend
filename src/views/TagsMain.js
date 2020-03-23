@@ -10,21 +10,6 @@ import {
 } from 'antd';
 import { EyeOutlined } from '@ant-design/icons'
 
-const routes = [
-  {
-    path: 'dashboard',
-    breadcrumbName: 'Dashboard',
-  },
-  {
-    path: 'insights',
-    breadcrumbName: 'Insights',
-  },
-  {
-    path: 'topicInsights',
-    breadcrumbName: 'Topic Insights ',
-  },
-];
-
 const columns = [
   {
     title: 'Tag',
@@ -79,7 +64,7 @@ export default class TagsMain extends React.Component {
   render() {
     const tableData = this.generateTableData()
     return (
-      <SideBar activeTab='tags' breadcrumbName={{ routes }}>
+      <SideBar activeTab='tags' title='Tags' subtitle='This is the tags page'>
         <Tabs defaultActiveKey="1">
           <TabPane tab="Statistics By Incorrect Attempts" key="1">
             <Row>
