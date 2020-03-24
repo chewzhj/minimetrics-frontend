@@ -6,7 +6,7 @@ export default class Dashboard extends React.Component {
 
   render() {
     return (
-      <SideBar activeTab='dashboard'>
+      <SideBar activeTab='dashboard' title='Dashboard' subtitle='Overview'>
         Dashboard
       </SideBar>
     )
