@@ -34,10 +34,10 @@ export default class SideBar extends React.Component {
           breakpoint="lg"
           collapsedWidth="0"
           onBreakpoint={broken => {
-            console.log(broken);
+            // console.log(broken);
           }}
           onCollapse={(collapsed, type) => {
-            console.log(collapsed, type);
+            // console.log(collapsed, type);
           }}
         >
           <div style={{ height: 40, margin: 24 }}>
@@ -60,7 +60,7 @@ export default class SideBar extends React.Component {
             </Menu.Item>
             <Menu.Item key="quiz">
               <BulbOutlined />
-              <Link to="/quizzes">
+              <Link to="/quiz">
                 <span className="nav-text">Quizzes</span>
               </Link>
             </Menu.Item>
