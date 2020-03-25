@@ -65,15 +65,10 @@ export default class QuizCreation extends React.Component {
             </Button>
           </Col>
           <Col md={24} sm={21} xs={24} style={{ marginTop: 20 }}>
-            <Link to='#'>
-              <Button type='primary' style={{ float: 'right', marginLeft: 10 }}>
-                Create Quiz
-                </Button>
-            </Link>
             <Link to='/quiz'>
               <Button type='danger' style={{ float: 'right', marginRight: 10 }}>
                 Discard Quiz
-                </Button>
+              </Button>
             </Link>
           </Col>
         </Row>
@@ -203,7 +198,7 @@ export default class QuizCreation extends React.Component {
                 <Col md={16} xs={21}>
 
                   <Card title={QuizPhrases.BUILD_QUESTION + " " + 1}>
-                  
+
                     <Row gutter={[5, 5]}>
                       <Col md={24} xs={21} style={{ marginTop: 20, marginLeft: 20 }}>
                         <Text strong>Title</Text>
@@ -278,6 +273,16 @@ export default class QuizCreation extends React.Component {
 
           </TabPane>
         </Tabs>
+
+        <Row>
+          <Col md={20} sm={21} xs={21} style={{ marginTop: 20, marginLeft: 20 }}>
+            <Link to='#'>
+              <Button type='primary' style={{ float: 'left' }}>
+                Create Quiz
+            </Button>
+            </Link>
+          </Col>
+        </Row>
 
       </SideBar>
     )
