@@ -15,8 +15,8 @@ const Routing = () => {
   return (
     <Switch>
 
+      <Route path="/login" component={LoginContainer}/>
       {/* <Route path="/index" component={SideBar}/> */}
-      <Route path="/dashboard" component={Dashboard} />
       <Route path="/users" component={Users} />
 
       <Route path="/quiz/create" component={QuizCreationContainer} />
@@ -29,7 +29,7 @@ const Routing = () => {
       <Route path="/react-default" component={DefaultReactApp}/>
 
       {/* fall through */}
-      <Route path="/" component={LoginContainer}/>
+      <Route path="/" component={Dashboard} />
     </Switch>
   )
 }

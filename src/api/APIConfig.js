@@ -7,6 +7,6 @@ export default axios.create({
     'Content-Type': 'application/json',
     'Accept': 'application/json',
     'X-Authorization': sessionStorage.getItem('sessionKey'),
-    'Authorization': sessionStorage.getItem('username'),
+    // 'Authorization': sessionStorage.getItem('username'),
   }
 })
