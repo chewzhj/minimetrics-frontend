@@ -195,7 +195,7 @@ export default class QuizCreation extends React.Component {
 
             <div id="appendNewQuestion">
               <Row style={{ marginTop: 20, marginLeft: 20 }}>
-                <Col md={16} xs={21}>
+                <Col md={20} xs={21}>
 
                   <Card title={QuizPhrases.BUILD_QUESTION + " " + 1}>
 
@@ -205,7 +205,7 @@ export default class QuizCreation extends React.Component {
                       </Col>
                     </Row>
                     <Row gutter={[5, 5]} style={{ marginLeft: 20 }}>
-                      <Col md={12} xs={21}>
+                      <Col md={18} xs={21}>
                         <TextArea placeholder="Question Title" autoSize />
                       </Col>
                     </Row>
@@ -216,7 +216,7 @@ export default class QuizCreation extends React.Component {
                       </Col>
                     </Row>
                     <Row gutter={[5, 5]} style={{ marginLeft: 40 }}>
-                      <Col md={12} xs={21}>
+                      <Col md={18} xs={21}>
                         <Radio.Group style={{ width: '80%' }}>
                           <Radio style={radioStyle} value={1}>
                             <TextArea autoSize />
