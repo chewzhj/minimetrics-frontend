@@ -15,7 +15,7 @@ const mapDispatchToProps = dispatch => ({
   onChangeEmail: (value) => dispatch(onChangeEmail(value)),
   onChangePassword: (value) => dispatch(onChangePassword(value)),
   onChangeRmbme: (value) => dispatch(onChangeRmbme(value)),
-  clickLogin: () => dispatch(clickLogin()),
+  clickLogin: (u,p) => dispatch(clickLogin(u,p)),
 })
 
 export default connect(

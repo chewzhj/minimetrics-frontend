@@ -17,6 +17,11 @@ export default class Login extends React.Component {
   onCheckRememberMe = (e) => {
     this.props.onChangeRmbme(e.target.checked)
   }
+  onClickLogin = () => {
+    const {email, password} = this.props.login
+    console.log(email, password);
+    this.props.clickLogin(email, password)
+  }
 
   render() {
     const {email, password, rmbme} = this.props.login
@@ -46,11 +51,9 @@ export default class Login extends React.Component {
             <Checkbox onChange={this.onCheckRememberMe} checked={rmbme}>{LoginPhrases.INPUT_RMBME}</Checkbox>
             <Link to='#'>{LoginPhrases.LINK_FORGOT_PW}</Link>
           </div>
-          <Link to='/dashboard'>
-            <Button type='primary' style={{width: '100%', margin: '8px 0'}}>
-              {LoginPhrases.BUTTON_LOGIN}
-            </Button>
-          </Link>
+          <Button type='primary' onClick={this.onClickLogin} style={{width: '100%', margin: '8px 0'}}>
+            {LoginPhrases.BUTTON_LOGIN}
+          </Button>
           <div style={{width: '100%', margin: '8px 0', display: 'flex', justifyContent: 'flex-end'}}>
             <Link to='/#'>{LoginPhrases.LINK_NUSNET_LOGIN}</Link>
           </div>
