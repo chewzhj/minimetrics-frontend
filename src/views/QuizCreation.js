@@ -138,8 +138,6 @@ export default class QuizCreation extends React.Component {
   }
   submitQuiz = () => {
     const {
-      currentTab,
-      quizPreviewVisible,
       quizTitle,
       quizStartEnd,
       quizMaxAttempts,
@@ -162,7 +160,7 @@ export default class QuizCreation extends React.Component {
         tagList: qn.tags.map(tagText => ({ 'tagName': tagText })),
         points: 1, // not included
         answerList: answerList,
-        enableConfidence: qn.quizConfidenceEnabled,
+        enableConfidence: quizConfidenceEnabled,
         feedback: null, // not included
       }
     })
@@ -189,6 +187,7 @@ export default class QuizCreation extends React.Component {
     }
 
     console.log(quizObject);
+    this.props.createQuiz(quizObject)
   }
 
   render() {
@@ -201,6 +200,7 @@ export default class QuizCreation extends React.Component {
       quizAttemptUnlimited,
       quizConfidenceEnabled,
       quizQuestions,
+      submitting,
     } = this.props.quizCreation
     const {tabPosition} = this.state
     const disableSubmit = !this.enableSubmit()
@@ -368,7 +368,7 @@ export default class QuizCreation extends React.Component {
         <Row>
           <Col md={20} sm={21} xs={21} style={{ marginTop: 20, marginLeft: 20 }}>
             <Link to='#'>
-              <Button onClick={this.submitQuiz} disabled={disableSubmit} type='primary' style={{ float: 'left' }}>
+              <Button onClick={this.submitQuiz} loading={submitting} disabled={disableSubmit} type='primary' style={{ float: 'left' }}>
                 Create Quiz
             </Button>
             </Link>

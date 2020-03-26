@@ -10,6 +10,7 @@ import {
   toggleAttemptLimit,
   toggleConfidence,
   updateQuestions,
+  createQuiz,
 } from '../actions/quizCreationActions'
 
 const mapStateToProps = state => ({
@@ -26,6 +27,7 @@ const mapDispatchToProps = dispatch => ({
   toggleAttemptLimit: (value) => dispatch(toggleAttemptLimit(value)),
   toggleConfidence: (value) => dispatch(toggleConfidence(value)),
   updateQuestions: (value) => dispatch(updateQuestions(value)),
+  createQuiz: (value) => dispatch(createQuiz(value)),
 })
 
 export default connect(

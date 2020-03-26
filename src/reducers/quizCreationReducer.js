@@ -8,12 +8,16 @@ import {
   QUIZ_CREATION_TOGGLE_ATTEMPT_LIMIT,
   QUIZ_CREATION_TOGGLE_CONFIDENCE,
   QUIZ_CREATION_UPDATE_QUESTIONS,
+  QUIZ_CREATION_CREATE_START,
+  QUIZ_CREATION_CREATE_SUCCESS,
+  QUIZ_CREATION_CREATE_FAILURE,
 } from '../variables/constants/QuizCreationConstants'
 
 const initialState = {
   // default settings
   currentTab: 'basic-settings',
   quizPreviewVisible: false,
+  submitting: false,
 
   // quiz settings
   quizTitle: '',
@@ -80,6 +84,12 @@ export function quizCreationReducer(state = initialState, action) {
       return {...state, quizConfidenceEnabled: action.value}
     case QUIZ_CREATION_UPDATE_QUESTIONS:
       return {...state, quizQuestions: action.value}
+    case QUIZ_CREATION_CREATE_START:
+      return {...state, submitting: true}
+    case QUIZ_CREATION_CREATE_SUCCESS:
+      return {...state, submitting: false}
+    case QUIZ_CREATION_CREATE_FAILURE:
+      return {...state, submitting: false}
     default:
       return state
   }

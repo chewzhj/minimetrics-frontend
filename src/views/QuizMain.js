@@ -62,6 +62,9 @@ const rowSelection = {
 
 export default class QuizMain extends React.Component {
 
+  // componentDidMount() {
+  // }
+
   generateTableData = () => {
     const tableData = []
 
