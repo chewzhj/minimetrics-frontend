@@ -31,7 +31,7 @@ export default class QuizCreation extends React.Component {
   changeQuestions = (value) => this.props.updateQuestions(value)
 
   addQuestion = () => {
-    const {quizQuestions} = this.props.quizCreation
+    const { quizQuestions } = this.props.quizCreation
     const updatedQuestions = quizQuestions.slice(0)
     let newQuestionNumber = quizQuestions.reduce((acc, cur) => Math.max(acc, cur.questionNumber), 0) + 1
 
@@ -52,7 +52,7 @@ export default class QuizCreation extends React.Component {
     this.changeQuestions(updatedQuestions)
   }
   removeQuestion = (qnNumber) => {
-    const {quizQuestions} = this.props.quizCreation
+    const { quizQuestions } = this.props.quizCreation
     let updatedQuestions = quizQuestions.filter(question => question.questionNumber !== qnNumber)
     updatedQuestions.sort((q1, q2) => q1.questionNumber - q2.questionNumber)
 
@@ -64,7 +64,7 @@ export default class QuizCreation extends React.Component {
     this.changeQuestions(updatedQuestions)
   }
   onChangeQuestion = (qnNumber, qn) => {
-    const {quizQuestions} = this.props.quizCreation
+    const { quizQuestions } = this.props.quizCreation
     let updatedQuestions = quizQuestions.filter(question => question.questionNumber !== qnNumber)
 
     updatedQuestions.push(qn)
@@ -96,7 +96,7 @@ export default class QuizCreation extends React.Component {
 
       return {
         questionText: qn.title,
-        tagList: qn.tags.map(tagText => ({'tagName': tagText})),
+        tagList: qn.tags.map(tagText => ({ 'tagName': tagText })),
         points: 1, // not included
         answerList: answerList,
         enableConfidence: qn.quizConfidenceEnabled,
@@ -107,22 +107,22 @@ export default class QuizCreation extends React.Component {
     const dtf = "YYYY-MM-DD HH:mm:ss"
 
     const quizObject = {
-    	"title": quizTitle,
-    	"module": "IS1103",
-    	"description": "4KIDSONLY", // not included
-    	"isPublished": true,
-    	"password": "", // not included
-    	"timeLimit": 60, // not included
-    	"isGraded": true, // not included
-    	"displayType": "ALL_AT_ONCE", // not included
-    	"attempts": quizAttemptUnlimited ? 0 : quizMaxAttempts, // 0 if unlimited?
-    	"startDate": quizStartEnd[0].format(dtf),
-    	"endDate": quizStartEnd[1].format(dtf),
-    	"displayStudentAnswers": false, // not included
-    	"displayCorrectAnswers": false, // not included
-    	"displayTotalMarks": false, // not included
-    	"displayMarksObtainedForEachQuestion": false, // not included
-    	"questionList": questionFormat
+      "title": quizTitle,
+      "module": "IS1103",
+      "description": "4KIDSONLY", // not included
+      "isPublished": true,
+      "password": "", // not included
+      "timeLimit": 60, // not included
+      "isGraded": true, // not included
+      "displayType": "ALL_AT_ONCE", // not included
+      "attempts": quizAttemptUnlimited ? 0 : quizMaxAttempts, // 0 if unlimited?
+      "startDate": quizStartEnd[0].format(dtf),
+      "endDate": quizStartEnd[1].format(dtf),
+      "displayStudentAnswers": false, // not included
+      "displayCorrectAnswers": false, // not included
+      "displayTotalMarks": false, // not included
+      "displayMarksObtainedForEachQuestion": false, // not included
+      "questionList": questionFormat
     }
 
     console.log(quizObject);
@@ -171,7 +171,7 @@ export default class QuizCreation extends React.Component {
         </Row>
 
         <div style={{ height: 20, width: '100%', borderBottom: '1px solid #ddd', marginBottom: 8 }} />
-        <Tabs activeKey={currentTab} tabPosition='left' onChange={this.changeTab}>
+        <Tabs activeKey={currentTab} tabPosition='top' onChange={this.changeTab}>
           <TabPane
             key='basic-settings'
             tab={
@@ -192,8 +192,8 @@ export default class QuizCreation extends React.Component {
               </Col>
             </Row>
             <Row gutter={[30, 30]}>
-              <Col md={8} xs={21} style={{ marginLeft: 20 }}>
-                <Input placeholder="Title" onChange={this.changeTitle} value={quizTitle}/>
+              <Col md={16} xs={21} style={{ marginLeft: 20 }}>
+                <Input placeholder="Title" onChange={this.changeTitle} value={quizTitle} />
               </Col>
             </Row>
 
@@ -203,7 +203,7 @@ export default class QuizCreation extends React.Component {
               </Col>
             </Row>
             <Row gutter={[30, 30]}>
-              <Col md={8} xs={21} style={{ marginLeft: 20 }}>
+              <Col md={16} xs={21} style={{ marginLeft: 20 }}>
                 <RangePicker
                   showTime={{ format: 'HH:mm' }}
                   format="YYYY-MM-DD HH:mm"
@@ -226,7 +226,7 @@ export default class QuizCreation extends React.Component {
               </Col>
             </Row>
             <Row gutter={[30, 30]}>
-              <Col md={3} xs={12} style={{ marginLeft: 20 }}>
+              <Col md={6} xs={12} style={{ marginLeft: 20 }}>
                 <InputNumber
                   min={1}
                   precision={0}
@@ -236,12 +236,12 @@ export default class QuizCreation extends React.Component {
                   disabled={quizAttemptUnlimited}
                 />
               </Col>
-              <Col md={2} xs={8}>
+              <Col md={2} xs={2}>
                 {QuizPhrases.ATTEMPTS}
               </Col>
             </Row>
             <Row gutter={[30, 30]}>
-              <Col md={6} xs={21} style={{ marginLeft: 20 }}>
+              <Col md={6} sm={18} xs={18} style={{ marginLeft: 20 }}>
                 <Checkbox onChange={this.toggleAttemptLimit} checked={quizAttemptUnlimited}>{QuizPhrases.NO_ATTEMPTS_LIMIT}</Checkbox>
               </Col>
             </Row>
@@ -259,7 +259,7 @@ export default class QuizCreation extends React.Component {
             </Row>
             <Row gutter={[30, 30]}>
               <Col md={3} xs={12} style={{ marginLeft: 20 }}>
-                <Switch checked={quizConfidenceEnabled} onChange={this.toggleConfidence}/>
+                <Switch checked={quizConfidenceEnabled} onChange={this.toggleConfidence} />
               </Col>
             </Row>
 
@@ -284,9 +284,9 @@ export default class QuizCreation extends React.Component {
               <QuestionCard
                 key={question.questionNumber}
                 question={question}
-                index={index+1}
-                onChange={(qn)=>this.onChangeQuestion(question.questionNumber, qn)}
-                onRemove={()=>this.removeQuestion(question.questionNumber)}
+                index={index + 1}
+                onChange={(qn) => this.onChangeQuestion(question.questionNumber, qn)}
+                onRemove={() => this.removeQuestion(question.questionNumber)}
               />
             ))}
 
@@ -319,7 +319,7 @@ export default class QuizCreation extends React.Component {
 const QuestionCard = (props) => {
 
   const onChange = (field, value) => {
-    let updatedQn = {...props.question}
+    let updatedQn = { ...props.question }
     updatedQn[field] = value
     props.onChange(updatedQn)
   }
@@ -347,7 +347,7 @@ const QuestionCard = (props) => {
       if (props.question.correctOptionNumber === option.optionNumber) {
         onChange('correctOptionNumber', runningNumber)
       }
-      
+
       option.optionNumber = runningNumber++
     }
 
@@ -384,7 +384,7 @@ const QuestionCard = (props) => {
               <Col md={18} xs={21}>
                 <TextArea
                   placeholder="Question Title"
-                  autoSize
+                  autoSize={{ minRows: 4 }}
                   value={props.question.title}
                   onChange={onChangeTitle}
                 />
@@ -392,28 +392,31 @@ const QuestionCard = (props) => {
             </Row>
 
             <Row gutter={[5, 5]} style={{ marginTop: 20, marginLeft: 40 }}>
-              <Col md={20} xs={21}>
+              <Col md={18} xs={21}>
                 <Text strong>{QuizPhrases.BUILD_SELECT_CORRECT_OPTION}</Text>
               </Col>
             </Row>
             <Row gutter={[5, 5]} style={{ marginLeft: 40 }}>
-              <Col md={18} xs={21}>
-                <Radio.Group style={{ width: '80%' }} value={props.question.correctOptionNumber} onChange={onChangeCorrect}>
+
+                <Radio.Group style={{ width: '90%', paddingRight: 30 }} value={props.question.correctOptionNumber} onChange={onChangeCorrect}>
                   {props.question.options.map((option) => (
                     <QuizQuestionOption
                       key={`option${option.optionNumber}`}
                       option={option}
-                      onChange={(op)=>onChangeOption(option.optionNumber, op)}
+                      onChange={(op) => onChangeOption(option.optionNumber, op)}
+                      onRemove={() => removeOption(option.optionNumber)}
                     />
                   ))}
                 </Radio.Group>
+
+            </Row>
+            <Row>
+              <Col md={20} xs={21} style={{ marginTop: 20, marginLeft: 40 }}>
+                <Button onClick={addOption} type="dashed" style={{ borderColor: green[5] }}>
+                  <Text style={{ color: green[5] }}>{QuizPhrases.BUILD_ADD_OPTION}</Text>
+                </Button>
               </Col>
             </Row>
-            <Col md={20} xs={21} style={{ marginTop: 20, marginLeft: 40 }}>
-              <Button onClick={addOption} type="dashed" style={{ borderColor: green[5] }}>
-                <Text style={{ color: green[5] }}>{QuizPhrases.BUILD_ADD_OPTION}</Text>
-              </Button>
-            </Col>
 
             <Row gutter={[5, 5]} style={{ marginTop: 20, marginLeft: 20 }}>
               <Col md={20} xs={21}>
@@ -452,7 +455,7 @@ const QuestionCard = (props) => {
 const QuizQuestionOption = (props) => {
 
   const onChange = (field, value) => {
-    let updatedOption = {...props.option}
+    let updatedOption = { ...props.option }
     updatedOption[field] = value
     props.onChange(updatedOption)
   }
@@ -470,7 +473,17 @@ const QuizQuestionOption = (props) => {
 
   return (
     <Radio style={radioStyle} value={props.option.optionNumber}>
-      <TextArea autoSize value={props.option.optionText} onChange={onChangeOptionText}/>
+
+      <Col xs={20}>
+        <TextArea autoSize= {{ minRows: 4 }} style={{ width: '100%' }} value={props.option.optionText} onChange={onChangeOptionText} />
+      </Col>
+
+      <Col xs={20}>
+        <Button onClick={props.onRemove} type="dashed" style={{ borderColor: red[5] }}>
+          <Text style={{ color: red[5] }}>{QuizPhrases.BUILD_REMOVE_OPTION}</Text>
+        </Button>
+      </Col>
+
     </Radio>
   )
 }
