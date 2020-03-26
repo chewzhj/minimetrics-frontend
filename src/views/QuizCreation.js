@@ -20,6 +20,15 @@ const { Option } = Select;
 
 export default class QuizCreation extends React.Component {
 
+  state = {
+    tabPosition: 'left'
+  }
+
+  onBreakpoint = (broken) => {
+    const position = broken ? 'top' : 'left'
+    this.setState({tabPosition: position})
+  }
+
   changeTab = (tab) => this.props.changeTab(tab)
   openPreview = () => this.props.openPreview()
   closePreview = () => this.props.closePreview()
@@ -139,10 +148,10 @@ export default class QuizCreation extends React.Component {
       quizConfidenceEnabled,
       quizQuestions,
     } = this.props.quizCreation
-
+    const {tabPosition} = this.state
 
     return (
-      <SideBar activeTab='quiz' title="Quiz" subtitle="Create New Quiz">
+      <SideBar activeTab='quiz' title="Quiz" subtitle="Create New Quiz" onBreakpoint={this.onBreakpoint}>
         {/* Quiz Preview Modal */}
         <Modal
           title="Basic Modal"
@@ -171,7 +180,7 @@ export default class QuizCreation extends React.Component {
         </Row>
 
         <div style={{ height: 20, width: '100%', borderBottom: '1px solid #ddd', marginBottom: 8 }} />
-        <Tabs activeKey={currentTab} tabPosition='top' onChange={this.changeTab}>
+        <Tabs activeKey={currentTab} tabPosition={tabPosition} onChange={this.changeTab}>
           <TabPane
             key='basic-settings'
             tab={
