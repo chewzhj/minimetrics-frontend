@@ -20,6 +20,15 @@ const { Option } = Select;
 
 export default class QuizCreation extends React.Component {
 
+  state = {
+    tabPosition: 'left'
+  }
+
+  onBreakpoint = (broken) => {
+    const position = broken ? 'top' : 'left'
+    this.setState({tabPosition: position})
+  }
+
   changeTab = (tab) => this.props.changeTab(tab)
   openPreview = () => this.props.openPreview()
   closePreview = () => this.props.closePreview()
@@ -73,10 +82,62 @@ export default class QuizCreation extends React.Component {
     this.changeQuestions(updatedQuestions)
   }
 
+  enableSubmit = () => {
+    const {
+      quizTitle,
+      quizStartEnd,
+      quizMaxAttempts,
+      quizAttemptUnlimited,
+      quizQuestions,
+    } = this.props.quizCreation
+
+    const checks = (new Array(4)).fill(false)
+    if (quizTitle.trim() !== "") {
+      checks[0] = true
+    }
+    if (quizStartEnd.length === 2 && quizStartEnd[0] !== null && quizStartEnd[1] !== null) {
+      checks[1] = true
+    }
+    if (quizAttemptUnlimited || quizMaxAttempts > 0) {
+      checks[2] = true
+    }
+    // check questions
+    let qnCheck = true
+    if (quizQuestions.length === 0) {
+      qnCheck = false
+    } else {
+      for (const quizQn of quizQuestions) {
+        // check whether each question has a title
+        if (quizQn.title.trim() === "") {
+          qnCheck = false
+          break
+        }
+        // check if there is a correct option picked
+        if (quizQn.correctOptionNumber === 0 || quizQn.correctOptionNumber > quizQn.options.length) {
+          qnCheck = false
+          break
+        }
+        // check if there are options
+        if (quizQn.options.length === 0) {
+          qnCheck = false
+          break
+        } else {
+          for (const op of quizQn.options) {
+            // check if each option has text
+            if (op.optionText.trim() === "") {
+              qnCheck = false
+              break
+            }
+          }
+        }
+      }
+    }
+    checks[3] = qnCheck
+
+    return checks.reduce((acc, cur) => acc && cur, true)
+  }
   submitQuiz = () => {
     const {
-      currentTab,
-      quizPreviewVisible,
       quizTitle,
       quizStartEnd,
       quizMaxAttempts,
@@ -99,7 +160,7 @@ export default class QuizCreation extends React.Component {
         tagList: qn.tags.map(tagText => ({ 'tagName': tagText })),
         points: 1, // not included
         answerList: answerList,
-        enableConfidence: qn.quizConfidenceEnabled,
+        enableConfidence: quizConfidenceEnabled,
         feedback: null, // not included
       }
     })
@@ -126,6 +187,7 @@ export default class QuizCreation extends React.Component {
     }
 
     console.log(quizObject);
+    this.props.createQuiz(quizObject)
   }
 
   render() {
@@ -138,11 +200,13 @@ export default class QuizCreation extends React.Component {
       quizAttemptUnlimited,
       quizConfidenceEnabled,
       quizQuestions,
+      submitting,
     } = this.props.quizCreation
-
+    const {tabPosition} = this.state
+    const disableSubmit = !this.enableSubmit()
 
     return (
-      <SideBar activeTab='quiz' title="Quiz" subtitle="Create New Quiz">
+      <SideBar activeTab='quiz' title="Quiz" subtitle="Create New Quiz" onBreakpoint={this.onBreakpoint}>
         {/* Quiz Preview Modal */}
         <Modal
           title="Basic Modal"
@@ -171,7 +235,7 @@ export default class QuizCreation extends React.Component {
         </Row>
 
         <div style={{ height: 20, width: '100%', borderBottom: '1px solid #ddd', marginBottom: 8 }} />
-        <Tabs activeKey={currentTab} tabPosition='top' onChange={this.changeTab}>
+        <Tabs activeKey={currentTab} tabPosition={tabPosition} onChange={this.changeTab}>
           <TabPane
             key='basic-settings'
             tab={
@@ -304,7 +368,7 @@ export default class QuizCreation extends React.Component {
         <Row>
           <Col md={20} sm={21} xs={21} style={{ marginTop: 20, marginLeft: 20 }}>
             <Link to='#'>
-              <Button onClick={this.submitQuiz} type='primary' style={{ float: 'left' }}>
+              <Button onClick={this.submitQuiz} loading={submitting} disabled={disableSubmit} type='primary' style={{ float: 'left' }}>
                 Create Quiz
             </Button>
             </Link>
@@ -321,6 +385,13 @@ const QuestionCard = (props) => {
   const onChange = (field, value) => {
     let updatedQn = { ...props.question }
     updatedQn[field] = value
+    props.onChange(updatedQn)
+  }
+  const onChangeMultiple = (changes) => {
+    let updatedQn = { ...props.question }
+    for (const field in changes) {
+      updatedQn[field] = changes[field]
+    }
     props.onChange(updatedQn)
   }
   const onChangeTitle = (e) => onChange('title', e.target.value)
@@ -342,16 +413,29 @@ const QuestionCard = (props) => {
     let updatedOptions = props.question.options.filter(op => op.optionNumber !== opNumber)
     updatedOptions.sort((o1, o2) => o1.optionNumber - o2.optionNumber)
 
+    let correctOptionNumber = props.question.correctOptionNumber
+    if (correctOptionNumber === opNumber) {
+      // if we remove the correct option, no correct option
+      correctOptionNumber = 0
+    } else if (correctOptionNumber > opNumber) {
+      // if we dont remove the correct option leave it
+      correctOptionNumber--
+    } // if corr < remove, then its the same number
+
+    if (updatedOptions.length === 1) {
+      // if 1 option left, that is correct and disable removal
+      correctOptionNumber = 1
+    }
+
     let runningNumber = 1
     for (let option of updatedOptions) {
-      if (props.question.correctOptionNumber === option.optionNumber) {
-        onChange('correctOptionNumber', runningNumber)
-      }
-
       option.optionNumber = runningNumber++
     }
 
-    onChange('options', updatedOptions)
+    onChangeMultiple({
+      'correctOptionNumber': correctOptionNumber,
+      'options': updatedOptions
+    })
   }
   const onChangeOption = (opNumber, option) => {
     let updatedOptions = props.question.options.filter(op => op.optionNumber !== opNumber)
@@ -405,6 +489,7 @@ const QuestionCard = (props) => {
                       option={option}
                       onChange={(op) => onChangeOption(option.optionNumber, op)}
                       onRemove={() => removeOption(option.optionNumber)}
+                      disableRemove={props.question.options.length <= 1}
                     />
                   ))}
                 </Radio.Group>
@@ -479,7 +564,7 @@ const QuizQuestionOption = (props) => {
       </Col>
 
       <Col xs={20}>
-        <Button onClick={props.onRemove} type="dashed" style={{ borderColor: red[5] }}>
+        <Button onClick={props.onRemove} disabled={props.disableRemove} type="dashed" style={{ borderColor: red[5] }}>
           <Text style={{ color: red[5] }}>{QuizPhrases.BUILD_REMOVE_OPTION}</Text>
         </Button>
       </Col>

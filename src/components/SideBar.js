@@ -27,25 +27,22 @@ export default class SideBar extends React.Component {
     const { activeTab, title, subtitle } = this.props
     const phtitle = title || "Title"
     const phsubtitle = subtitle || "Subtitle"
+    const bpCallBack = this.props.onBreakpoint || (() => null)
+    const insightsOpen = activeTab.substring(0,8)
 
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Sider
-          breakpoint="lg"
+          breakpoint="md"
           collapsedWidth="0"
-          onBreakpoint={broken => {
-            // console.log(broken);
-          }}
-          onCollapse={(collapsed, type) => {
-            // console.log(collapsed, type);
-          }}
+          onBreakpoint={bpCallBack}
         >
           <div style={{ height: 40, margin: 24 }}>
             <Link to='/'>
               <img src={Wordless_Logo} alt="MiniMetrics" style={{ height: 39, width: 152 }} />
             </Link>
           </div>
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={[activeTab]} defaultOpenKeys={[activeTab]}>
+          <Menu theme="dark" mode="inline" defaultSelectedKeys={[activeTab]} defaultOpenKeys={[insightsOpen]}>
             <Menu.Item key="dashboard">
               <BarChartOutlined />
               <Link to="/dashboard">

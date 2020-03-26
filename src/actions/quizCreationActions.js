@@ -8,7 +8,43 @@ import {
   QUIZ_CREATION_TOGGLE_ATTEMPT_LIMIT,
   QUIZ_CREATION_TOGGLE_CONFIDENCE,
   QUIZ_CREATION_UPDATE_QUESTIONS,
+  QUIZ_CREATION_CREATE_START,
+  QUIZ_CREATION_CREATE_SUCCESS,
+  QUIZ_CREATION_CREATE_FAILURE,
 } from '../variables/constants/QuizCreationConstants'
+import {postCreateNewQuizAPI} from '../api/QuizAPI'
+
+export function createQuiz(quiz) {
+  return function(dispatch) {
+    dispatch(createQuizStart())
+    return postCreateNewQuizAPI(quiz)
+      .then(json => {
+        if (!json.data.hasError) {
+          dispatch(createQuizSuccess())
+        } else {
+          dispatch(createQuizFailure())
+        }
+      })
+      .catch(err => {
+        dispatch(createQuizFailure())
+      })
+  }
+}
+function createQuizStart() {
+  return {
+    type: QUIZ_CREATION_CREATE_START
+  }
+}
+function createQuizSuccess() {
+  return {
+    type: QUIZ_CREATION_CREATE_SUCCESS
+  }
+}
+function createQuizFailure() {
+  return {
+    type: QUIZ_CREATION_CREATE_FAILURE
+  }
+}
 
 export function changeTab(value) {
   return ({
