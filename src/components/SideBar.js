@@ -79,11 +79,11 @@ export default class SideBar extends React.Component {
                 </span>
               }
             >
-              <Menu.Item key="6"><Link to='/insights'>Overview</Link></Menu.Item>
-              <Menu.Item key="7">Topic Insights</Menu.Item>
-              <Menu.Item key="8">Quiz Insights</Menu.Item>
-              <Menu.Item key="9">Student Insights</Menu.Item>
-              <Menu.Item key="10">Confidence Insights</Menu.Item>
+              <Menu.Item key="insights/overview"><Link to='/insights/overview'>Overview</Link></Menu.Item>
+              <Menu.Item key="insights/topic"><Link to='/insights/topic'>Topic Insights</Link></Menu.Item>
+              <Menu.Item key="insights/quiz"><Link to='/insights/quiz'>Quiz Insights</Link></Menu.Item>
+              <Menu.Item key="insights/student"><Link to='/insights/student'>Student Insights</Link></Menu.Item>
+              <Menu.Item key="insights/confidence"><Link to='/insights/confidence'>Confidence Insights</Link></Menu.Item>
             </SubMenu>
           </Menu>
         </Sider>
