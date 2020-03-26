@@ -78,17 +78,17 @@ export default class InsightsTopic extends React.Component {
       <SideBar activeTab='insights/topic' title="Insights" subtitle="Topic Insights">
 
         <Row>
-          <Col md={24} xs={24} style={{ marginTop: 20, marginLeft: 20 }}>
+          <Col md={24} xs={24} style={{ marginTop: 20, marginLeft: 20, marginRight: 20 }}>
             <Title level={3}>Misunderstood Topics</Title>
             <Text>by percentage of incorrect 1st attempts</Text>
           </Col>
         </Row>
-        <Row gutter={[15, 15]} justify="end" style={{ marginTop: 10 }}>
+        <Row gutter={[15, 15]} justify="end" style={{ marginTop: 10, marginRight: 20 }}>
           <Col md={6} xs={24}>
             <span style={{ float: 'right', marginTop: 5 }}>Showing Results For:</span>
           </Col>
           <Col md={8} xs={24}>
-            <Select defaultValue="allQuizzes" style={{ width: '100%' }}>
+            <Select defaultValue="allQuizzes" style={{ width: '100%', paddingLeft: 20 }}>
               <Option value="allQuizzes">All Quizzes</Option>
               <Option value="mission1quiz">Mission 1 Quiz</Option>
               <Option value="mission2quiz">Mission 2 Quiz</Option>
@@ -163,7 +163,7 @@ export default class InsightsTopic extends React.Component {
         </Row>
 
         <Row>
-          <Col md={24} xs={24} style={{ marginTop: 20, marginLeft: 20 }}>
+          <Col md={24} xs={24} style={{ marginTop: 20, marginLeft: 20, paddingRight: 20 }}>
             <Title level={3}>Misunderstood Questions</Title>
             <Text>Select a Tag above to view its questions here.</Text>
           </Col>
