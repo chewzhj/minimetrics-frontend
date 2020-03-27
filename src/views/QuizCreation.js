@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Tabs, Modal, Row, Col, Typography, Input, InputNumber, DatePicker, Checkbox, Switch, Select, Radio, Card } from 'antd'
+import { Button, Tabs, Modal, Row, Col, Typography, Input, InputNumber, DatePicker, Checkbox, Switch, Select, Radio, Card, notification } from 'antd'
 import { blue, green, red } from '@ant-design/colors';
 import { Link } from 'react-router-dom'
 import moment from 'moment'
@@ -82,6 +82,46 @@ export default class QuizCreation extends React.Component {
     this.changeQuestions(updatedQuestions)
   }
 
+  checkSubmit = () => {
+    const checks = this.enableSubmit()
+    let i = 0
+    let outputMessage = "There were errors in the following"
+    const outputs = []
+    if (!checks[0]) {
+      outputs.push(`${++i}. Quiz Title is empty`)
+    }
+    if (!checks[1]) {
+      outputs.push(`\n${++i}. Quiz Start and End Dates are invalid`)
+    }
+    if (!checks[2]) {
+      outputs.push(`\n${++i}. Maximum Attempts is invalid`)
+    }
+    if (!checks[3]) {
+      outputs.push(`\n${++i}. Question or Options are invalid`)
+    }
+
+    const messageNodeBuilder = (errors) => {
+      return (
+        <div>
+          There were errors in the following
+          {errors.map((msg,idx) => (
+            <div key={idx}>
+              {msg}
+            </div>
+          ))}
+        </div>
+      )
+    }
+
+    if (i === 0) {
+      this.submitQuiz()
+    } else {
+      notification.warning({
+        message: 'Quiz Creation Error',
+        description: messageNodeBuilder(outputs)
+      })
+    }
+  }
   enableSubmit = () => {
     const {
       quizTitle,
@@ -95,7 +135,7 @@ export default class QuizCreation extends React.Component {
     if (quizTitle.trim() !== "") {
       checks[0] = true
     }
-    if (quizStartEnd.length === 2 && quizStartEnd[0] !== null && quizStartEnd[1] !== null) {
+    if (quizStartEnd && quizStartEnd.length === 2 && quizStartEnd[0] !== null && quizStartEnd[1] !== null) {
       checks[1] = true
     }
     if (quizAttemptUnlimited || quizMaxAttempts > 0) {
@@ -134,7 +174,7 @@ export default class QuizCreation extends React.Component {
     }
     checks[3] = qnCheck
 
-    return checks.reduce((acc, cur) => acc && cur, true)
+    return checks
   }
   submitQuiz = () => {
     const {
@@ -186,9 +226,36 @@ export default class QuizCreation extends React.Component {
       "questionList": questionFormat
     }
 
-    console.log(quizObject);
+    // console.log(JSON.stringify(quizObject));
     this.props.createQuiz(quizObject)
   }
+  onNotification = (growlNotification) => {
+    const {quizTitle} = this.props.quizCreation
+
+    const alerts = {
+      success: {
+        message: `Created ${quizTitle}`,
+        description: "Your quiz has been successfully created!"
+      },
+      error: {
+        message: `Error`,
+        description: "There has been an unexpected error!"
+      }
+    }
+
+    const openNotificationWithIcon = type => {
+      notification[type](alerts[type]);
+    };
+
+    openNotificationWithIcon(growlNotification)
+
+    this.props.resetNotification()
+
+    if (growlNotification === 'success') {
+      this.props.history.push('/quiz')
+    }
+  }
+
 
   render() {
     const {
@@ -201,9 +268,12 @@ export default class QuizCreation extends React.Component {
       quizConfidenceEnabled,
       quizQuestions,
       submitting,
+      growlNotification,
     } = this.props.quizCreation
     const {tabPosition} = this.state
-    const disableSubmit = !this.enableSubmit()
+    if (growlNotification) {
+      this.onNotification(growlNotification)
+    }
 
     return (
       <SideBar activeTab='quiz' title="Quiz" subtitle="Create New Quiz" onBreakpoint={this.onBreakpoint}>
@@ -368,7 +438,7 @@ export default class QuizCreation extends React.Component {
         <Row>
           <Col md={20} sm={21} xs={21} style={{ marginTop: 20, marginLeft: 20 }}>
             <Link to='#'>
-              <Button onClick={this.submitQuiz} loading={submitting} disabled={disableSubmit} type='primary' style={{ float: 'left' }}>
+              <Button onClick={this.checkSubmit} loading={submitting} type='primary' style={{ float: 'left' }}>
                 Create Quiz
             </Button>
             </Link>
@@ -563,11 +633,13 @@ const QuizQuestionOption = (props) => {
         <TextArea autoSize= {{ minRows: 4 }} style={{ width: '100%' }} value={props.option.optionText} onChange={onChangeOptionText} />
       </Col>
 
-      <Col xs={20}>
-        <Button onClick={props.onRemove} disabled={props.disableRemove} type="dashed" style={{ borderColor: red[5] }}>
-          <Text style={{ color: red[5] }}>{QuizPhrases.BUILD_REMOVE_OPTION}</Text>
-        </Button>
-      </Col>
+      {props.disableRemove ||
+        <Col xs={20}>
+          <Button onClick={props.onRemove} type="dashed" style={{ borderColor: red[5] }}>
+            <Text style={{ color: red[5] }}>{QuizPhrases.BUILD_REMOVE_OPTION}</Text>
+          </Button>
+        </Col>
+      }
 
     </Radio>
   )
