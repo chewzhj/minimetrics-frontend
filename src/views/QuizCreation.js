@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Tabs, Modal, Row, Col, Typography, Input, InputNumber, DatePicker, Checkbox, Switch, Select, Radio, Card } from 'antd'
+import { Button, Tabs, Modal, Row, Col, Typography, Input, InputNumber, DatePicker, Checkbox, Switch, Select, Radio, Card, notification } from 'antd'
 import { blue, green, red } from '@ant-design/colors';
 import { Link } from 'react-router-dom'
 import moment from 'moment'
@@ -189,6 +189,33 @@ export default class QuizCreation extends React.Component {
     console.log(quizObject);
     this.props.createQuiz(quizObject)
   }
+  onNotification = (growlNotification) => {
+    const {quizTitle} = this.props.quizCreation
+
+    const alerts = {
+      success: {
+        message: `Created ${quizTitle}`,
+        description: "Your quiz has been successfully created!"
+      },
+      error: {
+        message: `Error`,
+        description: "There has been an unexpected error!"
+      }
+    }
+
+    const openNotificationWithIcon = type => {
+      notification[type](alerts[type]);
+    };
+
+    openNotificationWithIcon(growlNotification)
+
+    this.props.resetNotification()
+
+    if (growlNotification === 'success') {
+      this.props.history.push('/quiz')
+    }
+  }
+
 
   render() {
     const {
@@ -201,9 +228,13 @@ export default class QuizCreation extends React.Component {
       quizConfidenceEnabled,
       quizQuestions,
       submitting,
+      growlNotification,
     } = this.props.quizCreation
     const {tabPosition} = this.state
     const disableSubmit = !this.enableSubmit()
+    if (growlNotification) {
+      this.onNotification(growlNotification)
+    }
 
     return (
       <SideBar activeTab='quiz' title="Quiz" subtitle="Create New Quiz" onBreakpoint={this.onBreakpoint}>

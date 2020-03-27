@@ -11,6 +11,7 @@ import {
   toggleConfidence,
   updateQuestions,
   createQuiz,
+  resetNotification,
 } from '../actions/quizCreationActions'
 
 const mapStateToProps = state => ({
@@ -28,6 +29,7 @@ const mapDispatchToProps = dispatch => ({
   toggleConfidence: (value) => dispatch(toggleConfidence(value)),
   updateQuestions: (value) => dispatch(updateQuestions(value)),
   createQuiz: (value) => dispatch(createQuiz(value)),
+  resetNotification: () => dispatch(resetNotification()),
 })
 
 export default connect(

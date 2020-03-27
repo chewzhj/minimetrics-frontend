@@ -11,6 +11,7 @@ import {
   QUIZ_CREATION_CREATE_START,
   QUIZ_CREATION_CREATE_SUCCESS,
   QUIZ_CREATION_CREATE_FAILURE,
+  QUIZ_CREATION_RESET_NOTIFICATION,
 } from '../variables/constants/QuizCreationConstants'
 import {postCreateNewQuizAPI} from '../api/QuizAPI'
 
@@ -96,5 +97,10 @@ export function updateQuestions(value) {
   return {
     type: QUIZ_CREATION_UPDATE_QUESTIONS,
     value
+  }
+}
+export function resetNotification() {
+  return {
+    type: QUIZ_CREATION_RESET_NOTIFICATION
   }
 }
