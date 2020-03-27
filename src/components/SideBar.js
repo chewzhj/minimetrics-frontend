@@ -108,7 +108,7 @@ export default class SideBar extends React.Component {
             subTitle={phsubtitle}
             style= {{ background: '#fff', paddingLeft: 50, zIndex: 0 }}
           />
-          <Content style={{ margin: '24px 16px 0' }}>
+          <Content style={{ margin: '16px 0' }}>
             <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
               {this.props.children}
             </div>
