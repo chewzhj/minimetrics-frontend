@@ -82,6 +82,46 @@ export default class QuizCreation extends React.Component {
     this.changeQuestions(updatedQuestions)
   }
 
+  checkSubmit = () => {
+    const checks = this.enableSubmit()
+    let i = 0
+    let outputMessage = "There were errors in the following"
+    const outputs = []
+    if (!checks[0]) {
+      outputs.push(`${++i}. Quiz Title is empty`)
+    }
+    if (!checks[1]) {
+      outputs.push(`\n${++i}. Quiz Start and End Dates are invalid`)
+    }
+    if (!checks[2]) {
+      outputs.push(`\n${++i}. Maximum Attempts is invalid`)
+    }
+    if (!checks[3]) {
+      outputs.push(`\n${++i}. Question or Options are invalid`)
+    }
+
+    const messageNodeBuilder = (errors) => {
+      return (
+        <div>
+          There were errors in the following
+          {errors.map((msg,idx) => (
+            <div key={idx}>
+              {msg}
+            </div>
+          ))}
+        </div>
+      )
+    }
+
+    if (i === 0) {
+      this.submitQuiz()
+    } else {
+      notification.warning({
+        message: 'Quiz Creation Error',
+        description: messageNodeBuilder(outputs)
+      })
+    }
+  }
   enableSubmit = () => {
     const {
       quizTitle,
@@ -134,7 +174,7 @@ export default class QuizCreation extends React.Component {
     }
     checks[3] = qnCheck
 
-    return checks.reduce((acc, cur) => acc && cur, true)
+    return checks
   }
   submitQuiz = () => {
     const {
@@ -231,7 +271,6 @@ export default class QuizCreation extends React.Component {
       growlNotification,
     } = this.props.quizCreation
     const {tabPosition} = this.state
-    const disableSubmit = !this.enableSubmit()
     if (growlNotification) {
       this.onNotification(growlNotification)
     }
@@ -399,7 +438,7 @@ export default class QuizCreation extends React.Component {
         <Row>
           <Col md={20} sm={21} xs={21} style={{ marginTop: 20, marginLeft: 20 }}>
             <Link to='#'>
-              <Button onClick={this.submitQuiz} loading={submitting} disabled={disableSubmit} type='primary' style={{ float: 'left' }}>
+              <Button onClick={this.checkSubmit} loading={submitting} type='primary' style={{ float: 'left' }}>
                 Create Quiz
             </Button>
             </Link>

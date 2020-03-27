@@ -13,8 +13,27 @@ import {
   QUIZ_CREATION_CREATE_FAILURE,
   QUIZ_CREATION_RESET_NOTIFICATION,
 } from '../variables/constants/QuizCreationConstants'
+import {notification} from 'antd'
 import {postCreateNewQuizAPI} from '../api/QuizAPI'
 
+function onNotification(notifType) {
+  const alerts = {
+    success: {
+      message: `Success`,
+      description: "Your quiz has been successfully created!"
+    },
+    error: {
+      message: `Error`,
+      description: "There has been an unexpected error!"
+    }
+  }
+
+  const openNotificationWithIcon = type => {
+    notification[type](alerts[type]);
+  };
+
+  openNotificationWithIcon(notifType)
+}
 export function createQuiz(quiz) {
   return function(dispatch) {
     dispatch(createQuizStart())
@@ -22,8 +41,10 @@ export function createQuiz(quiz) {
       .then(json => {
         if (!json.data.hasError) {
           dispatch(createQuizSuccess())
+          // onNotification('success')
         } else {
           dispatch(createQuizFailure())
+          // onNotification('error')
         }
       })
       .catch(err => {
