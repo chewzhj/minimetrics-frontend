@@ -135,7 +135,7 @@ export default class QuizCreation extends React.Component {
     if (quizTitle.trim() !== "") {
       checks[0] = true
     }
-    if (quizStartEnd.length === 2 && quizStartEnd[0] !== null && quizStartEnd[1] !== null) {
+    if (quizStartEnd && quizStartEnd.length === 2 && quizStartEnd[0] !== null && quizStartEnd[1] !== null) {
       checks[1] = true
     }
     if (quizAttemptUnlimited || quizMaxAttempts > 0) {
@@ -226,7 +226,7 @@ export default class QuizCreation extends React.Component {
       "questionList": questionFormat
     }
 
-    console.log(quizObject);
+    // console.log(JSON.stringify(quizObject));
     this.props.createQuiz(quizObject)
   }
   onNotification = (growlNotification) => {

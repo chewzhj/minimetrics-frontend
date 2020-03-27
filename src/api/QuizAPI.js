@@ -13,9 +13,9 @@ export async function getAllQuizAPI() {
 
 export async function postCreateNewQuizAPI(quiz) {
   try {
-    let data = await API.post('quiz/create', {
-      body: quiz
-    })
+    let data = await API.post('quiz/create',
+      quiz
+    )
     console.log(data);
     return data
   } catch (e) {
