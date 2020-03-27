@@ -563,11 +563,13 @@ const QuizQuestionOption = (props) => {
         <TextArea autoSize= {{ minRows: 4 }} style={{ width: '100%' }} value={props.option.optionText} onChange={onChangeOptionText} />
       </Col>
 
-      <Col xs={20}>
-        <Button onClick={props.onRemove} disabled={props.disableRemove} type="dashed" style={{ borderColor: red[5] }}>
-          <Text style={{ color: red[5] }}>{QuizPhrases.BUILD_REMOVE_OPTION}</Text>
-        </Button>
-      </Col>
+      {props.disableRemove ||
+        <Col xs={20}>
+          <Button onClick={props.onRemove} type="dashed" style={{ borderColor: red[5] }}>
+            <Text style={{ color: red[5] }}>{QuizPhrases.BUILD_REMOVE_OPTION}</Text>
+          </Button>
+        </Col>
+      }
 
     </Radio>
   )
