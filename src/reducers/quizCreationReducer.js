@@ -1,5 +1,6 @@
 import {
   QUIZ_CREATION_CHANGE_TAB,
+  QUIZ_CREATION_CHANGE_STEP,
   QUIZ_CREATION_OPEN_PREVIEW,
   QUIZ_CREATION_CLOSE_PREVIEW,
   QUIZ_CREATION_CHANGE_TITLE,
@@ -17,6 +18,7 @@ import {
 const initialState = {
   // default settings
   currentTab: 'basic-settings',
+  currentStep: 0,
   quizPreviewVisible: false,
   submitting: false,
   growlNotification: '',
@@ -70,6 +72,8 @@ export function quizCreationReducer(state = initialState, action) {
   switch (action.type) {
     case QUIZ_CREATION_CHANGE_TAB:
       return {...state, currentTab: action.value}
+    case QUIZ_CREATION_CHANGE_STEP:
+      return {...state, currentStep: action.value}
     case QUIZ_CREATION_OPEN_PREVIEW:
       return {...state, quizPreviewVisible: true}
     case QUIZ_CREATION_CLOSE_PREVIEW:
