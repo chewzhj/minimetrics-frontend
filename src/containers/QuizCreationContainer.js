@@ -2,6 +2,7 @@ import {connect} from 'react-redux'
 import View from '../views/QuizCreation'
 import {
   changeTab,
+  changeStep,
   openPreview,
   closePreview,
   changeTitle,
@@ -20,6 +21,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   changeTab: (value) => dispatch(changeTab(value)),
+  changeStep: (value) => dispatch(changeStep(value)),
   openPreview: () => dispatch(openPreview()),
   closePreview: () => dispatch(closePreview()),
   changeTitle: (value) => dispatch(changeTitle(value)),

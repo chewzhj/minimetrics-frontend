@@ -1,5 +1,6 @@
 import {
   QUIZ_CREATION_CHANGE_TAB,
+  QUIZ_CREATION_CHANGE_STEP,
   QUIZ_CREATION_OPEN_PREVIEW,
   QUIZ_CREATION_CLOSE_PREVIEW,
   QUIZ_CREATION_CHANGE_TITLE,
@@ -71,6 +72,12 @@ function createQuizFailure() {
 export function changeTab(value) {
   return ({
     type: QUIZ_CREATION_CHANGE_TAB,
+    value,
+  })
+}
+export function changeStep(value) {
+  return ({
+    type: QUIZ_CREATION_CHANGE_STEP,
     value,
   })
 }

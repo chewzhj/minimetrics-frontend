@@ -31,6 +31,15 @@ export default class QuizCreation extends React.Component {
   }
 
   changeTab = (tab) => this.props.changeTab(tab)
+  changeStep = (step) => this.props.changeStep(step)
+  nextStep = () => {
+    const currStep = this.props.quizCreation.currentStep
+    this.changeStep(currStep+1)
+  }
+  prevStep = () => {
+    const currStep = this.props.quizCreation.currentStep
+    this.changeStep(currStep-1)
+  }
   openPreview = () => this.props.openPreview()
   closePreview = () => this.props.closePreview()
   changeTitle = (e) => this.props.changeTitle(e.target.value)
@@ -261,6 +270,7 @@ export default class QuizCreation extends React.Component {
   render() {
     const {
       currentTab,
+      currentStep,
       quizPreviewVisible,
       quizTitle,
       quizStartEnd,
@@ -290,26 +300,28 @@ export default class QuizCreation extends React.Component {
           <p>Some contents...</p>
         </Modal>
 
-        <Row gutter={[5, 5]} justify="start">
-          <Col lg={12} md={12} sm={12} xs={12}>
-            <Steps size="small" style={{ marginRight: 20, marginTop: 20 }} >
-              <Step title="Quiz Settings" description="Change this to the Switch Step" />
-              <Step title="Build Questions" description="Only at Build Questions show Create Quiz button" />
-            </Steps>
-          </Col>
-        </Row>
-
         <Row justify="space-between">
-          <Col lg={12} md={12} sm={24} xs={24} style={{ marginTop: 20 }}>
-            <Link to='#'>
-              <Button onClick={this.checkSubmit} loading={submitting} type='primary'>
+          {currentStep === 0 &&
+            <Col lg={12} md={16} sm={24} xs={24} style={{ marginTop: 20 }}>
+              <Button onClick={this.nextStep} type='primary'>
+                Next
+              </Button>
+            </Col>
+          }
+          {currentStep === 1 &&
+            <Col lg={12} md={16} sm={24} xs={24} style={{ marginTop: 20 }}>
+              <Button onClick={this.prevStep}>
+                Previous
+              </Button>
+              <Button onClick={this.checkSubmit} loading={submitting} type='primary' style={{ marginLeft: 10 }}>
                 Create Quiz
-            </Button>
-            </Link>
-            <Button onClick={this.openPreview} style={{ marginLeft: 10 }}>
-              Preview Quiz
-            </Button>
-          </Col>
+              </Button>
+              <Button onClick={this.openPreview} style={{ marginLeft: 10 }}>
+                Preview Quiz
+              </Button>
+            </Col>
+          }
+
 
           <Col lg={3} md={3} sm={24} xs={24} style={{ marginTop: 20 }}>
             <Link to='/quiz'>
@@ -320,17 +332,18 @@ export default class QuizCreation extends React.Component {
           </Col>
         </Row>
 
-        <div style={{ height: 20, width: '100%', borderBottom: '1px solid #ddd', marginBottom: 8 }} />
-        <Tabs activeKey={currentTab} tabPosition={tabPosition} onChange={this.changeTab}>
-          <TabPane
-            key='basic-settings'
-            tab={
-              <span>
-                <BulbOutlined />
-                Quiz Settings
-              </span>
-            }>
+        <Row gutter={[5, 5]} justify="start">
+          <Col lg={16} md={16} sm={16} xs={24}>
+            <Steps size="small" direction="horizontal" onChange={this.changeStep} current={currentStep} style={{ marginRight: 20, marginTop: 20 }} >
+              <Step title="Quiz Settings"/>
+              <Step title="Build Questions"/>
+            </Steps>
+          </Col>
+        </Row>
 
+        <div style={{ height: 20, width: '100%', borderBottom: '1px solid #ddd', marginBottom: 8 }} />
+        {currentStep === 0 &&
+          <div>
             <Row>
               <Col md={20} sm={21} xs={21} style={{ marginTop: 20, marginLeft: 20 }}>
                 <Title level={4}>{CommonPhrases.General}</Title>
@@ -413,18 +426,10 @@ export default class QuizCreation extends React.Component {
                 <Switch checked={quizConfidenceEnabled} onChange={this.toggleConfidence} />
               </Col>
             </Row>
-
-          </TabPane>
-
-          <TabPane
-            key='basic-questions'
-            tab={
-              <span>
-                <SettingOutlined />
-                Build Questions
-              </span>
-            }>
-
+          </div>
+        }
+        {currentStep === 1 &&
+          <div>
             <Row>
               <Col md={20} sm={21} xs={21} style={{ marginTop: 20, marginLeft: 20 }}>
                 <Title level={4}>{QuizPhrases.BUILD_QUESTIONS_TITLE}</Title>
@@ -448,8 +453,8 @@ export default class QuizCreation extends React.Component {
                 </Button>
               </Col>
             </Row>
-          </TabPane>
-        </Tabs>
+          </div>
+        }
 
       </SideBar>
     )
