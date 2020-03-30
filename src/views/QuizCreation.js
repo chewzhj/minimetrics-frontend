@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Tabs, Modal, Row, Col, Typography, Input, InputNumber, DatePicker, Checkbox, Switch, Select, Radio, Card, notification } from 'antd'
+import { Button, Tabs, Modal, Row, Col, Typography, Input, InputNumber, DatePicker, Checkbox, Switch, Select, Radio, Card, notification, Steps } from 'antd'
 import { blue, green, red } from '@ant-design/colors';
 import { Link } from 'react-router-dom'
 import moment from 'moment'
@@ -17,6 +17,7 @@ const { TextArea } = Input;
 const { Title, Text } = Typography;
 const { RangePicker } = DatePicker;
 const { Option } = Select;
+const { Step } = Steps;
 
 export default class QuizCreation extends React.Component {
 
@@ -26,7 +27,7 @@ export default class QuizCreation extends React.Component {
 
   onBreakpoint = (broken) => {
     const position = broken ? 'top' : 'left'
-    this.setState({tabPosition: position})
+    this.setState({ tabPosition: position })
   }
 
   changeTab = (tab) => this.props.changeTab(tab)
@@ -104,7 +105,7 @@ export default class QuizCreation extends React.Component {
       return (
         <div>
           There were errors in the following
-          {errors.map((msg,idx) => (
+          {errors.map((msg, idx) => (
             <div key={idx}>
               {msg}
             </div>
@@ -230,7 +231,7 @@ export default class QuizCreation extends React.Component {
     this.props.createQuiz(quizObject)
   }
   onNotification = (growlNotification) => {
-    const {quizTitle} = this.props.quizCreation
+    const { quizTitle } = this.props.quizCreation
 
     const alerts = {
       success: {
@@ -270,7 +271,7 @@ export default class QuizCreation extends React.Component {
       submitting,
       growlNotification,
     } = this.props.quizCreation
-    const {tabPosition} = this.state
+    const { tabPosition, stepPosition } = this.state
     if (growlNotification) {
       this.onNotification(growlNotification)
     }
@@ -289,13 +290,28 @@ export default class QuizCreation extends React.Component {
           <p>Some contents...</p>
         </Modal>
 
-        <Row>
-          <Col md={24} sm={21} xs={24}>
-            <Button onClick={this.openPreview} style={{ float: 'left' }}>
+        <Row gutter={[5, 5]} justify="start">
+          <Col lg={12} md={12} sm={12} xs={12}>
+            <Steps size="small" style={{ marginRight: 20, marginTop: 20 }} >
+              <Step title="Quiz Settings" description="Change this to the Switch Step" />
+              <Step title="Build Questions" description="Only at Build Questions show Create Quiz button" />
+            </Steps>
+          </Col>
+        </Row>
+
+        <Row justify="space-between">
+          <Col lg={12} md={12} sm={24} xs={24} style={{ marginTop: 20 }}>
+            <Link to='#'>
+              <Button onClick={this.checkSubmit} loading={submitting} type='primary'>
+                Create Quiz
+            </Button>
+            </Link>
+            <Button onClick={this.openPreview} style={{ marginLeft: 10 }}>
               Preview Quiz
             </Button>
           </Col>
-          <Col md={24} sm={21} xs={24} style={{ marginTop: 20 }}>
+
+          <Col lg={3} md={3} sm={24} xs={24} style={{ marginTop: 20 }}>
             <Link to='/quiz'>
               <Button type='danger' style={{ float: 'right', marginRight: 10 }}>
                 Discard Quiz
@@ -314,6 +330,7 @@ export default class QuizCreation extends React.Component {
                 Quiz Settings
               </span>
             }>
+
             <Row>
               <Col md={20} sm={21} xs={21} style={{ marginTop: 20, marginLeft: 20 }}>
                 <Title level={4}>{CommonPhrases.General}</Title>
@@ -431,19 +448,8 @@ export default class QuizCreation extends React.Component {
                 </Button>
               </Col>
             </Row>
-
           </TabPane>
         </Tabs>
-
-        <Row>
-          <Col md={20} sm={21} xs={21} style={{ marginTop: 20, marginLeft: 20 }}>
-            <Link to='#'>
-              <Button onClick={this.checkSubmit} loading={submitting} type='primary' style={{ float: 'left' }}>
-                Create Quiz
-            </Button>
-            </Link>
-          </Col>
-        </Row>
 
       </SideBar>
     )
@@ -552,17 +558,17 @@ const QuestionCard = (props) => {
             </Row>
             <Row gutter={[5, 5]} style={{ marginLeft: 40 }}>
 
-                <Radio.Group style={{ width: '90%', paddingRight: 30 }} value={props.question.correctOptionNumber} onChange={onChangeCorrect}>
-                  {props.question.options.map((option) => (
-                    <QuizQuestionOption
-                      key={`option${option.optionNumber}`}
-                      option={option}
-                      onChange={(op) => onChangeOption(option.optionNumber, op)}
-                      onRemove={() => removeOption(option.optionNumber)}
-                      disableRemove={props.question.options.length <= 1}
-                    />
-                  ))}
-                </Radio.Group>
+              <Radio.Group style={{ width: '90%', paddingRight: 30 }} value={props.question.correctOptionNumber} onChange={onChangeCorrect}>
+                {props.question.options.map((option) => (
+                  <QuizQuestionOption
+                    key={`option${option.optionNumber}`}
+                    option={option}
+                    onChange={(op) => onChangeOption(option.optionNumber, op)}
+                    onRemove={() => removeOption(option.optionNumber)}
+                    disableRemove={props.question.options.length <= 1}
+                  />
+                ))}
+              </Radio.Group>
 
             </Row>
             <Row>
@@ -583,7 +589,7 @@ const QuestionCard = (props) => {
                 <Select
                   mode="tags"
                   style={{ width: '100%' }}
-                  placeholder="Question Tags"
+                  placeholder="Type to add a new tag or select from the list"
                   value={props.question.tags}
                   onChange={onChangeTags}>
                   {tags_options}
@@ -630,7 +636,7 @@ const QuizQuestionOption = (props) => {
     <Radio style={radioStyle} value={props.option.optionNumber}>
 
       <Col xs={20}>
-        <TextArea autoSize= {{ minRows: 4 }} style={{ width: '100%' }} value={props.option.optionText} onChange={onChangeOptionText} />
+        <TextArea autoSize={{ minRows: 4 }} style={{ width: '100%' }} value={props.option.optionText} onChange={onChangeOptionText} />
       </Col>
 
       {props.disableRemove ||

@@ -19,7 +19,7 @@ const BUILD_REMOVE_OPTION = "Remove option"
 const BUILD_OPTION = "Option"
 const BUILD_SAVE = "Save"
 const BUILD_SELECT_CORRECT_OPTION = "Select Correct Option"
-const BUILD_QUESTION_TAGS = "Tags"
+const BUILD_QUESTION_TAGS = "Question Tags"
 
 export default {
   QUIZ_TITLE,

@@ -13,7 +13,7 @@ import {
 import CommonPhrases from '../phrases/CommonPhrases'
 import InsightsPhrases from '../phrases/InsightsPhrases'
 import { QuestionCircleFilled, SmileTwoTone, CloseCircleTwoTone, CheckCircleTwoTone, EyeOutlined } from '@ant-design/icons'
-import { ResponsivePie } from '@nivo/pie'
+import { ResponsiveBar } from '@nivo/bar'
 
 const { Option } = Select;
 const { Title, Text } = Typography;
@@ -49,6 +49,7 @@ const columns = [
     }
   }
 ];
+const getBarColor = bar => bar.data.color;
 
 export default class InsightsConfidence extends React.Component {
 
@@ -178,50 +179,73 @@ export default class InsightsConfidence extends React.Component {
           <Col md={24} xs={24}>
 
             <div style={{ height: 400 }}>
-              <ResponsivePie
+              <ResponsiveBar
                 data={[
                   {
                     "id": "Misinformed",
                     "label": "Misinformed",
-                    "value": 85
+                    "value": 85,
+                    "color": chartColors[0]
                   },
                   {
                     "id": "Uninformed",
                     "label": "Uninformed",
-                    "value": 60
+                    "value": 60,
+                    "color": chartColors[1]
                   },
                   {
                     "id": "Almost There",
                     "label": "Almost There",
-                    "value": 30
+                    "value": 30,
+                    "color": chartColors[2]
                   },
                   {
                     "id": "Knowledgeable",
                     "label": "Knowledgeable",
-                    "value": 15
+                    "value": 15,
+                    "color": chartColors[3]
                   }
                 ]}
-                margin={{ top: 40, right: 80, bottom: 20, left: 80 }}
-                innerRadius={0.25}
-                padAngle={0.7}
-                colors={ chartColors }
-                borderColor={{ from: 'color', modifiers: [['darker', 0.2]] }}
-                radialLabelsSkipAngle={2}
-                radialLabelsTextXOffset={6}
-                radialLabelsTextColor={{ from: 'color' }}
-                radialLabelsLinkOffset={0}
-                radialLabelsLinkDiagonalLength={16}
-                radialLabelsLinkHorizontalLength={24}
-                radialLabelsLinkStrokeWidth={1}
-                radialLabelsLinkColor={{ from: 'color' }}
-                slicesLabelsSkipAngle={10}
-                slicesLabelsTextColor="#333333"
+                keys={['value']}
+                layout='vertical'
+                enableGridX={true}
+                enableGridY={false}
+                gridXValues={5}
+                indexBy='label'
+                margin={{ top: 0, right: 30, bottom: 50, left: 100 }}
+                padding={0.3}
+                colors={getBarColor}
+                borderRadius={4}
+                borderColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
+                axisTop={null}
+                axisRight={null}
+                axisBottom={{
+                  tickSize: 0,
+                  tickValues: 5,
+                  tickPadding: 0,
+                  tickRotation: 0,
+                  legend: 'Group',
+                  legendPosition: 'middle',
+                  legendOffset: 32
+                }}
+                axisLeft={{
+                  tickSize: 0,
+                  tickValues: 5,
+                  tickPadding: 10,
+                  tickRotation: 0,
+                  legend: 'Number',
+                  legendPosition: 'middle',
+                  legendOffset: -40
+                }}
+                labelSkipWidth={12}
+                labelSkipHeight={12}
+                labelTextColor={{ from: 'color', modifiers: [['brighter', 10]] }}
                 animate={true}
                 motionStiffness={90}
                 motionDamping={15}
                 onClick={(data, event) => {
                   console.log(data);
-                  alert("Filter " + data.label + " into table below.");
+                  alert("Load " + data.indexValue + " questions into table below.");
                 }}
               />
             </div>
@@ -232,7 +256,7 @@ export default class InsightsConfidence extends React.Component {
 
         <Row gutter={[15, 15]} style={{ marginTop: 20, paddingLeft: 20, paddingRight: 20 }}>
 
-          <Col md={6} sm={24} xs={24}>
+          <Col lg={6} md={12} sm={24} xs={24}>
             <Card style={{ width: '100%', borderRadius: 4, boxShadow: '2px 1px 4px 0px #bcbcbc', background: '#fcdbd9' }}>
               <Row justify="space-between">
                 <Text strong style={{ fontSize: 14 }}>Misinformed</Text>
@@ -251,7 +275,7 @@ export default class InsightsConfidence extends React.Component {
             </Card>
           </Col>
 
-          <Col md={6} sm={24} xs={24}>
+          <Col lg={6} md={12} sm={24} xs={24}>
             <Card style={{ width: '100%', borderRadius: 4, boxShadow: '2px 1px 4px 0px #bcbcbc', background: '#fccca7' }}>
               <Row justify="space-between">
                 <Text strong style={{ fontSize: 14 }}>Uninformed</Text>
@@ -270,7 +294,7 @@ export default class InsightsConfidence extends React.Component {
             </Card>
           </Col>
 
-          <Col md={6} sm={24} xs={24}>
+          <Col lg={6} md={12} sm={24} xs={24}>
             <Card style={{ width: '100%', borderRadius: 4, boxShadow: '2px 1px 4px 0px #bcbcbc', background: '#fff3cf' }}>
               <Row justify="space-between">
                 <Text strong style={{ fontSize: 14 }}>"Almost There"</Text>
@@ -289,7 +313,7 @@ export default class InsightsConfidence extends React.Component {
             </Card>
           </Col>
 
-          <Col md={6} sm={24} xs={24}>
+          <Col lg={6} md={12} sm={24} xs={24}>
             <Card style={{ width: '100%', borderRadius: 4, boxShadow: '2px 1px 4px 0px #bcbcbc', background: '#cfefdf' }}>
               <Row justify="space-between">
                 <Text strong style={{ fontSize: 14 }}>Knowledgeable</Text>
