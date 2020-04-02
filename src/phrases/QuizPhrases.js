@@ -9,6 +9,11 @@ const NO_ATTEMPTS_LIMIT = "No Attempt Limit"
 const ATTEMPTS = "attempts"
 const CONFIDENCE_LEVEL = "Confidence Level"
 const CONFIDENCE_LEVEL_SWITCH_LABEL = "Confidence Level prompt for all quizzes (To be used for Competency Insights)"
+const CONFIDENCE_LEVEL_SWITCH_LABEL_LINE_1 = "Confidence level is used to generate insights on the competence level of students."
+const CONFIDENCE_LEVEL_SWITCH_LABEL_LINE_2 = "With this setting turned on, each question will require students to answer if they are confident or not. This would let you track a student's competency level."
+const CONFIDENCE_LEVEL_SWITCH_LABEL_LINE_3 = "To find out how exactly confidence level is used to track a student's competency level, go to "
+const CONFIDENCE_LEVEL_SWITCH_LABEL_ROUTE = "Insights > Competency Insights."
+
 
 const BUILD_QUESTIONS_TITLE = "Build Questions"
 const BUILD_ADD_QUESTION = "Add a question"
@@ -33,6 +38,10 @@ export default {
   ATTEMPTS,
   CONFIDENCE_LEVEL,
   CONFIDENCE_LEVEL_SWITCH_LABEL,
+  CONFIDENCE_LEVEL_SWITCH_LABEL_LINE_1,
+  CONFIDENCE_LEVEL_SWITCH_LABEL_LINE_2,
+  CONFIDENCE_LEVEL_SWITCH_LABEL_LINE_3,
+  CONFIDENCE_LEVEL_SWITCH_LABEL_ROUTE,
   BUILD_QUESTIONS_TITLE,
   BUILD_ADD_QUESTION,
   BUILD_REMOVE_QUESTION,
