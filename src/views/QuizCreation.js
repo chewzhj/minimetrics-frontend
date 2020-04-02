@@ -1,15 +1,17 @@
 import React from 'react'
-import { Button, Tabs, Modal, Row, Col, Typography, Input, InputNumber, DatePicker, Checkbox, Switch, Select, Radio, Card, notification, Steps } from 'antd'
+import { Button, Tabs, Modal, Row, Col, Typography, Input, InputNumber, DatePicker, Checkbox, Switch, Select, Radio, Card, notification, Steps, Popover } from 'antd'
 import { blue, green, red } from '@ant-design/colors';
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import SideBar from '../components/SideBar'
 import CommonPhrases from '../phrases/CommonPhrases'
 import QuizPhrases from '../phrases/QuizPhrases'
+import Wordless_Logo from '../assets/img/mm_wordless_logo.png'
 
 import {
   BulbOutlined,
   SettingOutlined,
+  EyeOutlined,
 } from '@ant-design/icons';
 
 const { TabPane } = Tabs
@@ -301,34 +303,31 @@ export default class QuizCreation extends React.Component {
         </Modal>
 
         <Row justify="space-between">
-          {currentStep === 0 &&
-            <Col lg={12} md={16} sm={24} xs={24} style={{ marginTop: 20 }}>
-              <Button onClick={this.nextStep} type='primary'>
-                Next
-              </Button>
-            </Col>
-          }
-          {currentStep === 1 &&
-            <Col lg={12} md={16} sm={24} xs={24} style={{ marginTop: 20 }}>
-              <Button onClick={this.prevStep}>
-                Previous
-              </Button>
-              <Button onClick={this.checkSubmit} loading={submitting} type='primary' style={{ marginLeft: 10 }}>
-                Create Quiz
-              </Button>
-              <Button onClick={this.openPreview} style={{ marginLeft: 10 }}>
-                Preview Quiz
-              </Button>
-            </Col>
-          }
-
-
           <Col lg={3} md={3} sm={24} xs={24} style={{ marginTop: 20 }}>
             <Link to='/quiz'>
               <Button type='danger' style={{ float: 'right', marginRight: 10 }}>
                 Discard Quiz
               </Button>
             </Link>
+          </Col>
+
+          <Col lg={12} md={16} sm={24} xs={24} style={{ marginTop: 20, display: 'flex', justifyContent: 'end' }}>
+            <Button onClick={this.prevStep} disabled={currentStep===0}>
+              Previous
+            </Button>
+            {currentStep === 0 &&
+              <Button onClick={this.nextStep} type='primary' style={{ marginLeft: 10, width: 104 }}>
+                Next
+              </Button>
+            }
+            {currentStep === 1 &&
+              <Button onClick={this.checkSubmit} loading={submitting} type='primary' style={{ marginLeft: 10, width: 104 }}>
+                Create Quiz
+              </Button>
+            }
+            <Button onClick={this.openPreview} disabled={currentStep===0} style={{ marginLeft: 10 }}>
+              Preview Quiz
+            </Button>
           </Col>
         </Row>
 
@@ -413,12 +412,25 @@ export default class QuizCreation extends React.Component {
             <Row>
               <Col md={20} sm={21} xs={21} style={{ marginTop: 20, marginLeft: 20 }}>
                 <Title level={4}>{QuizPhrases.CONFIDENCE_LEVEL}</Title>
+                <Popover
+                  title='Preview'
+                  content={
+                    <img src={Wordless_Logo} alt="MiniMetrics" style={{ height: 39, width: 152 }} />
+                  }>
+                  <Button icon={<EyeOutlined/>} shape='circle'/>
+                </Popover>
               </Col>
             </Row>
 
             <Row gutter={[5, 5]} style={{ marginTop: 20, marginLeft: 20 }}>
               <Col md={20} sm={21} xs={21}>
-                {QuizPhrases.CONFIDENCE_LEVEL_SWITCH_LABEL}
+                {QuizPhrases.CONFIDENCE_LEVEL_SWITCH_LABEL_LINE_1}
+              </Col>
+              <Col md={20} sm={21} xs={21}>
+                {QuizPhrases.CONFIDENCE_LEVEL_SWITCH_LABEL_LINE_2}
+              </Col>
+              <Col md={20} sm={21} xs={21}>
+                {QuizPhrases.CONFIDENCE_LEVEL_SWITCH_LABEL_LINE_3}<i>{QuizPhrases.CONFIDENCE_LEVEL_SWITCH_LABEL_ROUTE}</i>
               </Col>
             </Row>
             <Row gutter={[30, 30]}>
