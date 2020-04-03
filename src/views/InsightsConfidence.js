@@ -272,6 +272,11 @@ export default class InsightsConfidence extends React.Component {
                 <CloseCircleTwoTone twoToneColor="#f04134" style={{ fontSize: '20px' }} />
                 <Text style={{ fontSize: 12, marginTop: 1 }}>&nbsp;&nbsp;Incorrect</Text>
               </Row>
+              <Row style={{ marginTop: 20 }}>
+                <Button type="dashed">
+                  View in Table
+                </Button>
+              </Row>
             </Card>
           </Col>
 
@@ -290,6 +295,11 @@ export default class InsightsConfidence extends React.Component {
               <Row style={{ marginTop: 10 }}>
                 <CloseCircleTwoTone twoToneColor="#f04134" style={{ fontSize: '20px' }} />
                 <Text style={{ fontSize: 12, marginTop: 1 }}>&nbsp;&nbsp;Incorrect</Text>
+              </Row>
+              <Row style={{ marginTop: 20 }}>
+                <Button type="dashed">
+                  View in Table
+                </Button>
               </Row>
             </Card>
           </Col>
@@ -310,6 +320,11 @@ export default class InsightsConfidence extends React.Component {
                 <CheckCircleTwoTone twoToneColor="#52c41a" style={{ fontSize: '20px' }} />
                 <Text style={{ fontSize: 12, marginTop: 1 }}>&nbsp;&nbsp;Correct</Text>
               </Row>
+              <Row style={{ marginTop: 20 }}>
+                <Button type="dashed">
+                  View in Table
+                </Button>
+              </Row>
             </Card>
           </Col>
 
@@ -329,7 +344,22 @@ export default class InsightsConfidence extends React.Component {
                 <CheckCircleTwoTone twoToneColor="#52c41a" style={{ fontSize: '20px' }} />
                 <Text style={{ fontSize: 12, marginTop: 1 }}>&nbsp;&nbsp;Correct</Text>
               </Row>
+              <Row style={{ marginTop: 20 }}>
+                <Button type="dashed">
+                  View in Table
+                </Button>
+              </Row>
             </Card>
+
+          </Col>
+        </Row>
+
+        <Row>
+          <Col md={24} xs={24} style={{ marginTop: 20, marginLeft: 20, paddingRight: 20 }}>
+            <Title level={3}>View Students in confidence group
+            </Title>
+
+            <Text>Select a student from any of the 4 groups above by clicking on their corresponding buttons.</Text>
           </Col>
         </Row>
 
