@@ -10,42 +10,12 @@ import {
 } from 'antd';
 import { EyeOutlined } from '@ant-design/icons'
 import { ResponsiveBar } from '@nivo/bar'
+import { HorizontalBar } from 'react-chartjs-2';
+import { ChartDataLabels } from 'chartjs-plugin-datalabels';
+import 'chartjs-plugin-style';
 
 const { Option } = Select;
 const { Title, Text } = Typography;
-
-const HorizontalTick = ({ textAnchor, textBaseline, value, x, y }) => {
-  const MAX_LINE_LENGTH = 16;
-  const MAX_LINES = 2;
-  const LENGTH_OF_ELLIPSIS = 3;
-  const TRIM_LENGTH = MAX_LINE_LENGTH * MAX_LINES - LENGTH_OF_ELLIPSIS;
-  const trimWordsOverLength = new RegExp(`^(.{${TRIM_LENGTH}}[^\\w]*).*`);
-  const groupWordsByLength = new RegExp(
-    `([^\\s].{0,${MAX_LINE_LENGTH}}(?=[\\s\\W]|$))`,
-    'gm',
-  );
-  const splitValues = value
-    .replace(trimWordsOverLength, '$1...')
-    .match(groupWordsByLength)
-    .slice(0, 2)
-    .map((val, i) => (
-      <tspan
-        key={val}
-        dy={12 * i}
-        x={-10}
-        style={{ fontFamily: 'sans-serif', fontSize: '11px' }}
-      >
-        {val}
-      </tspan>
-    ));
-  return (
-    <g transform={`translate(${x},${y})`}>
-      <text alignmentBaseline={textBaseline} textAnchor={textAnchor}>
-        {splitValues}
-      </text>
-    </g>
-  );
-};
 
 const columns = [
   {
@@ -64,11 +34,55 @@ const columns = [
     title: 'View',
     render: (text, record, index) => {
       return (
-        <Button shape='circle' icon={<EyeOutlined />} onClick={ () => {alert("Show modal of question + question options (& maybe can put some quiz insights inside here too)")}} />
+        <Button shape='circle' icon={<EyeOutlined />} onClick={() => { alert("Show modal of question + question options (& maybe can put some quiz insights inside here too)") }} />
       )
     }
   }
 ];
+
+/*
+START CHARTJS CONFIG
+*/
+
+const quizChartData = {
+  labels: ['Deontology', 'Virtues', 'Utilitarianism', 'Fair Use Doctrine', 'Rights'],
+  datasets: [{
+    label: 'Incorrect',
+    backgroundColor: '#428bca',
+    borderColor: '#428bca',
+    borderWidth: 1,
+    hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+    hoverBorderColor: 'rgba(255,99,132,1)',
+    data: [85, 60, 30, 15],
+    shadowOffsetX: 2,
+    shadowOffsetY: 2,
+    shadowBlur: 2,
+    shadowColor: 'rgba(0, 0, 0, 0.3)'
+  }, {
+    hidden: true,
+    label: 'Total',
+    data: [60, 70, 90, 42, 30]
+  }]
+};
+
+const options = {
+  plugins: {
+    // Change options for ALL labels of THIS CHART
+    datalabels: {
+      color: '#000',
+      align: 'end',
+      anchor: 'end'
+    }
+  },
+  maintainAspectRatio: false,
+  legend: {
+    display: false
+  }
+}
+
+/*
+END CHARTJS CONFIG
+*/
 
 const topicData = [
   {
@@ -143,7 +157,7 @@ const percentage1dp = (number) => {
 export default class InsightsTopic extends React.Component {
 
   generateTableData = () => {
-    const {graphDropdown} = this.props.insightsTopic
+    const { graphDropdown } = this.props.insightsTopic
 
     if (graphDropdown === 'all') {
       let accumulateIncorrect = {}
@@ -171,7 +185,7 @@ export default class InsightsTopic extends React.Component {
       const quizTopicData = topicData.filter(quiz => quiz.id === graphDropdown)[0]
       return quizTopicData.tagData.map(tag => ({
         tag: tag.tag,
-        percentage: percentage1dp(tag.incorrect/tag.total)
+        percentage: percentage1dp(tag.incorrect / tag.total)
       })).sort((t1, t2) => t1.percentage - t2.percentage)
     }
   }
@@ -185,14 +199,14 @@ export default class InsightsTopic extends React.Component {
   render() {
     const tableData = []
     const graphData = this.generateTableData()
-    const {graphDropdown} = this.props.insightsTopic
+    const { graphDropdown } = this.props.insightsTopic
 
     return (
       <SideBar activeTab='insights/topic' title="Insights" subtitle="Topic Insights">
 
         <Row>
           <Col md={24} xs={24} style={{ marginTop: 20, marginLeft: 20, marginRight: 20 }}>
-            <Title level={3}>Misunderstood Topics</Title>
+            <Title level={3}>Misunderstood Topics & Questions</Title>
             <Text>by percentage of incorrect 1st attempts</Text>
           </Col>
         </Row>
@@ -208,9 +222,32 @@ export default class InsightsTopic extends React.Component {
             </Select>
           </Col>
         </Row>
+
+        <Row type="flex" justify="center" style={{ marginTop: 20 }}>
+          <Text strong>Click on a Tag in the chart to view its questions.</Text>
+        </Row>
+
         <Row>
+          <Col lg={12} md={24} xs={24} style={{ marginTop: 20, paddingLeft: 20 }}>
+            <HorizontalBar
+              data={quizChartData}
+              width={100}
+              height={400}
+              options={options}
+            />
+          </Col>
+
+          <Col lg={12} md={24} xs={24} style={{ marginTop: 20, paddingLeft: 10, paddingRight: 20 }}>
+            <Table columns={columns} dataSource={tableData} bordered={true} />
+          </Col>
+        </Row>
+
+        <Row>
+
           <Col md={24} xs={24}>
+
             <div style={{ height: 400 }}>
+
               <ResponsiveBar
                 data={graphData}
                 keys={['percentage']}
@@ -235,11 +272,6 @@ export default class InsightsTopic extends React.Component {
                   legendPosition: 'middle',
                   legendOffset: 32
                 }}
-                axisLeft={{
-                  tickSize: 0,
-                  tickPadding: 0,
-                  renderTick: HorizontalTick
-                }}
                 labelSkipWidth={12}
                 labelSkipHeight={12}
                 labelTextColor={{ from: 'color', modifiers: [['brighter', 10]] }}
@@ -251,19 +283,9 @@ export default class InsightsTopic extends React.Component {
                   alert("Load " + data.indexValue + " questions into table below.");
                 }}
               />
-            </div>
-          </Col>
-        </Row>
 
-        <Row>
-          <Col md={24} xs={24} style={{ marginTop: 20, marginLeft: 20, paddingRight: 20 }}>
-            <Title level={3}>Misunderstood Questions</Title>
-            <Text>Select a Tag above to view its questions here.</Text>
-          </Col>
-        </Row>
-        <Row style={{ marginTop: 20 }}>
-          <Col md={24} xs={24}>
-            <Table columns={columns} dataSource={tableData} bordered={true} />
+            </div>
+
           </Col>
         </Row>
       </SideBar>

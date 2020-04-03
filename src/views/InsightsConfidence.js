@@ -13,12 +13,13 @@ import {
 import CommonPhrases from '../phrases/CommonPhrases'
 import InsightsPhrases from '../phrases/InsightsPhrases'
 import { QuestionCircleFilled, SmileTwoTone, CloseCircleTwoTone, CheckCircleTwoTone, EyeOutlined } from '@ant-design/icons'
-import { ResponsiveBar } from '@nivo/bar'
+import { Bar } from 'react-chartjs-2';
+import { ChartDataLabels } from 'chartjs-plugin-datalabels';
+import 'chartjs-plugin-style';
 
 const { Option } = Select;
 const { Title, Text } = Typography;
 
-const chartColors = ['#f79992', '#f78e3d', '#ffdd76', '#76d0a3'];
 const columns = [
   {
     title: 'Name',
@@ -49,7 +50,40 @@ const columns = [
     }
   }
 ];
-const getBarColor = bar => bar.data.color;
+
+const chartColors = ['#f79992', '#f78e3d', '#ffdd76', '#76d0a3'];
+
+const data = {
+  labels: ['Misinformed', 'Uninformed', 'Almost There', 'Knowledgeable'],
+  datasets: [{
+    label: 'Students',
+    backgroundColor: chartColors,
+    borderColor: chartColors,
+    borderWidth: 1,
+    hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+    hoverBorderColor: 'rgba(255,99,132,1)',
+    data: [85, 60, 30, 15],
+    shadowOffsetX: 2,
+    shadowOffsetY: 2,
+    shadowBlur: 2,
+    shadowColor: 'rgba(0, 0, 0, 0.3)'
+  }]
+};
+
+const options = {
+  plugins: {
+    // Change options for ALL labels of THIS CHART
+    datalabels: {
+      color: '#000',
+      align: 'end',
+      anchor: 'end'
+    }
+  },
+  maintainAspectRatio: false,
+  legend: {
+    display: false
+  }
+}
 
 export default class InsightsConfidence extends React.Component {
 
@@ -175,83 +209,14 @@ export default class InsightsConfidence extends React.Component {
         </Row>
 
         <Row>
-
-          <Col md={24} xs={24}>
-
-            <div style={{ height: 400 }}>
-              <ResponsiveBar
-                data={[
-                  {
-                    "id": "Misinformed",
-                    "label": "Misinformed",
-                    "value": 85,
-                    "color": chartColors[0]
-                  },
-                  {
-                    "id": "Uninformed",
-                    "label": "Uninformed",
-                    "value": 60,
-                    "color": chartColors[1]
-                  },
-                  {
-                    "id": "Almost There",
-                    "label": "Almost There",
-                    "value": 30,
-                    "color": chartColors[2]
-                  },
-                  {
-                    "id": "Knowledgeable",
-                    "label": "Knowledgeable",
-                    "value": 15,
-                    "color": chartColors[3]
-                  }
-                ]}
-                keys={['value']}
-                layout='vertical'
-                enableGridX={true}
-                enableGridY={false}
-                gridXValues={5}
-                indexBy='label'
-                margin={{ top: 0, right: 30, bottom: 50, left: 100 }}
-                padding={0.3}
-                colors={getBarColor}
-                borderRadius={4}
-                borderColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
-                axisTop={null}
-                axisRight={null}
-                axisBottom={{
-                  tickSize: 0,
-                  tickValues: 5,
-                  tickPadding: 0,
-                  tickRotation: 0,
-                  legend: 'Group',
-                  legendPosition: 'middle',
-                  legendOffset: 32
-                }}
-                axisLeft={{
-                  tickSize: 0,
-                  tickValues: 5,
-                  tickPadding: 10,
-                  tickRotation: 0,
-                  legend: 'Number',
-                  legendPosition: 'middle',
-                  legendOffset: -40
-                }}
-                labelSkipWidth={12}
-                labelSkipHeight={12}
-                labelTextColor={{ from: 'color', modifiers: [['brighter', 10]] }}
-                animate={true}
-                motionStiffness={90}
-                motionDamping={15}
-                onClick={(data, event) => {
-                  console.log(data);
-                  alert("Load " + data.indexValue + " questions into table below.");
-                }}
-              />
-            </div>
-
+          <Col md={24} xs={24} style={{ paddingLeft: 20, paddingRight: 20 }}>
+            <Bar
+              data={data}
+              width={100}
+              height={400}
+              options={options}
+            />
           </Col>
-
         </Row>
 
         <Row gutter={[15, 15]} style={{ marginTop: 20, paddingLeft: 20, paddingRight: 20 }}>
