@@ -13,6 +13,7 @@ import {
   updateQuestions,
   createQuiz,
   resetNotification,
+  discardQuizCreation,
 } from '../actions/quizCreationActions'
 
 const mapStateToProps = state => ({
@@ -32,6 +33,7 @@ const mapDispatchToProps = dispatch => ({
   updateQuestions: (value) => dispatch(updateQuestions(value)),
   createQuiz: (value) => dispatch(createQuiz(value)),
   resetNotification: () => dispatch(resetNotification()),
+  discardQuizCreation: () => dispatch(discardQuizCreation()),
 })
 
 export default connect(

@@ -13,6 +13,7 @@ import {
   QUIZ_CREATION_CREATE_SUCCESS,
   QUIZ_CREATION_CREATE_FAILURE,
   QUIZ_CREATION_RESET_NOTIFICATION,
+  QUIZ_CREATION_RESET,
 } from '../variables/constants/QuizCreationConstants'
 import {notification} from 'antd'
 import {postCreateNewQuizAPI} from '../api/QuizAPI'
@@ -130,5 +131,10 @@ export function updateQuestions(value) {
 export function resetNotification() {
   return {
     type: QUIZ_CREATION_RESET_NOTIFICATION
+  }
+}
+export function discardQuizCreation() {
+  return {
+    type: QUIZ_CREATION_RESET
   }
 }
