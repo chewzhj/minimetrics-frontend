@@ -13,6 +13,7 @@ import {
   QUIZ_CREATION_CREATE_SUCCESS,
   QUIZ_CREATION_CREATE_FAILURE,
   QUIZ_CREATION_RESET_NOTIFICATION,
+  QUIZ_CREATION_RESET,
 } from '../variables/constants/QuizCreationConstants'
 
 const initialState = {
@@ -93,11 +94,13 @@ export function quizCreationReducer(state = initialState, action) {
     case QUIZ_CREATION_CREATE_START:
       return {...state, submitting: true}
     case QUIZ_CREATION_CREATE_SUCCESS:
-      return {...state, submitting: false, growlNotification: 'success'}
+      return {...initialState, growlNotification: 'success'}
     case QUIZ_CREATION_CREATE_FAILURE:
       return {...state, submitting: false, growlNotification: 'error'}
     case QUIZ_CREATION_RESET_NOTIFICATION:
       return {...state, growlNotification: ''}
+    case QUIZ_CREATION_RESET:
+      return initialState
     default:
       return state
   }

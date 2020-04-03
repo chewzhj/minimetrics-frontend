@@ -6,7 +6,7 @@ import moment from 'moment'
 import SideBar from '../components/SideBar'
 import CommonPhrases from '../phrases/CommonPhrases'
 import QuizPhrases from '../phrases/QuizPhrases'
-import Wordless_Logo from '../assets/img/mm_wordless_logo.png'
+import Tooltip_Image from '../assets/img/confidence_tooltip.jpg'
 
 import {
   BulbOutlined,
@@ -221,7 +221,7 @@ export default class QuizCreation extends React.Component {
 
     const quizObject = {
       "title": quizTitle,
-      "module": "IS1103",
+      "moduleID": "012d1387-43ff-4053-b0bd-462954693a01",
       "description": "4KIDSONLY", // not included
       "isPublished": true,
       "password": "", // not included
@@ -238,7 +238,7 @@ export default class QuizCreation extends React.Component {
       "questionList": questionFormat
     }
 
-    // console.log(JSON.stringify(quizObject));
+    console.log(JSON.stringify(quizObject));
     this.props.createQuiz(quizObject)
   }
   onNotification = (growlNotification) => {
@@ -303,9 +303,9 @@ export default class QuizCreation extends React.Component {
         </Modal>
 
         <Row justify="space-between">
-          <Col lg={3} md={3} sm={24} xs={24} style={{ marginTop: 20 }}>
+          <Col lg={8} md={8} sm={24} xs={24} style={{ marginTop: 20 }}>
             <Link to='/quiz'>
-              <Button type='danger' style={{ float: 'right', marginRight: 10 }}>
+              <Button type='danger' style={{ float: 'left', marginRight: 10 }}>
                 Discard Quiz
               </Button>
             </Link>
@@ -414,8 +414,9 @@ export default class QuizCreation extends React.Component {
                 <Title level={4}>{QuizPhrases.CONFIDENCE_LEVEL}</Title>
                 <Popover
                   title='Preview'
+                  placement="topLeft"
                   content={
-                    <img src={Wordless_Logo} alt="MiniMetrics" style={{ height: 39, width: 152 }} />
+                    <img src={Tooltip_Image} alt="MiniMetrics" style={{ height: 270, width: 480 }} />
                   }>
                   <Button icon={<EyeOutlined/>} shape='circle'/>
                 </Popover>

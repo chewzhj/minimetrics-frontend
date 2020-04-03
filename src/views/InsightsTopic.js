@@ -70,42 +70,122 @@ const columns = [
   }
 ];
 
+const topicData = [
+  {
+    quizTitle: 'Mission 1 Quiz',
+    id: '1',
+    tagData: [
+      {
+        tag: 'Deontology',
+        incorrect: 45,
+        total: 60,
+      },
+      {
+        tag: 'Fair Use Doctrine',
+        incorrect: 40,
+        total: 70,
+      },
+      {
+        tag: 'Virtues',
+        incorrect: 45,
+        total: 90,
+      },
+      {
+        tag: 'Rights',
+        incorrect: 30,
+        total: 42,
+      },
+      {
+        tag: 'Utilitarianism',
+        incorrect: 23,
+        total: 30,
+      },
+    ]
+  },
+  {
+    quizTitle: 'Mission 2 Quiz',
+    id: '2',
+    tagData: [
+      {
+        tag: 'Deontology',
+        incorrect: 25,
+        total: 43,
+      },
+      {
+        tag: 'Fair Use Doctrine',
+        incorrect: 4,
+        total: 25,
+      },
+      {
+        tag: 'Virtues',
+        incorrect: 23,
+        total: 40,
+      },
+      {
+        tag: 'Rights',
+        incorrect: 3,
+        total: 32,
+      },
+      {
+        tag: 'Utilitarianism',
+        incorrect: 12,
+        total: 50,
+      },
+    ]
+  },
+]
+
+const percentage1dp = (number) => {
+  const thousandtimes = Math.round(number * 1000)
+  return thousandtimes / 10
+}
+
 export default class InsightsTopic extends React.Component {
 
   generateTableData = () => {
-    const tableData = [
-      {
-        quizTitle: 'Mission 1 Quiz',
-        questionNumber: '6',
-        percentage: 50
-      },
-      {
-        quizTitle: 'Mission 2 Quiz',
-        questionNumber: '6',
-        percentage: 50
-      },
-      {
-        quizTitle: 'Mission 1 Quiz',
-        questionNumber: '2',
-        percentage: 40
-      },
-      {
-        quizTitle: 'Mission 2 Quiz',
-        questionNumber: '3',
-        percentage: 30
-      },
-      {
-        quizTitle: 'Mission 1 Quiz',
-        questionNumber: '7',
-        percentage: 20
-      },
-    ]
+    const {graphDropdown} = this.props.insightsTopic
 
-    return tableData
+    if (graphDropdown === 'all') {
+      let accumulateIncorrect = {}
+      let accumulateTotal = {}
+      for (const quiz of topicData) {
+        for (const tag of quiz.tagData) {
+          if (!accumulateTotal[tag.tag]) {
+            accumulateTotal[tag.tag] = 0
+            accumulateIncorrect[tag.tag] = 0
+          }
+          accumulateIncorrect[tag.tag] += tag.incorrect
+          accumulateTotal[tag.tag] += tag.total
+        }
+      }
+      let graphData = []
+      for (const tag in accumulateIncorrect) {
+        graphData.push({
+          tag: tag,
+          percentage: percentage1dp(accumulateIncorrect[tag] / accumulateTotal[tag])
+        })
+      }
+      graphData.sort((t1, t2) => t1.percentage - t2.percentage)
+      return graphData
+    } else {
+      const quizTopicData = topicData.filter(quiz => quiz.id === graphDropdown)[0]
+      return quizTopicData.tagData.map(tag => ({
+        tag: tag.tag,
+        percentage: percentage1dp(tag.incorrect/tag.total)
+      })).sort((t1, t2) => t1.percentage - t2.percentage)
+    }
   }
 
+  generateGraphTitle = () => {
+
+  }
+
+  changeGraphDropdown = (value) => this.props.changeDropdown(value)
+
   render() {
-    const tableData = this.generateTableData()
+    const tableData = []
+    const graphData = this.generateTableData()
+    const {graphDropdown} = this.props.insightsTopic
 
     return (
       <SideBar activeTab='insights/topic' title="Insights" subtitle="Topic Insights">
@@ -121,10 +201,10 @@ export default class InsightsTopic extends React.Component {
             <span style={{ float: 'right', marginTop: 5 }}>Showing Results For:</span>
           </Col>
           <Col md={8} xs={24}>
-            <Select defaultValue="allQuizzes" style={{ width: '100%', paddingLeft: 20 }}>
-              <Option value="allQuizzes">All Quizzes</Option>
-              <Option value="mission1quiz">Mission 1 Quiz</Option>
-              <Option value="mission2quiz">Mission 2 Quiz</Option>
+            <Select value={graphDropdown} onChange={this.changeGraphDropdown} style={{ width: '100%', paddingLeft: 20 }}>
+              <Option value="all">All Quizzes</Option>
+              <Option value="1">Mission 1 Quiz</Option>
+              <Option value="2">Mission 2 Quiz</Option>
             </Select>
           </Col>
         </Row>
@@ -132,28 +212,7 @@ export default class InsightsTopic extends React.Component {
           <Col md={24} xs={24}>
             <div style={{ height: 400 }}>
               <ResponsiveBar
-                data={[
-                  {
-                    "tag": "Utilitarianism",
-                    "percentage": 21
-                  },
-                  {
-                    "tag": "Rights",
-                    "percentage": 30
-                  },
-                  {
-                    "tag": "Virtues",
-                    "percentage": 37
-                  },
-                  {
-                    "tag": "Fair Use Doctrine",
-                    "percentage": 48
-                  },
-                  {
-                    "tag": "Deontology",
-                    "percentage": 68
-                  }
-                ]}
+                data={graphData}
                 keys={['percentage']}
                 layout='horizontal'
                 enableGridX={true}
