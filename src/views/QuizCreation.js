@@ -36,11 +36,11 @@ export default class QuizCreation extends React.Component {
   changeStep = (step) => this.props.changeStep(step)
   nextStep = () => {
     const currStep = this.props.quizCreation.currentStep
-    this.changeStep(currStep+1)
+    this.changeStep(currStep + 1)
   }
   prevStep = () => {
     const currStep = this.props.quizCreation.currentStep
-    this.changeStep(currStep-1)
+    this.changeStep(currStep - 1)
   }
   openPreview = () => this.props.openPreview()
   closePreview = () => this.props.closePreview()
@@ -311,31 +311,31 @@ export default class QuizCreation extends React.Component {
             </Link>
           </Col>
 
-          <Col lg={12} md={16} sm={24} xs={24} style={{ marginTop: 20, display: 'flex', justifyContent: 'end' }}>
-            <Button onClick={this.prevStep} disabled={currentStep===0}>
-              Previous
+          <Col lg={12} md={16} sm={24} xs={24} style={{ marginTop: 20 }}>
+            <Button onClick={this.openPreview} disabled={currentStep === 0} style={{ float: 'right', marginTop: 10, marginLeft: 10 }}>
+              Preview Quiz
             </Button>
             {currentStep === 0 &&
-              <Button onClick={this.nextStep} type='primary' style={{ marginLeft: 10, width: 104 }}>
+              <Button onClick={this.nextStep} type='primary' style={{ float: 'right', marginLeft: 10, marginTop: 10, width: 104 }}>
                 Next
               </Button>
             }
             {currentStep === 1 &&
-              <Button onClick={this.checkSubmit} loading={submitting} type='primary' style={{ marginLeft: 10, width: 104 }}>
+              <Button onClick={this.checkSubmit} loading={submitting} type='primary' style={{ float: 'right', marginTop: 10, marginLeft: 10, width: 104 }}>
                 Create Quiz
               </Button>
             }
-            <Button onClick={this.openPreview} disabled={currentStep===0} style={{ marginLeft: 10 }}>
-              Preview Quiz
+            <Button onClick={this.prevStep} disabled={currentStep === 0} style={{ float: 'right', marginLeft: 10, marginTop: 10 }}>
+              Previous
             </Button>
           </Col>
         </Row>
 
         <Row gutter={[5, 5]} justify="start">
           <Col lg={16} md={16} sm={16} xs={24}>
-            <Steps size="small" direction="horizontal" onChange={this.changeStep} current={currentStep} style={{ marginRight: 20, marginTop: 20 }} >
-              <Step title="Quiz Settings"/>
-              <Step title="Build Questions"/>
+            <Steps size="small" direction="horizontal" onChange={this.changeStep} current={currentStep} style={{ marginRight: 20, marginTop: 40 }} >
+              <Step title="Quiz Settings" />
+              <Step title="Build Questions" />
             </Steps>
           </Col>
         </Row>
@@ -410,15 +410,17 @@ export default class QuizCreation extends React.Component {
             </Row>
 
             <Row>
-              <Col md={20} sm={21} xs={21} style={{ marginTop: 20, marginLeft: 20 }}>
+              <Col lg={6} md={8} sm={12} xs={12} style={{ marginTop: 20, marginLeft: 20 }}>
                 <Title level={4}>{QuizPhrases.CONFIDENCE_LEVEL}</Title>
+              </Col>
+              <Col lg={2} md={2} sm={2} xs={2} style={{ marginTop: 20, marginLeft: 20 }}>
                 <Popover
                   title='Preview'
                   placement="topLeft"
                   content={
                     <img src={Tooltip_Image} alt="MiniMetrics" style={{ height: 270, width: 480 }} />
                   }>
-                  <Button icon={<EyeOutlined/>} shape='circle'/>
+                  <Button icon={<EyeOutlined />} shape='circle' />
                 </Popover>
               </Col>
             </Row>
@@ -435,7 +437,7 @@ export default class QuizCreation extends React.Component {
               </Col>
             </Row>
             <Row gutter={[30, 30]}>
-              <Col md={3} xs={12} style={{ marginLeft: 20 }}>
+              <Col md={3} xs={12} style={{ marginLeft: 20, marginTop: 10 }}>
                 <Switch checked={quizConfidenceEnabled} onChange={this.toggleConfidence} />
               </Col>
             </Row>
