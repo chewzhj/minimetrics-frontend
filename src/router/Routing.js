@@ -1,5 +1,5 @@
 import React from 'react'
-import {Route, Switch} from 'react-router-dom'
+import {Route, Switch, Redirect} from 'react-router-dom'
 import DefaultReactApp from '../assets/js/App'
 import CounterContainer from '../containers/CounterContainer'
 import LoginContainer from '../containers/LoginContainer'
@@ -13,6 +13,9 @@ import InsightsTopicContainer from '../containers/InsightsTopicContainer'
 import InsightsQuiz from '../views/InsightsQuiz'
 import InsightsStudent from '../views/InsightsStudent'
 import InsightsConfidence from '../views/InsightsConfidence'
+import StudentQuizAttempt from '../views/StudentQuizAttempt'
+import StudentQuizList from '../views/StudentQuizList'
+import StudentQuizResult from '../views/StudentQuizResult'
 import SideBar from '../components/SideBar'
 
 const Routing = () => {
@@ -20,8 +23,7 @@ const Routing = () => {
     <Switch>
 
       <Route path="/login" component={LoginContainer}/>
-      {/* <Route path="/index" component={SideBar}/> */}
-      <Route path="/users" component={Users} />
+      <Route path="/index" component={Dashboard} />
 
       <Route path="/quiz/create" component={QuizCreationContainer} />
       <Route path="/quiz" component={QuizMainContainer} />
@@ -32,14 +34,19 @@ const Routing = () => {
       <Route path="/insights/student" component={InsightsStudent} />
       <Route path="/insights/confidence" component={InsightsConfidence} />
 
+      <Route path="/studentquiz/attempt" component={StudentQuizAttempt} />
+      <Route path="/studentquiz/result" component={StudentQuizResult} />
+      <Route path="/studentquiz" component={StudentQuizList} />
 
       <Route path="/counter" component={CounterContainer}/>
       <Route path="/react-default" component={DefaultReactApp}/>
 
       {/* fall through */}
-      <Route path="/" component={Dashboard} />
+      <Route path="/" component={Fallthrough} />
     </Switch>
   )
 }
+
+const Fallthrough = () => <Redirect push to='/index' />
 
 export default Routing
