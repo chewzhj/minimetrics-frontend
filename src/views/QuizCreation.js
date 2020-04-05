@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Tabs, Modal, Row, Col, Typography, Input, InputNumber, DatePicker, Checkbox, Switch, Select, Radio, Card, notification, Steps, Popover } from 'antd'
+import { Button, Tabs, Modal, Row, Col, Typography, Input, InputNumber, DatePicker, Checkbox, Switch, Select, Radio, Card, notification, Steps, Popover, Popconfirm } from 'antd'
 import { blue, green, red } from '@ant-design/colors';
 import { Link } from 'react-router-dom'
 import moment from 'moment'
@@ -50,6 +50,10 @@ export default class QuizCreation extends React.Component {
   toggleAttemptLimit = (e) => this.props.toggleAttemptLimit(e.target.checked)
   toggleConfidence = (checked) => this.props.toggleConfidence(checked)
   changeQuestions = (value) => this.props.updateQuestions(value)
+  discardQuizCreation = () => {
+    this.props.discardQuizCreation()
+    this.props.history.push('/quiz')
+  }
 
   addQuestion = () => {
     const { quizQuestions } = this.props.quizCreation
@@ -304,11 +308,17 @@ export default class QuizCreation extends React.Component {
 
         <Row justify="space-between">
           <Col lg={8} md={8} sm={24} xs={24} style={{ marginTop: 20 }}>
-            <Link to='/quiz'>
+            <Popconfirm
+              title="Are you sure you want to discard this quiz?"
+              onConfirm={this.discardQuizCreation}
+              okText="Yes"
+              okType='danger'
+              cancelText="No"
+            >
               <Button type='danger' style={{ float: 'left', marginRight: 10 }}>
                 Discard Quiz
               </Button>
-            </Link>
+            </Popconfirm>
           </Col>
 
           <Col lg={12} md={16} sm={24} xs={24} style={{ marginTop: 20 }}>
@@ -321,7 +331,7 @@ export default class QuizCreation extends React.Component {
               </Button>
             }
             {currentStep === 1 &&
-              <Button onClick={this.checkSubmit} loading={submitting} type='primary' style={{ float: 'right', marginTop: 10, marginLeft: 10, width: 104 }}>
+              <Button onClick={this.checkSubmit} loading={submitting} type='primary' style={{ float: 'right', marginTop: 10, marginLeft: 10}}>
                 Create Quiz
               </Button>
             }
@@ -363,6 +373,11 @@ export default class QuizCreation extends React.Component {
             <Row gutter={[5, 5]} style={{ marginLeft: 20 }}>
               <Col md={20} sm={21} xs={21}>
                 {QuizPhrases.QUIZ_DATES}
+              </Col>
+            </Row>
+            <Row gutter={[5, 5]} style={{ marginLeft: 20 }}>
+              <Col md={20} sm={21} xs={21}>
+                {QuizPhrases.QUIZ_DATES_HELP}
               </Col>
             </Row>
             <Row gutter={[30, 30]}>
@@ -416,7 +431,7 @@ export default class QuizCreation extends React.Component {
               <Col lg={2} md={2} sm={2} xs={2} style={{ marginTop: 20, marginLeft: 20 }}>
                 <Popover
                   title='Preview'
-                  placement="topLeft"
+                  // placement="topLeft"
                   content={
                     <img src={Tooltip_Image} alt="MiniMetrics" style={{ height: 270, width: 480 }} />
                   }>

@@ -1,5 +1,6 @@
 const QUIZ_TITLE = "Quiz Title"
 const QUIZ_DATES = "Opening/Closing Date and Time"
+const QUIZ_DATES_HELP = "Select date then click OK to confirm selection"
 const DISPLAY_SETTINGS = "Display Settings"
 const TIME_LIMIT = "Time Limit"
 const NO_TIME_LIMIT = "No Time Limit"
@@ -29,6 +30,7 @@ const BUILD_QUESTION_TAGS = "Question Tags"
 export default {
   QUIZ_TITLE,
   QUIZ_DATES,
+  QUIZ_DATES_HELP,
   DISPLAY_SETTINGS,
   TIME_LIMIT,
   NO_TIME_LIMIT,
