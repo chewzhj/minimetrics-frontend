@@ -7,7 +7,7 @@ import Dashboard from '../views/Dashboard'
 import Users from '../views/Users'
 import QuizMainContainer from '../containers/QuizMainContainer'
 import QuizCreationContainer from '../containers/QuizCreationContainer'
-import TagsMain from '../views/TagsMain'
+import TagsContainer from '../containers/TagsContainer'
 import InsightsMain from '../views/InsightsMain'
 import InsightsTopicContainer from '../containers/InsightsTopicContainer'
 import InsightsQuiz from '../views/InsightsQuiz'
@@ -25,7 +25,7 @@ const Routing = () => {
 
       <Route path="/quiz/create" component={QuizCreationContainer} />
       <Route path="/quiz" component={QuizMainContainer} />
-      <Route path="/tags" component={TagsMain} />
+      <Route path="/tags" component={TagsContainer} />
       <Route path="/insights/overview" component={InsightsMain} />
       <Route path="/insights/topic" component={InsightsTopicContainer} />
       <Route path="/insights/quiz" component={InsightsQuiz} />

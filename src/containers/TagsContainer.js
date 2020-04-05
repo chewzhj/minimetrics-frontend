@@ -1,13 +1,13 @@
 import {connect} from 'react-redux'
-import View from '../views/QuizMain'
-import {loadQuizzes} from '../actions/quizMainActions'
+import View from '../views/Tags'
+import {getTags} from '../actions/tagActions'
 
 const mapStateToProps = state => ({
-  quizMain: state.quizMain
+  tags: state.tags
 })
 
 const mapDispatchToProps = dispatch => ({
-  loadQuizzes: () => dispatch(loadQuizzes()),
+  getTags: () => dispatch(getTags()),
 })
 
 export default connect(

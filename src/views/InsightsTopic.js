@@ -13,6 +13,8 @@ import { ResponsiveBar } from '@nivo/bar'
 import { HorizontalBar } from 'react-chartjs-2';
 import { ChartDataLabels } from 'chartjs-plugin-datalabels';
 import 'chartjs-plugin-style';
+import GlobalConstants from '../variables/GlobalConstants'
+import { getTopicInsightsAPI } from '../api/InsightsAPI'
 
 const { Option } = Select;
 const { Title, Text } = Typography;
@@ -40,49 +42,6 @@ const columns = [
   }
 ];
 
-/*
-START CHARTJS CONFIG
-*/
-
-const quizChartData = {
-  labels: ['Deontology', 'Virtues', 'Utilitarianism', 'Fair Use Doctrine', 'Rights'],
-  datasets: [{
-    label: 'Incorrect',
-    backgroundColor: '#428bca',
-    borderColor: '#428bca',
-    borderWidth: 1,
-    hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-    hoverBorderColor: 'rgba(255,99,132,1)',
-    data: [85, 60, 30, 15],
-    shadowOffsetX: 2,
-    shadowOffsetY: 2,
-    shadowBlur: 2,
-    shadowColor: 'rgba(0, 0, 0, 0.3)'
-  }, {
-    hidden: true,
-    label: 'Total',
-    data: [60, 70, 90, 42, 30]
-  }]
-};
-
-const options = {
-  plugins: {
-    // Change options for ALL labels of THIS CHART
-    datalabels: {
-      color: '#000',
-      align: 'end',
-      anchor: 'end'
-    }
-  },
-  maintainAspectRatio: false,
-  legend: {
-    display: false
-  }
-}
-
-/*
-END CHARTJS CONFIG
-*/
 
 const topicData = [
   {
@@ -149,12 +108,61 @@ const topicData = [
   },
 ]
 
+
+/*
+START CHARTJS CONFIG
+*/
+
+const quizChartData = {
+  labels: ['Deontology', 'Virtues', 'Utilitarianism', 'Fair Use Doctrine', 'Rights'],
+  datasets: [{
+    label: 'Incorrect',
+    backgroundColor: '#428bca',
+    borderColor: '#428bca',
+    borderWidth: 1,
+    hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+    hoverBorderColor: 'rgba(255,99,132,1)',
+    data: [85, 60, 30, 15],
+    shadowOffsetX: 2,
+    shadowOffsetY: 2,
+    shadowBlur: 2,
+    shadowColor: 'rgba(0, 0, 0, 0.3)'
+  }, {
+    hidden: true,
+    label: 'Total',
+    data: [60, 70, 90, 42, 30]
+  }]
+};
+
+const options = {
+  plugins: {
+    // Change options for ALL labels of THIS CHART
+    datalabels: {
+      color: '#000',
+      align: 'end',
+      anchor: 'end'
+    }
+  },
+  maintainAspectRatio: false,
+  legend: {
+    display: false
+  }
+}
+
+/*
+END CHARTJS CONFIG
+*/
+
 const percentage1dp = (number) => {
   const thousandtimes = Math.round(number * 1000)
   return thousandtimes / 10
 }
 
 export default class InsightsTopic extends React.Component {
+
+  componentDidMount() {
+    getTopicInsightsAPI(GlobalConstants.ModuleID)
+  }
 
   generateTableData = () => {
     const { graphDropdown } = this.props.insightsTopic
@@ -179,15 +187,39 @@ export default class InsightsTopic extends React.Component {
           percentage: percentage1dp(accumulateIncorrect[tag] / accumulateTotal[tag])
         })
       }
-      graphData.sort((t1, t2) => t1.percentage - t2.percentage)
+      graphData.sort((t1, t2) => t2.percentage - t1.percentage)
       return graphData
     } else {
       const quizTopicData = topicData.filter(quiz => quiz.id === graphDropdown)[0]
       return quizTopicData.tagData.map(tag => ({
         tag: tag.tag,
         percentage: percentage1dp(tag.incorrect / tag.total)
-      })).sort((t1, t2) => t1.percentage - t2.percentage)
+      })).sort((t1, t2) => t2.percentage - t1.percentage)
     }
+  }
+
+  generateChartData = (prevChartData) => {
+    return {
+      labels: prevChartData.map(line => line.tag),
+      datasets: [{
+        label: 'Incorrect',
+        backgroundColor: '#428bca',
+        borderColor: '#428bca',
+        borderWidth: 1,
+        hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+        hoverBorderColor: 'rgba(255,99,132,1)',
+        data: prevChartData.map(line => line.percentage),
+        shadowOffsetX: 2,
+        shadowOffsetY: 2,
+        shadowBlur: 2,
+        shadowColor: 'rgba(0, 0, 0, 0.3)'
+      }, {
+        hidden: true,
+        label: 'Total',
+        data: [60, 70, 90, 42, 30]
+      }]
+    };
+
   }
 
   generateGraphTitle = () => {
@@ -199,6 +231,7 @@ export default class InsightsTopic extends React.Component {
   render() {
     const tableData = []
     const graphData = this.generateTableData()
+    const chartData = this.generateChartData(graphData)
     const { graphDropdown } = this.props.insightsTopic
 
     return (
@@ -230,7 +263,7 @@ export default class InsightsTopic extends React.Component {
         <Row>
           <Col lg={12} md={24} xs={24} style={{ marginTop: 20, paddingLeft: 20 }}>
             <HorizontalBar
-              data={quizChartData}
+              data={chartData}
               width={100}
               height={400}
               options={options}

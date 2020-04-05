@@ -3,6 +3,7 @@ import {counterReducer} from './counterReducer'
 import {loginReducer} from './loginReducer'
 import {quizMainReducer} from './quizMainReducer'
 import {quizCreationReducer} from './quizCreationReducer'
+import {tagReducer} from './tagReducer'
 import {insightsTopicReducer} from './insightsTopicReducer'
 
 export default combineReducers({
@@ -10,5 +11,6 @@ export default combineReducers({
   login: loginReducer,
   quizMain: quizMainReducer,
   quizCreation: quizCreationReducer,
+  tags: tagReducer,
   insightsTopic: insightsTopicReducer,
 })

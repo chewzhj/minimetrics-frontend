@@ -2,7 +2,7 @@ import API from './APIConfig'
 
 export async function getAllQuizAPI() {
   try {
-    let data = await API.get('/quiz/all')
+    let data = await API.post('/quiz/all', {})
     console.log(data);
     return data
   } catch (e) {
