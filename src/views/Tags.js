@@ -9,15 +9,12 @@ import {
   Button
 } from 'antd';
 import { EyeOutlined } from '@ant-design/icons'
+import { getAllTagAPI } from '../api/TagApi'
 
 const columns = [
   {
     title: 'Tag',
     dataIndex: 'tag',
-  },
-  {
-    title: 'Percentage / %',
-    dataIndex: 'percentage',
   },
   {
     title: 'View',
@@ -34,11 +31,21 @@ const { Option } = Select;
 
 export default class TagsMain extends React.Component {
 
+  componentDidMount() {
+    this.props.getTags()
+  }
+
   render() {
-   
+    const { tagList, tagsLoading } = this.props.tags
+
     return (
       <SideBar activeTab='tags' title='Tags' subtitle='This is the tags page'>
-        Tags
+        <Table
+          rowKey='tag'
+          loading={tagsLoading}
+          dataSource={[{tag: 'Deontology'}]}
+          columns={columns}
+        />
       </SideBar>
     )
   }

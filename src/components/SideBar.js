@@ -38,21 +38,15 @@ export default class SideBar extends React.Component {
           onBreakpoint={bpCallBack}
         >
           <div style={{ height: 40, margin: 24 }}>
-            <Link to='/'>
+            <Link to='/index'>
               <img src={Wordless_Logo} alt="MiniMetrics" style={{ height: 39, width: 152 }} />
             </Link>
           </div>
           <Menu theme="dark" mode="inline" defaultSelectedKeys={[activeTab]} defaultOpenKeys={[insightsOpen]}>
             <Menu.Item key="dashboard">
               <BarChartOutlined />
-              <Link to="/dashboard">
+              <Link to="/index">
                 <span className="nav-text">Dashboard</span>
-              </Link>
-            </Menu.Item>
-            <Menu.Item key="users">
-              <UserOutlined />
-              <Link to="/users">
-                <span className="nav-text">Users</span>
               </Link>
             </Menu.Item>
             <Menu.Item key="quiz">
@@ -82,6 +76,24 @@ export default class SideBar extends React.Component {
               <Menu.Item key="insights/student"><Link to='/insights/student'>Student Insights</Link></Menu.Item>
               <Menu.Item key="insights/confidence"><Link to='/insights/confidence'>Confidence Insights</Link></Menu.Item>
             </SubMenu>
+            <Menu.Item key="studentquiz">
+              <UserOutlined />
+              <Link to="/studentquiz">
+                <span className="nav-text">(Stu) Quizzes</span>
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="studentquizattempt">
+              <UserOutlined />
+              <Link to="/studentquiz/attempt">
+                <span className="nav-text">(Stu) Quiz Attempt</span>
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="studentquizresults">
+              <UserOutlined />
+              <Link to="/studentquiz/result">
+                <span className="nav-text">(Stu) Quiz Results</span>
+              </Link>
+            </Menu.Item>
           </Menu>
         </Sider>
         <Layout>

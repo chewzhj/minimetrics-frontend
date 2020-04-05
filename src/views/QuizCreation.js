@@ -1,11 +1,31 @@
 import React from 'react'
-import { Button, Tabs, Modal, Row, Col, Typography, Input, InputNumber, DatePicker, Checkbox, Switch, Select, Radio, Card, notification, Steps, Popover, Popconfirm } from 'antd'
+import {
+  Button,
+  Tabs,
+  Modal,
+  Row,
+  Col,
+  Typography,
+  Input,
+  InputNumber,
+  DatePicker,
+  Checkbox,
+  Switch,
+  Select,
+  Radio,
+  Card,
+  notification,
+  Steps,
+  Popover,
+  Popconfirm
+} from 'antd'
 import { blue, green, red } from '@ant-design/colors';
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import SideBar from '../components/SideBar'
 import CommonPhrases from '../phrases/CommonPhrases'
 import QuizPhrases from '../phrases/QuizPhrases'
+import GlobalConstants from '../variables/GlobalConstants'
 import Tooltip_Image from '../assets/img/confidence_tooltip.jpg'
 
 import {
@@ -225,7 +245,7 @@ export default class QuizCreation extends React.Component {
 
     const quizObject = {
       "title": quizTitle,
-      "moduleID": "012d1387-43ff-4053-b0bd-462954693a01",
+      "moduleID": GlobalConstants.ModuleID,
       "description": "4KIDSONLY", // not included
       "isPublished": true,
       "password": "", // not included
