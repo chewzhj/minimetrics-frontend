@@ -475,7 +475,7 @@ export default class QuizCreation extends React.Component {
                 <Title level={4}>{QuizPhrases.CONFIDENCE_LEVEL}&nbsp;&nbsp;
                   <Popover
                     title='Preview'
-                    placement="topLeft"
+                    // placement="topLeft"
                     content={
                       <img src={Tooltip_Image} alt="MiniMetrics" style={{ height: 270, width: 480 }} />
                     }><Button icon={<QuestionOutlined />} shape='circle'/>
