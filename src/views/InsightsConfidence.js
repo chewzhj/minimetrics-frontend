@@ -13,7 +13,7 @@ import {
 } from 'antd';
 import CommonPhrases from '../phrases/CommonPhrases'
 import InsightsPhrases from '../phrases/InsightsPhrases'
-import { QuestionCircleFilled, SmileTwoTone, CloseCircleTwoTone, CheckCircleTwoTone, EyeOutlined, QuestionCircleOutlined} from '@ant-design/icons'
+import { QuestionCircleFilled, SmileTwoTone, CloseCircleTwoTone, CheckCircleTwoTone, EyeOutlined, CheckOutlined, CloseOutlined} from '@ant-design/icons'
 import { Bar } from 'react-chartjs-2';
 import { ChartDataLabels } from 'chartjs-plugin-datalabels';
 import 'chartjs-plugin-style';
@@ -43,14 +43,6 @@ const columns = [
   {
     title: 'Freq. in Knowledgeable',
     dataIndex: 'freqKnowledgeable',
-  },
-  {
-    title: 'View',
-    render: (text, record, index) => {
-      return (
-        <Button shape='circle' icon={<EyeOutlined />} />
-      )
-    }
   }
 ];
 
@@ -99,11 +91,11 @@ const legendTable = [
     render: text => {
       if (text === 1) {
         return (
-          'Yes'
+          <Text><CheckOutlined/> Yes</Text>
         )
       } else {
         return (
-          'No'
+          <Text><CloseOutlined/> No</Text>
         )
       }
     }
@@ -115,11 +107,11 @@ const legendTable = [
     render: text => {
       if (text === 1) {
         return (
-          'Yes'
+          <Text><CheckOutlined/> Yes</Text>
         )
       } else {
         return (
-          'No'
+          <Text><CloseOutlined/> No</Text>
         )
       }
     }
@@ -144,8 +136,8 @@ const data = {
     backgroundColor: chartColors,
     borderColor: chartColors,
     borderWidth: 1,
-    hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-    hoverBorderColor: 'rgba(255,99,132,1)',
+    hoverBackgroundColor: 'rgba(158, 158, 158, 0.7)',
+    hoverBorderColor: 'rgba(158, 158, 158, 0.7)',
     data: [85, 60, 30, 15],
     shadowOffsetX: 4,
     shadowOffsetY: 4,
@@ -176,6 +168,7 @@ export default class InsightsConfidence extends React.Component {
       {
         name: 'Robert Fischer',
         userId: 1,
+        group: 'Misinformed',
         freqMisinformed: 33,
         freqUninformed: 33,
         freqAlmostThere: 32,
@@ -184,6 +177,7 @@ export default class InsightsConfidence extends React.Component {
       {
         name: 'Mitchell Robertson',
         userId: 2,
+        group: 'Misinformed',
         freqMisinformed: 21,
         freqUninformed: 21,
         freqAlmostThere: 20,
@@ -192,6 +186,7 @@ export default class InsightsConfidence extends React.Component {
       {
         name: 'Ricardo Black',
         userId: 3,
+        group: 'Misinformed',
         freqMisinformed: 20,
         freqUninformed: 20,
         freqAlmostThere: 20,
@@ -200,6 +195,7 @@ export default class InsightsConfidence extends React.Component {
       {
         name: 'Harold Edwards',
         userId: 4,
+        group: 'Misinformed',
         freqMisinformed: 19,
         freqUninformed: 12,
         freqAlmostThere: 10,
@@ -208,6 +204,7 @@ export default class InsightsConfidence extends React.Component {
       {
         name: 'Jennie Warren',
         userId: 5,
+        group: 'Misinformed',
         freqMisinformed: 16,
         freqUninformed: 11,
         freqAlmostThere: 13,
@@ -216,6 +213,7 @@ export default class InsightsConfidence extends React.Component {
       {
         name: 'Audrey Watson',
         userId: 6,
+        group: 'Misinformed',
         freqMisinformed: 15,
         freqUninformed: 11,
         freqAlmostThere: 1,
@@ -224,6 +222,7 @@ export default class InsightsConfidence extends React.Component {
       {
         name: 'Judith Richards',
         userId: 7,
+        group: 'Misinformed',
         freqMisinformed: 12,
         freqUninformed: 3,
         freqAlmostThere: 3,
@@ -232,6 +231,7 @@ export default class InsightsConfidence extends React.Component {
       {
         name: 'Soham Ngyuen',
         userId: 8,
+        group: 'Misinformed',
         freqMisinformed: 11,
         freqUninformed: 4,
         freqAlmostThere: 2,
@@ -240,6 +240,7 @@ export default class InsightsConfidence extends React.Component {
       {
         name: 'Jacob Fox',
         userId: 9,
+        group: 'Misinformed',
         freqMisinformed: 11,
         freqUninformed: 4,
         freqAlmostThere: 2,
@@ -248,6 +249,7 @@ export default class InsightsConfidence extends React.Component {
       {
         name: 'Freida Ignan',
         userId: 10,
+        group: 'Misinformed',
         freqMisinformed: 7,
         freqUninformed: 3,
         freqAlmostThere: 3,

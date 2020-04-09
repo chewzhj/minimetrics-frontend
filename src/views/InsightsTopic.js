@@ -89,8 +89,8 @@ export default class InsightsTopic extends React.Component {
         backgroundColor: '#428bca',
         borderColor: '#428bca',
         borderWidth: 1,
-        hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-        hoverBorderColor: 'rgba(255,99,132,1)',
+        hoverBackgroundColor: 'rgba(158, 158, 158, 0.7)',
+        hoverBorderColor: 'rgba(158, 158, 158, 0.7)',
         data: prevChartData.map(line => line.percentage),
         shadowOffsetX: 3,
         shadowOffsetY: 3,
@@ -230,9 +230,8 @@ export default class InsightsTopic extends React.Component {
         </Modal>
         <Row>
           <Col md={24} xs={24} style={{ marginTop: 20, marginLeft: 20, marginRight: 20 }}>
-            <Title level={3}>Misunderstood Topics & Questions</Title>
-            <Text>by percentage of incorrect 1st attempts&nbsp;</Text>
-            <Link to='/tutorials/insights/topic'><Button icon={<PlayCircleOutlined/>}>Tutorial</Button></Link>
+            <Title level={3}>Misunderstood Topics & Questions&nbsp;&nbsp;<Link to='/tutorials/insights/topic'><Button icon={<PlayCircleOutlined/>}>Tutorial</Button></Link></Title>
+            <Text>by percentage of incorrect 1st attempts</Text>
           </Col>
         </Row>
         <Row gutter={[15, 15]} justify="end" style={{ marginTop: 20, marginRight: 20 }}>
