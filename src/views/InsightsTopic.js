@@ -92,9 +92,9 @@ export default class InsightsTopic extends React.Component {
         hoverBackgroundColor: 'rgba(255,99,132,0.4)',
         hoverBorderColor: 'rgba(255,99,132,1)',
         data: prevChartData.map(line => line.percentage),
-        shadowOffsetX: 2,
-        shadowOffsetY: 2,
-        shadowBlur: 2,
+        shadowOffsetX: 3,
+        shadowOffsetY: 3,
+        shadowBlur: 3,
         shadowColor: 'rgba(0, 0, 0, 0.3)'
       }, {
         hidden: true,
@@ -235,8 +235,8 @@ export default class InsightsTopic extends React.Component {
             <Link to='/tutorials/insights/topic'><Button icon={<PlayCircleOutlined/>}>Tutorial</Button></Link>
           </Col>
         </Row>
-        <Row gutter={[15, 15]} justify="end" style={{ marginTop: 10, marginRight: 20 }}>
-          <Col md={6} xs={24}>
+        <Row gutter={[15, 15]} justify="end" style={{ marginTop: 20, marginRight: 20 }}>
+          <Col md={12} xs={24}>
             <span style={{ float: 'right', marginTop: 5 }}>Showing Results For:</span>
           </Col>
           <Col md={8} xs={24}>
@@ -248,8 +248,17 @@ export default class InsightsTopic extends React.Component {
           </Col>
         </Row>
 
-        <Row type="flex" justify="center" style={{ marginTop: 20 }}>
-          <Text strong>Click on a Tag in the chart to view its questions.</Text>
+        <Row style={{ marginTop: 20 }}>
+          <Col md={12} xs={24}>
+            <div align="center">
+              <Text strong>Click on a Tag in the chart to view its questions.</Text>
+            </div>
+          </Col>
+          <Col md={12} xs={24}>
+            <div align="center">
+              <Text strong>Table of Questions</Text>
+            </div>
+          </Col>
         </Row>
 
         <Row>

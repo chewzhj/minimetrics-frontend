@@ -32,7 +32,25 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+/*COLOR*/
+.fcdbd9 {
+  background-color: #fcdbd9;
+}
+
+.fccca7 {
+  background-color: #fccca7;
+}
+
+.fff3cf {
+  background-color: #fff3cf;
+}
+
+.cfefdf {
+  background-color: #cfefdf;
 }

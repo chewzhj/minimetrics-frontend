@@ -65,11 +65,7 @@ const data = {
     borderWidth: 1,
     hoverBackgroundColor: 'rgba(255,99,132,0.4)',
     hoverBorderColor: 'rgba(255,99,132,1)',
-    data: [85, 60, 30, 15],
-    shadowOffsetX: 2,
-    shadowOffsetY: 2,
-    shadowBlur: 2,
-    shadowColor: 'rgba(0, 0, 0, 0.3)'
+    data: [85, 60, 30, 15]
   }]
 };
 
