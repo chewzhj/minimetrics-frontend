@@ -109,12 +109,20 @@ export default class InsightsTopic extends React.Component {
     };
   }
   chartOptions = {
+    title: {
+      display: true,
+      position: 'bottom',
+      text: 'Percentage of incorrect 1st attempts'
+    },
     plugins: {
       // Change options for ALL labels of THIS CHART
       datalabels: {
         color: '#000',
         align: 'end',
-        anchor: 'end'
+        anchor: 'end',
+        formatter: function (value, context) {
+          return value + '%';
+        }
       }
     },
     layout: {
