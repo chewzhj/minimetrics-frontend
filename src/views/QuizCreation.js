@@ -26,7 +26,7 @@ import GlobalConstants from '../variables/GlobalConstants'
 import Tooltip_Image from '../assets/img/confidence_tooltip.jpg'
 
 import {
-  EyeOutlined,
+  QuestionOutlined,
 } from '@ant-design/icons';
 
 const { TextArea } = Input;
@@ -339,7 +339,7 @@ export default class QuizCreation extends React.Component {
         </Modal>
 
         <Row justify="space-between">
-          <Col lg={8} md={8} sm={24} xs={24} style={{ marginTop: 20 }}>
+          <Col lg={6} md={6} sm={24} xs={24} style={{ marginTop: 10 }}>
             <Popconfirm
               title="Are you sure you want to discard this quiz?"
               onConfirm={this.discardQuizCreation}
@@ -347,24 +347,24 @@ export default class QuizCreation extends React.Component {
               okType='danger'
               cancelText="No"
             >
-              <Button type='danger' style={{ float: 'left', marginRight: 10 }}>
+              <Button type='danger' style={{ float: 'left', marginRight: 10, marginTop: 10 }}>
                 Discard Quiz
               </Button>
             </Popconfirm>
           </Col>
 
-          <Col lg={12} md={16} sm={24} xs={24} style={{ marginTop: 20 }}>
-            <Button onClick={this.openPreview} disabled={currentStep === 0} style={{ float: 'right', marginTop: 10, marginLeft: 10 }}>
+          <Col lg={18} md={18} sm={24} xs={24} style={{ marginTop: 10 }}>
+            <Button onClick={this.nextStep} disabled={currentStep===1} type='primary' style={{ float: 'right', marginLeft: 10, marginTop: 10, width: 125}}>
+              Next &rarr;
+            </Button>
+            <Button onClick={this.prevStep} disabled={currentStep === 0} style={{ float: 'right', marginLeft: 10, marginTop: 10, width: 125 }}>
+            &larr; Previous
+            </Button>
+            <Button onClick={this.openPreview} disabled={currentStep === 0} style={{ float: 'right', marginTop: 10, marginLeft: 10, width: 125 }}>
               Preview Quiz
             </Button>
-            <Button onClick={this.checkSubmit} disabled={currentStep===0} loading={submitting} type='primary' style={{ float: 'right', marginTop: 10, marginLeft: 10}}>
+            <Button onClick={this.checkSubmit} disabled={currentStep===0} loading={submitting} type='primary' style={{ float: 'right', marginTop: 10, marginLeft: 10, width: 125 }}>
               Create Quiz
-            </Button>
-            <Button onClick={this.nextStep} disabled={currentStep===1} type='primary' style={{ float: 'right', marginLeft: 10, marginTop: 10}}>
-              Next
-            </Button>
-            <Button onClick={this.prevStep} disabled={currentStep === 0} style={{ float: 'right', marginLeft: 10, marginTop: 10 }}>
-              Previous
             </Button>
           </Col>
         </Row>
@@ -407,12 +407,12 @@ export default class QuizCreation extends React.Component {
               <Col md={8} sm={11} xs={21} style={{ marginLeft: 20 }}>
                 <DatePicker
                   format="YYYY-MM-DD"
-                  style={{width: '100%'}}
+                  style={{ width: '100%' }}
                   onChange={this.changeOpeningDate}
                   value={quizStartDate}
                 />
               </Col>
-              <Col md={8} sm={10} xs={21}>
+              <Col md={6} sm={8} xs={14} style={{ marginLeft: 20 }}>
                 <Input
                   type='time'
                   onChange={this.changeOpeningTime}
@@ -434,7 +434,7 @@ export default class QuizCreation extends React.Component {
                   value={quizEndDate}
                 />
               </Col>
-              <Col md={8} sm={10} xs={21} >
+              <Col md={6} sm={8} xs={14} style={{ marginLeft: 20 }}>
                 <Input
                   type='time'
                   onChange={this.changeClosingTime}
@@ -476,18 +476,16 @@ export default class QuizCreation extends React.Component {
             </Row>
 
             <Row>
-              <Col lg={6} md={8} sm={12} xs={12} style={{ marginTop: 20, marginLeft: 20 }}>
-                <Title level={4}>{QuizPhrases.CONFIDENCE_LEVEL}</Title>
-              </Col>
-              <Col lg={2} md={2} sm={2} xs={2} style={{ marginTop: 20, marginLeft: 20 }}>
-                <Popover
-                  title='Preview'
-                  // placement="topLeft"
-                  content={
-                    <img src={Tooltip_Image} alt="MiniMetrics" style={{ height: 270, width: 480 }} />
-                  }>
-                  <Button icon={<EyeOutlined />} shape='circle' />
-                </Popover>
+              <Col lg={8} md={8} sm={12} xs={24} style={{ marginTop: 20, marginLeft: 20 }}>
+                <Title level={4}>{QuizPhrases.CONFIDENCE_LEVEL}&nbsp;&nbsp;
+                  <Popover
+                    title='Preview'
+                    placement="topLeft"
+                    content={
+                      <img src={Tooltip_Image} alt="MiniMetrics" style={{ height: 270, width: 480 }} />
+                    }><Button icon={<QuestionOutlined />} shape='circle'/>
+                  </Popover>
+                </Title>
               </Col>
             </Row>
 
@@ -720,7 +718,7 @@ const QuizQuestionOption = (props) => {
 
   return (
     <Radio style={radioStyle} value={props.option.optionNumber}>
-
+      <Text>This is the correct option</Text>
       <Col xs={20}>
         <TextArea autoSize={{ minRows: 4 }} style={{ width: '100%' }} value={props.option.optionText} onChange={onChangeOptionText} />
       </Col>

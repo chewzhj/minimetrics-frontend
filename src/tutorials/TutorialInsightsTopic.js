@@ -225,9 +225,8 @@ export default class InsightsTopic extends React.Component {
         </Modal>
         <Row>
           <Col md={24} xs={24} style={{ marginTop: 20, marginLeft: 20, marginRight: 20 }}>
-            <Title level={3}>Misunderstood Topics & Questions</Title>
-            <Text>by percentage of incorrect 1st attempts&nbsp;</Text>
-            <Button onClick={()=>{this.props.history.goBack()}}>End Tutorial</Button>
+            <Title level={3}>Misunderstood Topics & Questions&nbsp;&nbsp;<Button onClick={()=>{this.props.history.goBack()}}>End Tutorial</Button></Title>
+            <Text>by percentage of incorrect 1st attempts</Text>
           </Col>
         </Row>
         <Row gutter={[15, 15]} justify="end" style={{ marginTop: 10, marginRight: 20 }}>
