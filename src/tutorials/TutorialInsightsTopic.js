@@ -200,7 +200,7 @@ export default class InsightsTopic extends React.Component {
       }
     }
   ];
-
+  changeStep = (step) => this.setState({step})
   changeGraphDropdown = (value) => this.setState({graphDropdown: value})
   clickBar = (index) => {
     const graphData = this.cleanGraphData()
@@ -218,7 +218,7 @@ export default class InsightsTopic extends React.Component {
     const chartData = this.generateChartData(graphData)
     const modalQuestion = InsightsTopicData.defaultQuestion
 
-    const { graphDropdown, viewQuestion } = this.state
+    const { graphDropdown, viewQuestion, step } = this.state
 
     return (
       <SideBar activeTab='insights/topic' title="Topic Insights (Tutorial)" subtitle="Identify the most troublesome topics for students" disabled>
@@ -245,6 +245,16 @@ export default class InsightsTopic extends React.Component {
             </div>
           }
         </Modal>
+
+        {/* Step 2 Modal */}
+        <Modal
+          title="Step 2 Modal"
+          visible={step===2}
+          onCancel={this.closeModal}
+        >
+          <p>Hihihihi</p>
+        </Modal>
+
         <Row>
           <Col md={24} xs={24} style={{ marginTop: 20, marginLeft: 20, marginRight: 20 }}>
             <Title level={3}>Misunderstood Topics & Questions&nbsp;&nbsp;<Button onClick={()=>{this.props.history.goBack()}}>End Tutorial</Button></Title>
