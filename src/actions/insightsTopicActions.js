@@ -12,7 +12,7 @@ import {getTopicInsightsAPI} from '../api/InsightsAPI'
 export function loadChartData(moduleID) {
   return function(dispatch) {
     dispatch(loadChartStart())
-    return getTopicInsightsAPI()
+    return getTopicInsightsAPI(moduleID)
       .then(json => {
         if (!json.data.hasError) {
           dispatch(loadChartSuccess(json.data.quizList))
