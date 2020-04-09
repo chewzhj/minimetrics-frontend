@@ -14,16 +14,16 @@ import { getAllTagAPI } from '../api/TagApi'
 const columns = [
   {
     title: 'Tag',
-    dataIndex: 'tag',
+    dataIndex: 'tagName',
   },
-  {
-    title: 'View',
-    render: (text, record, index) => {
-      return (
-        <Button shape='circle' icon={<EyeOutlined />} />
-      )
-    }
-  }
+  // {
+  //   title: 'View',
+  //   render: (text, record, index) => {
+  //     return (
+  //       <Button shape='circle' icon={<EyeOutlined />} />
+  //     )
+  //   }
+  // }
 ];
 
 const { TabPane } = Tabs;
@@ -41,10 +41,12 @@ export default class TagsMain extends React.Component {
     return (
       <SideBar activeTab='tags' title='Tags' subtitle='This is the tags page'>
         <Table
-          rowKey='tag'
+          rowKey='tagID'
           loading={tagsLoading}
-          dataSource={[{tag: 'Deontology'}]}
+          dataSource={tagList}
           columns={columns}
+          bordered
+          size='small'
         />
       </SideBar>
     )

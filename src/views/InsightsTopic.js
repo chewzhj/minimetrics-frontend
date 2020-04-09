@@ -36,6 +36,57 @@ export default class InsightsTopic extends React.Component {
   }
 
   cleanGraphData = () => {
+    const { graphDropdown, graphData } = this.props.insightsTopic
+    const { tagList } = this.props.tags
+    const topicData = graphData
+
+    if (graphDropdown === 'all') {
+      let accumulateIncorrect = {}
+      let accumulateCorrect = {}
+      for (const quiz of topicData) {
+        for (const tag of quiz.tagList) {
+          if (!accumulateCorrect[tag.tagName]) {
+            accumulateCorrect[tag.tagName] = 0
+            accumulateIncorrect[tag.tagName] = 0
+          }
+          accumulateIncorrect[tag.tagName] += tag.incorrect
+          accumulateCorrect[tag.tagName] += tag.correct
+        }
+      }
+      let graphData = []
+      for (const tag in accumulateIncorrect) {
+        graphData.push({
+          tag: tag,
+          percentage: percentage1dp(accumulateIncorrect[tag] / (accumulateIncorrect[tag]+accumulateCorrect[tag]))
+        })
+      }
+      graphData.sort((t1, t2) => {
+        if (t1.percentage !== t2.percentage) {
+          return t2.percentage - t1.percentage
+        } else {
+          return t1.tag.localeCompare(t2.tag)
+        }
+      })
+      return graphData
+    } else {
+      const topicDataFiltered = topicData.filter(quiz => quiz.quiz.quizID === graphDropdown)
+      if (topicDataFiltered.length === 0) {
+        return []
+      }
+      const quizTopicData = topicDataFiltered[0]
+      return quizTopicData.tagList.map(tag => ({
+        tag: tag.tagName,
+        percentage: percentage1dp(tag.incorrect / (tag.correct+tag.incorrect))
+      })).sort((t1, t2) => {
+        if (t1.percentage !== t2.percentage) {
+          return t2.percentage - t1.percentage
+        } else {
+          return t1.tag.localeCompare(t2.tag)
+        }
+      })
+    }
+  }
+  cleanGraphTempData = () => {
     const { graphDropdown } = this.props.insightsTopic
     const topicData = InsightsTopicData.topicData
 
@@ -89,13 +140,13 @@ export default class InsightsTopic extends React.Component {
         backgroundColor: '#428bca',
         borderColor: '#428bca',
         borderWidth: 1,
-        hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-        hoverBorderColor: 'rgba(255,99,132,1)',
+        hoverBackgroundColor: 'rgba(158, 158, 158, 0.7)',
+        hoverBorderColor: 'rgba(158, 158, 158, 0.7)',
         data: prevChartData.map(line => line.percentage),
-        shadowOffsetX: 3,
-        shadowOffsetY: 3,
-        shadowBlur: 3,
-        shadowColor: 'rgba(0, 0, 0, 0.3)'
+        shadowOffsetX: 4,
+        shadowOffsetY: 4,
+        shadowBlur: 4,
+        shadowColor: 'rgba(0, 0, 0, 0.4)'
       }, {
         hidden: true,
         label: 'Total',
@@ -104,13 +155,36 @@ export default class InsightsTopic extends React.Component {
     };
   }
   chartOptions = {
+    title: {
+      display: true,
+      position: 'bottom',
+      text: 'Percentage of incorrect 1st attempts'
+    },
     plugins: {
       // Change options for ALL labels of THIS CHART
       datalabels: {
         color: '#000',
         align: 'end',
-        anchor: 'end'
+        anchor: 'end',
+        formatter: function (value, context) {
+          return value + '%';
+        }
       }
+    },
+    layout: {
+      padding: {
+        right: 50
+      }
+    },
+    scales: {
+      xAxes: [{
+        ticks: {
+          beginAtZero: true,
+          suggestedMin: 0,
+          suggestedMax: 100,
+          stepSize: 5
+        }
+      }]
     },
     maintainAspectRatio: false,
     legend: {
@@ -201,7 +275,9 @@ export default class InsightsTopic extends React.Component {
     const chartData = this.generateChartData(graphData)
     const modalQuestion = this.filterQuestion()
 
-    const { graphDropdown, viewQuestion } = this.props.insightsTopic
+    const { graphDropdown, viewQuestion, graphLoading } = this.props.insightsTopic
+    const { tagsLoading, tagList } = this.props.tags
+    const { quizLoading, quizzes } = this.props.quizMain
 
     return (
       <SideBar activeTab='insights/topic' title="Topic Insights" subtitle="Identify the most troublesome topics for students">
@@ -230,9 +306,8 @@ export default class InsightsTopic extends React.Component {
         </Modal>
         <Row>
           <Col md={24} xs={24} style={{ marginTop: 20, marginLeft: 20, marginRight: 20 }}>
-            <Title level={3}>Misunderstood Topics & Questions</Title>
-            <Text>by percentage of incorrect 1st attempts&nbsp;</Text>
-            <Link to='/tutorials/insights/topic'><Button icon={<PlayCircleOutlined/>}>Tutorial</Button></Link>
+            <Title level={3}>Misunderstood Topics & Questions&nbsp;&nbsp;<Link to='/tutorials/insights/topic'><Button icon={<PlayCircleOutlined/>}>Tutorial</Button></Link></Title>
+            <Text>by percentage of incorrect 1st attempts</Text>
           </Col>
         </Row>
         <Row gutter={[15, 15]} justify="end" style={{ marginTop: 20, marginRight: 20 }}>
@@ -240,30 +315,31 @@ export default class InsightsTopic extends React.Component {
             <span style={{ float: 'right', marginTop: 5 }}>Showing Results For:</span>
           </Col>
           <Col md={8} xs={24}>
-            <Select value={graphDropdown} onChange={this.changeGraphDropdown} style={{ width: '100%', paddingLeft: 20 }}>
+            <Select disabled={quizLoading} value={graphDropdown} onChange={this.changeGraphDropdown} style={{ width: '100%', paddingLeft: 20 }}>
               <Option value="all">All Quizzes</Option>
-              <Option value={1}>Mission 1 Quiz</Option>
-              <Option value={2}>Mission 2 Quiz</Option>
+              {quizzes.map(quiz => (
+                <Option key={quiz.quizID} value={quiz.quizID}>{quiz.title}</Option>
+              ))}
             </Select>
           </Col>
         </Row>
 
         <Row style={{ marginTop: 20 }}>
-          <Col md={12} xs={24}>
-            <div align="center">
-              <Text strong>Click on a Tag in the chart to view its questions.</Text>
-            </div>
-          </Col>
-          <Col md={12} xs={24}>
-            <div align="center">
-              <Text strong>Table of Questions</Text>
-            </div>
-          </Col>
+
+
         </Row>
 
         <Row>
           <Col lg={12} md={24} xs={24} style={{ marginTop: 20, paddingLeft: 20 }}>
-            <Spin spinning={false}>
+            <Col>
+              <div align="center">
+                <Text strong>Topic Bar Chart</Text>
+              </div>
+              <div align="center" style={{ marginTop: 10, marginBottom: 20 }}>
+                <Text>Click on a bar in the chart below to view a Table of Questions about the topic.</Text>
+              </div>
+            </Col>
+            <Spin spinning={graphLoading && tagsLoading}>
               <HorizontalBar
                 data={chartData}
                 width={100}
@@ -274,6 +350,14 @@ export default class InsightsTopic extends React.Component {
           </Col>
 
           <Col lg={12} md={24} xs={24} style={{ marginTop: 20, paddingLeft: 10, paddingRight: 20 }}>
+            <Col>
+              <div align="center">
+                <Text strong>Table of Questions</Text>
+              </div>
+              <div align="center" style={{ marginTop: 10, marginBottom: 20 }}>
+                <Text>This table will populate with questions from the topics selected.</Text>
+              </div>
+            </Col>
             <Table columns={this.columns} dataSource={tableData} bordered />
           </Col>
         </Row>

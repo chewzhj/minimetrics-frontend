@@ -1,4 +1,4 @@
-const ModuleID = "94c6ec2c-3457-435c-bf61-03536d7bfe47"
+const ModuleID = "05776d84-c16e-493c-9844-076824eae49f"
 
 export default {
   ModuleID
