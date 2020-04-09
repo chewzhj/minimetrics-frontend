@@ -12,7 +12,7 @@ import InsightsMain from '../views/InsightsMain'
 import InsightsTopicContainer from '../containers/InsightsTopicContainer'
 import InsightsQuiz from '../views/InsightsQuiz'
 import InsightsStudent from '../views/InsightsStudent'
-import InsightsConfidence from '../views/InsightsConfidence'
+import InsightsConfidenceContainer from '../containers/InsightsConfidenceContainer'
 import TutorialInsightsTopic from '../tutorials/TutorialInsightsTopic'
 import StudentQuizAttempt from '../views/StudentQuizAttempt'
 import StudentQuizList from '../views/StudentQuizList'
@@ -33,7 +33,7 @@ const Routing = () => {
       <Route path="/insights/topic" component={InsightsTopicContainer} />
       <Route path="/insights/quiz" component={InsightsQuiz} />
       <Route path="/insights/student" component={InsightsStudent} />
-      <Route path="/insights/confidence" component={InsightsConfidence} />
+      <Route path="/insights/confidence" component={InsightsConfidenceContainer} />
 
       <Route path="/studentquiz/attempt" component={StudentQuizAttempt} />
       <Route path="/studentquiz/result" component={StudentQuizResult} />

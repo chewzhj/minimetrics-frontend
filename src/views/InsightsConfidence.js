@@ -9,8 +9,10 @@ import {
   Button,
   Typography,
   Tooltip,
-  Divider
+  Divider,
+  Modal,
 } from 'antd';
+import {MailOutlined} from '@ant-design/icons'
 import CommonPhrases from '../phrases/CommonPhrases'
 import InsightsPhrases from '../phrases/InsightsPhrases'
 import { QuestionCircleFilled, SmileTwoTone, CloseCircleTwoTone, CheckCircleTwoTone, EyeOutlined, QuestionCircleOutlined} from '@ant-design/icons'
@@ -32,26 +34,26 @@ const columns = [
     title: 'Freq. in Misinformed',
     dataIndex: 'freqMisinformed',
   },
-  {
-    title: 'Freq. in Uninformed',
-    dataIndex: 'freqUninformed',
-  },
-  {
-    title: 'Freq. in Almost There',
-    dataIndex: 'freqAlmostThere',
-  },
-  {
-    title: 'Freq. in Knowledgeable',
-    dataIndex: 'freqKnowledgeable',
-  },
-  {
-    title: 'View',
-    render: (text, record, index) => {
-      return (
-        <Button shape='circle' icon={<EyeOutlined />} />
-      )
-    }
-  }
+  // {
+  //   title: 'Freq. in Uninformed',
+  //   dataIndex: 'freqUninformed',
+  // },
+  // {
+  //   title: 'Freq. in Almost There',
+  //   dataIndex: 'freqAlmostThere',
+  // },
+  // {
+  //   title: 'Freq. in Knowledgeable',
+  //   dataIndex: 'freqKnowledgeable',
+  // },
+  // {
+  //   title: 'View',
+  //   render: (text, record, index) => {
+  //     return (
+  //       <Button shape='circle' icon={<EyeOutlined />} />
+  //     )
+  //   }
+  // }
 ];
 
 const legendTable = [
@@ -171,6 +173,11 @@ const options = {
 
 export default class InsightsConfidence extends React.Component {
 
+  changeSelect = (value, option) => this.props.changeSelect(value)
+  clickGroup = (value) => this.props.clickGroup(value)
+  exportGroup = () => this.props.exportGroup()
+  closeExportModal = () => this.props.closeExportModal()
+
   generateTableData = () => {
     const tableData = [
       {
@@ -257,7 +264,6 @@ export default class InsightsConfidence extends React.Component {
 
     return tableData
   }
-
   generateLegendTableData = () => {
     const legendTableData = [
       {
@@ -290,11 +296,26 @@ export default class InsightsConfidence extends React.Component {
   }
 
   render() {
+    const {
+      tagSelection,
+      exportGroupModalVisible,
+    } = this.props.insightsConfidence
     const tableData = this.generateTableData()
     const legendTableData = this.generateLegendTableData()
 
     return (
       <SideBar activeTab='insights/confidence' title="Insights" subtitle="Confidence Insights">
+
+        <Modal
+          visible={exportGroupModalVisible}
+          footer={null}
+          onCancel={this.closeExportModal}
+          title="Export Misinformed Students' Emails">
+          <p>e0030001@u.nus.edu;</p>
+          <p>e0030002@u.nus.edu;</p>
+          <p>e0030003@u.nus.edu;</p>
+          <p>e0030004@u.nus.edu;</p>
+        </Modal>
 
         <Row>
           <Col md={24} xs={24} style={{ marginTop: 20, marginLeft: 20, paddingRight: 20 }}>
@@ -313,8 +334,8 @@ export default class InsightsConfidence extends React.Component {
             <span style={{ float: 'right', marginTop: 5 }}>{CommonPhrases.DROPDOWN_LABEL_SHOWING_RESULTS_FOR}</span>
           </Col>
           <Col md={8} xs={24}>
-            <Select mode="multiple" defaultValue="allTags" style={{ width: '100%', paddingLeft: 20 }}>
-              <Option value="allTags">All Tags</Option>
+            <Select mode="multiple" allowClear onChange={this.changeSelect} value={tagSelection} style={{ width: '100%', paddingLeft: 20 }}>
+              {/* <Option value="allTags">All Tags</Option> */}
               <Option value="Deontology">Deontology</Option>
               <Option value="Fair Use Doctrine">Fair Use Doctrine</Option>
               <Option value="Values">Values</Option>
@@ -334,7 +355,7 @@ export default class InsightsConfidence extends React.Component {
             />
           </Col>
           <Col lg={12} md={24} xs={24}>
-            <Table 
+            <Table
             title={() => <div style={{ marginTop: 20 }} align='center'><Text strong>Legend</Text></div>}
             columns={legendTable}
             rowClassName={(record) => record.color.replace('#', '')}
@@ -449,14 +470,15 @@ export default class InsightsConfidence extends React.Component {
           <Col md={24} xs={24} style={{ marginTop: 40, marginLeft: 20, paddingRight: 20 }}>
             <Title level={3}>View Students in confidence group
             </Title>
-
+            <Button onClick={this.exportGroup} icon={<MailOutlined/>}>Export Emails</Button>
+            <br/>
             <Text>Select a student from any of the 4 groups above by clicking on their corresponding buttons.</Text>
           </Col>
         </Row>
 
         <Row style={{ marginTop: 20, marginLeft: 20, marginRight: 20 }}>
           <Col md={24} xs={24}>
-            <Table columns={columns} dataSource={tableData} bordered={true} />
+            <Table columns={columns} dataSource={tableData} bordered size='small'/>
           </Col>
         </Row>
       </SideBar>
