@@ -70,13 +70,13 @@ export default class SideBar extends React.Component {
                 </span>
               }
             >
-              <Menu.Item key="insights/overview"><Link to='/insights/overview'>Overview</Link></Menu.Item>
+              {/* <Menu.Item key="insights/overview"><Link to='/insights/overview'>Overview</Link></Menu.Item> */}
               <Menu.Item key="insights/topic"><Link to='/insights/topic'>Topic Insights</Link></Menu.Item>
-              <Menu.Item key="insights/quiz"><Link to='/insights/quiz'>Quiz Insights</Link></Menu.Item>
-              <Menu.Item key="insights/student"><Link to='/insights/student'>Student Insights</Link></Menu.Item>
+              {/* <Menu.Item key="insights/quiz"><Link to='/insights/quiz'>Quiz Insights</Link></Menu.Item>
+              <Menu.Item key="insights/student"><Link to='/insights/student'>Student Insights</Link></Menu.Item> */}
               <Menu.Item key="insights/confidence"><Link to='/insights/confidence'>Confidence Insights</Link></Menu.Item>
             </SubMenu>
-            <Menu.Item key="studentquiz">
+            {/* <Menu.Item key="studentquiz">
               <UserOutlined />
               <Link to="/studentquiz">
                 <span className="nav-text">(Stu) Quizzes</span>
@@ -93,7 +93,7 @@ export default class SideBar extends React.Component {
               <Link to="/studentquiz/result">
                 <span className="nav-text">(Stu) Quiz Results</span>
               </Link>
-            </Menu.Item>
+            </Menu.Item> */}
           </Menu>
         </Sider>
         <Layout>
