@@ -1,7 +1,6 @@
 import React from 'react'
 import {
   Button,
-  Tabs,
   Modal,
   Row,
   Col,
@@ -19,9 +18,7 @@ import {
   Popover,
   Popconfirm
 } from 'antd'
-import { blue, green, red } from '@ant-design/colors';
-import { Link } from 'react-router-dom'
-import moment from 'moment'
+import { blue, green, red } from '@ant-design/colors'
 import SideBar from '../components/SideBar'
 import CommonPhrases from '../phrases/CommonPhrases'
 import QuizPhrases from '../phrases/QuizPhrases'
@@ -29,28 +26,15 @@ import GlobalConstants from '../variables/GlobalConstants'
 import Tooltip_Image from '../assets/img/confidence_tooltip.jpg'
 
 import {
-  BulbOutlined,
-  SettingOutlined,
   EyeOutlined,
 } from '@ant-design/icons';
 
-const { TabPane } = Tabs
 const { TextArea } = Input;
 const { Title, Text } = Typography;
-const { RangePicker } = DatePicker;
 const { Option } = Select;
 const { Step } = Steps;
 
 export default class QuizCreation extends React.Component {
-
-  state = {
-    tabPosition: 'left'
-  }
-
-  onBreakpoint = (broken) => {
-    const position = broken ? 'top' : 'left'
-    this.setState({ tabPosition: position })
-  }
 
   changeTab = (tab) => this.props.changeTab(tab)
   changeStep = (step) => this.props.changeStep(step)
@@ -65,7 +49,10 @@ export default class QuizCreation extends React.Component {
   openPreview = () => this.props.openPreview()
   closePreview = () => this.props.closePreview()
   changeTitle = (e) => this.props.changeTitle(e.target.value)
-  changeDates = (t1, s1) => this.props.changeDates(t1)
+  changeOpeningDate = (m, s) => this.props.changeOpeningDate(m)
+  changeOpeningTime = (e) => this.props.changeOpeningTime(e.target.value)
+  changeClosingDate = (m, s) => this.props.changeClosingDate(m)
+  changeClosingTime = (e) => this.props.changeClosingTime(e.target.value)
   changeMaxAttempts = (value) => this.props.changeMaxAttempts(value)
   toggleAttemptLimit = (e) => this.props.toggleAttemptLimit(e.target.checked)
   toggleConfidence = (checked) => this.props.toggleConfidence(checked)
@@ -121,18 +108,26 @@ export default class QuizCreation extends React.Component {
   checkSubmit = () => {
     const checks = this.enableSubmit()
     let i = 0
-    let outputMessage = "There were errors in the following"
     const outputs = []
     if (!checks[0]) {
       outputs.push(`${++i}. Quiz Title is empty`)
     }
     if (!checks[1]) {
-      outputs.push(`\n${++i}. Quiz Start and End Dates are invalid`)
+      outputs.push(`\n${++i}. Quiz Opening Date is invalid`)
     }
     if (!checks[2]) {
-      outputs.push(`\n${++i}. Maximum Attempts is invalid`)
+      outputs.push(`\n${++i}. Quiz Opening Time is invalid`)
     }
     if (!checks[3]) {
+      outputs.push(`\n${++i}. Quiz Closing Date is invalid`)
+    }
+    if (!checks[4]) {
+      outputs.push(`\n${++i}. Quiz Closing Time is invalid`)
+    }
+    if (!checks[5]) {
+      outputs.push(`\n${++i}. Maximum Attempts is invalid`)
+    }
+    if (!checks[6]) {
       outputs.push(`\n${++i}. Question or Options are invalid`)
     }
 
@@ -161,21 +156,33 @@ export default class QuizCreation extends React.Component {
   enableSubmit = () => {
     const {
       quizTitle,
-      quizStartEnd,
+      quizStartDate,
+      quizStartTime,
+      quizEndDate,
+      quizEndTime,
       quizMaxAttempts,
       quizAttemptUnlimited,
       quizQuestions,
     } = this.props.quizCreation
 
-    const checks = (new Array(4)).fill(false)
+    const checks = (new Array(7)).fill(false)
     if (quizTitle.trim() !== "") {
       checks[0] = true
     }
-    if (quizStartEnd && quizStartEnd.length === 2 && quizStartEnd[0] !== null && quizStartEnd[1] !== null) {
+    if (quizStartDate) {
       checks[1] = true
     }
-    if (quizAttemptUnlimited || quizMaxAttempts > 0) {
+    if (quizStartTime) {
       checks[2] = true
+    }
+    if (quizEndDate) {
+      checks[3] = true
+    }
+    if (quizEndTime) {
+      checks[4] = true
+    }
+    if (quizAttemptUnlimited || quizMaxAttempts > 0) {
+      checks[5] = true
     }
     // check questions
     let qnCheck = true
@@ -208,14 +215,17 @@ export default class QuizCreation extends React.Component {
         }
       }
     }
-    checks[3] = qnCheck
+    checks[6] = qnCheck
 
     return checks
   }
   submitQuiz = () => {
     const {
       quizTitle,
-      quizStartEnd,
+      quizStartDate,
+      quizStartTime,
+      quizEndDate,
+      quizEndTime,
       quizMaxAttempts,
       quizAttemptUnlimited,
       quizConfidenceEnabled,
@@ -241,20 +251,22 @@ export default class QuizCreation extends React.Component {
       }
     })
 
-    const dtf = "YYYY-MM-DD HH:mm:ss"
+    const dateFormat = "YYYY-MM-DD"
+    const startDateTime = quizStartDate.format(dateFormat) + " " + quizStartTime + ":00"
+    const endDateTime = quizEndDate.format(dateFormat) + " " + quizEndTime + ":00"
 
     const quizObject = {
       "title": quizTitle,
       "moduleID": GlobalConstants.ModuleID,
-      "description": "4KIDSONLY", // not included
+      "description": "", // not included
       "isPublished": true,
       "password": "", // not included
       "timeLimit": 60, // not included
       "isGraded": true, // not included
       "displayType": "ALL_AT_ONCE", // not included
       "attempts": quizAttemptUnlimited ? 0 : quizMaxAttempts, // 0 if unlimited?
-      "startDate": quizStartEnd[0].format(dtf),
-      "endDate": quizStartEnd[1].format(dtf),
+      "startDate": startDateTime,
+      "endDate": endDateTime,
       "displayStudentAnswers": false, // not included
       "displayCorrectAnswers": false, // not included
       "displayTotalMarks": false, // not included
@@ -292,14 +304,15 @@ export default class QuizCreation extends React.Component {
     }
   }
 
-
   render() {
     const {
-      currentTab,
       currentStep,
       quizPreviewVisible,
       quizTitle,
-      quizStartEnd,
+      quizStartDate,
+      quizStartTime,
+      quizEndDate,
+      quizEndTime,
       quizMaxAttempts,
       quizAttemptUnlimited,
       quizConfidenceEnabled,
@@ -307,13 +320,12 @@ export default class QuizCreation extends React.Component {
       submitting,
       growlNotification,
     } = this.props.quizCreation
-    const { tabPosition, stepPosition } = this.state
     if (growlNotification) {
       this.onNotification(growlNotification)
     }
 
     return (
-      <SideBar activeTab='quiz' title="Quiz" subtitle="Create New Quiz" onBreakpoint={this.onBreakpoint}>
+      <SideBar activeTab='quiz' title="Quiz" subtitle="Create New Quiz">
         {/* Quiz Preview Modal */}
         <Modal
           title="Basic Modal"
@@ -388,22 +400,45 @@ export default class QuizCreation extends React.Component {
 
             <Row gutter={[5, 5]} style={{ marginLeft: 20 }}>
               <Col md={20} sm={21} xs={21}>
-                {QuizPhrases.QUIZ_DATES}
+                {QuizPhrases.QUIZ_OPENING_DATES}
+              </Col>
+            </Row>
+            <Row gutter={[30, 30]}>
+              <Col md={8} sm={11} xs={21} style={{ marginLeft: 20 }}>
+                <DatePicker
+                  format="YYYY-MM-DD"
+                  style={{width: '100%'}}
+                  onChange={this.changeOpeningDate}
+                  value={quizStartDate}
+                />
+              </Col>
+              <Col md={8} sm={10} xs={21}>
+                <Input
+                  type='time'
+                  onChange={this.changeOpeningTime}
+                  value={quizStartTime}
+                />
               </Col>
             </Row>
             <Row gutter={[5, 5]} style={{ marginLeft: 20 }}>
               <Col md={20} sm={21} xs={21}>
-                {QuizPhrases.QUIZ_DATES_HELP}
+                {QuizPhrases.QUIZ_CLOSING_DATES}
               </Col>
             </Row>
             <Row gutter={[30, 30]}>
-              <Col md={16} xs={21} style={{ marginLeft: 20 }}>
-                <RangePicker
-                  showTime={{ format: 'HH:mm' }}
-                  format="YYYY-MM-DD HH:mm"
-                  style={{ width: '100%' }}
-                  onChange={this.changeDates}
-                  value={quizStartEnd}
+              <Col md={8} sm={11} xs={21} style={{ marginLeft: 20 }}>
+                <DatePicker
+                  format="YYYY-MM-DD"
+                  style={{width: '100%'}}
+                  onChange={this.changeClosingDate}
+                  value={quizEndDate}
+                />
+              </Col>
+              <Col md={8} sm={10} xs={21} >
+                <Input
+                  type='time'
+                  onChange={this.changeClosingTime}
+                  value={quizEndTime}
                 />
               </Col>
             </Row>
