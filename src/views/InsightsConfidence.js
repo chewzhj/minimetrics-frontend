@@ -8,17 +8,20 @@ import {
   Table,
   Button,
   Typography,
-  Tooltip
+  Tooltip,
+  Divider
 } from 'antd';
 import CommonPhrases from '../phrases/CommonPhrases'
 import InsightsPhrases from '../phrases/InsightsPhrases'
-import { QuestionCircleFilled, SmileTwoTone, CloseCircleTwoTone, CheckCircleTwoTone, EyeOutlined } from '@ant-design/icons'
+import { QuestionCircleFilled, SmileTwoTone, CloseCircleTwoTone, CheckCircleTwoTone, EyeOutlined, QuestionCircleOutlined} from '@ant-design/icons'
 import { Bar } from 'react-chartjs-2';
 import { ChartDataLabels } from 'chartjs-plugin-datalabels';
 import 'chartjs-plugin-style';
 
 const { Option } = Select;
 const { Title, Text } = Typography;
+
+const pageSize = 1;
 
 const columns = [
   {
@@ -51,6 +54,87 @@ const columns = [
   }
 ];
 
+const legendTable = [
+  {
+    title: 'Group',
+    dataIndex: 'groupTitle',
+    align: 'center',
+    render: text => {
+      return (
+        <Text strong>{ text }</Text>
+      )
+    }
+  },
+  {
+    title: 'Info',
+    align: 'center',
+    dataIndex: 'groupTitle',
+    render: text => {
+      let title = ""
+      let color = ""
+      if (text === "Misinformed") {
+        title = InsightsPhrases.CONFIDENCE_INSIGHTS_EXPLN_GRP_MIS
+        color = '#fcdbd9'
+      } else if (text === "Uninformed") {
+        title = InsightsPhrases.CONFIDENCE_INSIGHTS_EXPLN_GRP_UNI
+        color = '#fccca7'
+      } else if (text === "Almost There") {
+        title = InsightsPhrases.CONFIDENCE_INSIGHTS_EXPLN_GRP_ALM
+        color = '#fff3cf'
+      } else {
+        title = InsightsPhrases.CONFIDENCE_INSIGHTS_EXPLN_GRP_KNO
+        color = '#cfefdf'
+      }
+      return (
+        <Tooltip placement="topLeft" title={title} arrowPointAtCenter>
+          <QuestionCircleFilled />
+        </Tooltip>
+      );
+    }
+  },
+  {
+    title: 'Confident',
+    align: 'center',
+    dataIndex: 'confident',
+    render: text => {
+      if (text === 1) {
+        return (
+          'Yes'
+        )
+      } else {
+        return (
+          'No'
+        )
+      }
+    }
+  },
+  {
+    title: 'Correct',
+    align: 'center',
+    dataIndex: 'correct',
+    render: text => {
+      if (text === 1) {
+        return (
+          'Yes'
+        )
+      } else {
+        return (
+          'No'
+        )
+      }
+    }
+  },
+  {
+    title: 'View Students',
+    align: 'center',
+    render: (text, record, index) => {
+      return (
+        <Button>View</Button>
+      )
+    }
+  }
+];
+
 const chartColors = ['#f79992', '#f78e3d', '#ffdd76', '#76d0a3'];
 
 const data = {
@@ -63,10 +147,10 @@ const data = {
     hoverBackgroundColor: 'rgba(255,99,132,0.4)',
     hoverBorderColor: 'rgba(255,99,132,1)',
     data: [85, 60, 30, 15],
-    shadowOffsetX: 2,
-    shadowOffsetY: 2,
-    shadowBlur: 2,
-    shadowColor: 'rgba(0, 0, 0, 0.3)'
+    shadowOffsetX: 4,
+    shadowOffsetY: 4,
+    shadowBlur: 4,
+    shadowColor: 'rgba(0, 0, 0, 0.4)'
   }]
 };
 
@@ -174,8 +258,40 @@ export default class InsightsConfidence extends React.Component {
     return tableData
   }
 
+  generateLegendTableData = () => {
+    const legendTableData = [
+      {
+        groupTitle: 'Misinformed',
+        confident: 1,
+        correct: 0,
+        color: '#fcdbd9'
+      },
+      {
+        groupTitle: 'Uninformed',
+        confident: 0,
+        correct: 0,
+        color: '#fccca7'
+      },
+      {
+        groupTitle: 'Almost There',
+        confident: 0,
+        correct: 1,
+        color: '#fff3cf'
+      },
+      {
+        groupTitle: 'Knowledgeable',
+        confident: 1,
+        correct: 1,
+        color: '#cfefdf'
+      },
+    ]
+
+    return legendTableData
+  }
+
   render() {
     const tableData = this.generateTableData()
+    const legendTableData = this.generateLegendTableData()
 
     return (
       <SideBar activeTab='insights/confidence' title="Insights" subtitle="Confidence Insights">
@@ -209,7 +325,7 @@ export default class InsightsConfidence extends React.Component {
         </Row>
 
         <Row>
-          <Col md={24} xs={24} style={{ paddingLeft: 20, paddingRight: 20 }}>
+          <Col lg={12} md={24} xs={24} style={{ paddingLeft: 20, paddingRight: 20 }}>
             <Bar
               data={data}
               width={100}
@@ -217,12 +333,22 @@ export default class InsightsConfidence extends React.Component {
               options={options}
             />
           </Col>
+          <Col lg={12} md={24} xs={24}>
+            <Table 
+            title={() => <div style={{ marginTop: 20 }} align='center'><Text strong>Legend</Text></div>}
+            columns={legendTable}
+            rowClassName={(record) => record.color.replace('#', '')}
+            dataSource={legendTableData}
+            rowKey={record => record.id}
+            pagination={data.length > pageSize && { pageSize }}
+            size="middle" />
+          </Col>
         </Row>
 
-        <Row gutter={[15, 15]} style={{ marginTop: 20, paddingLeft: 20, paddingRight: 20 }}>
+        <Row hidden gutter={[15, 15]} style={{ marginTop: 20, paddingLeft: 20, paddingRight: 20 }}>
 
           <Col lg={6} md={12} sm={24} xs={24}>
-            <Card style={{ width: '100%', borderRadius: 4, boxShadow: '2px 1px 4px 0px #bcbcbc', background: '#fcdbd9' }}>
+            <Card style={{ width: '100%', borderRadius: 4, background: '#fcdbd9' }}>
               <Row justify="space-between">
                 <Text strong style={{ fontSize: 14 }}>Misinformed</Text>
                 <Tooltip placement="topLeft" title={InsightsPhrases.CONFIDENCE_INSIGHTS_EXPLN_GRP_MIS} arrowPointAtCenter>
@@ -246,7 +372,7 @@ export default class InsightsConfidence extends React.Component {
           </Col>
 
           <Col lg={6} md={12} sm={24} xs={24}>
-            <Card style={{ width: '100%', borderRadius: 4, boxShadow: '2px 1px 4px 0px #bcbcbc', background: '#fccca7' }}>
+            <Card style={{ width: '100%', borderRadius: 4, background: '#fccca7' }}>
               <Row justify="space-between">
                 <Text strong style={{ fontSize: 14 }}>Uninformed</Text>
                 <Tooltip placement="topLeft" title={InsightsPhrases.CONFIDENCE_INSIGHTS_EXPLN_GRP_UNI} arrowPointAtCenter>
@@ -270,7 +396,7 @@ export default class InsightsConfidence extends React.Component {
           </Col>
 
           <Col lg={6} md={12} sm={24} xs={24}>
-            <Card style={{ width: '100%', borderRadius: 4, boxShadow: '2px 1px 4px 0px #bcbcbc', background: '#fff3cf' }}>
+            <Card style={{ width: '100%', borderRadius: 4, background: '#fff3cf' }}>
               <Row justify="space-between">
                 <Text strong style={{ fontSize: 14 }}>"Almost There"</Text>
                 <Tooltip placement="topLeft" title={InsightsPhrases.CONFIDENCE_INSIGHTS_EXPLN_GRP_ALM} arrowPointAtCenter>
@@ -294,7 +420,7 @@ export default class InsightsConfidence extends React.Component {
           </Col>
 
           <Col lg={6} md={12} sm={24} xs={24}>
-            <Card style={{ width: '100%', borderRadius: 4, boxShadow: '2px 1px 4px 0px #bcbcbc', background: '#cfefdf' }}>
+            <Card style={{ width: '100%', borderRadius: 4, background: '#cfefdf' }}>
               <Row justify="space-between">
                 <Text strong style={{ fontSize: 14 }}>Knowledgeable</Text>
                 <Tooltip placement="topLeft" title={InsightsPhrases.CONFIDENCE_INSIGHTS_EXPLN_GRP_KNO} arrowPointAtCenter>
@@ -320,7 +446,7 @@ export default class InsightsConfidence extends React.Component {
         </Row>
 
         <Row>
-          <Col md={24} xs={24} style={{ marginTop: 20, marginLeft: 20, paddingRight: 20 }}>
+          <Col md={24} xs={24} style={{ marginTop: 40, marginLeft: 20, paddingRight: 20 }}>
             <Title level={3}>View Students in confidence group
             </Title>
 
