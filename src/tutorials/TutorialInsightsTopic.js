@@ -117,6 +117,20 @@ export default class InsightsTopic extends React.Component {
         anchor: 'end'
       }
     },
+    layout: {
+      padding: {
+        right: 50
+      }
+    },
+    scales: {
+      xAxes: [{
+        ticks: {
+          beginAtZero: true,
+          suggestedMin: 0,
+          stepSize: 5
+        }
+      }]
+    },
     maintainAspectRatio: false,
     legend: {
       display: false
@@ -242,12 +256,16 @@ export default class InsightsTopic extends React.Component {
           </Col>
         </Row>
 
-        <Row type="flex" justify="center" style={{ marginTop: 20 }}>
-          <Text strong>Click on a Tag in the chart to view its questions.</Text>
-        </Row>
-
         <Row>
           <Col lg={12} md={24} xs={24} style={{ marginTop: 20, paddingLeft: 20 }}>
+            <Col>
+              <div align="center">
+                <Text strong>Topic Bar Chart</Text>
+              </div>
+              <div align="center" style={{ marginTop: 10, marginBottom: 20 }}>
+                <Text>Click on a bar in the chart below to view a Table of Questions about the topic.</Text>
+              </div>
+            </Col>
             <Spin spinning={false}>
               <HorizontalBar
                 data={chartData}
@@ -259,6 +277,14 @@ export default class InsightsTopic extends React.Component {
           </Col>
 
           <Col lg={12} md={24} xs={24} style={{ marginTop: 20, paddingLeft: 10, paddingRight: 20 }}>
+            <Col>
+              <div align="center">
+                <Text strong>Table of Questions</Text>
+              </div>
+              <div align="center" style={{ marginTop: 10, marginBottom: 20 }}>
+                <Text>This table will populate with questions from the topics selected.</Text>
+              </div>
+            </Col>
             <Table columns={this.columns} dataSource={tableData} bordered/>
           </Col>
         </Row>

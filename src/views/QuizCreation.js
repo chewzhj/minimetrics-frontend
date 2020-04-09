@@ -4,6 +4,7 @@ import {
   Modal,
   Row,
   Col,
+  Divider,
   Typography,
   Input,
   InputNumber,
@@ -360,12 +361,6 @@ export default class QuizCreation extends React.Component {
             <Button onClick={this.prevStep} disabled={currentStep === 0} style={{ float: 'right', marginLeft: 10, marginTop: 10, width: 125 }}>
             &larr; Previous
             </Button>
-            <Button onClick={this.openPreview} disabled={currentStep === 0} style={{ float: 'right', marginTop: 10, marginLeft: 10, width: 125 }}>
-              Preview Quiz
-            </Button>
-            <Button onClick={this.checkSubmit} disabled={currentStep===0} loading={submitting} type='primary' style={{ float: 'right', marginTop: 10, marginLeft: 10, width: 125 }}>
-              Create Quiz
-            </Button>
           </Col>
         </Row>
 
@@ -527,14 +522,23 @@ export default class QuizCreation extends React.Component {
 
             <Row gutter={[30, 30]}>
               <Col md={20} xs={21} style={{ marginTop: 20, marginLeft: 20 }}>
-                <Button type="dashed" onClick={this.addQuestion} size={"large"} style={{ width: "100%", borderColor: blue[5] }}>
-                  <Text style={{ color: blue[5] }}>{QuizPhrases.BUILD_ADD_QUESTION}</Text>
+                <Button type="dashed" onClick={this.addQuestion} size={"large"} style={{ width: "100%", borderColor: blue[5], backgroundColor: blue[5] }}>
+                  <Text style={{ color: '#fff' }}>{QuizPhrases.BUILD_ADD_QUESTION}</Text>
                 </Button>
               </Col>
             </Row>
           </div>
         }
 
+        <Divider/>
+        <Row justify="end">
+          <Button onClick={this.openPreview} disabled={currentStep === 0} style={{ marginTop: 10, marginLeft: 10 }}>
+                Preview Quiz
+              </Button>
+          <Button onClick={this.checkSubmit} disabled={currentStep===0} loading={submitting} type='primary' style={{ marginTop: 10, marginLeft: 10 }}>
+            Create Quiz
+          </Button>
+        </Row>
       </SideBar>
     )
   }
@@ -657,8 +661,8 @@ const QuestionCard = (props) => {
             </Row>
             <Row>
               <Col md={20} xs={21} style={{ marginTop: 20, marginLeft: 40 }}>
-                <Button onClick={addOption} type="dashed" style={{ borderColor: green[5] }}>
-                  <Text style={{ color: green[5] }}>{QuizPhrases.BUILD_ADD_OPTION}</Text>
+                <Button onClick={addOption} style={{ borderColor: green[5], backgroundColor: green[5] }}>
+                  <Text style={{ color: '#fff' }}>{QuizPhrases.BUILD_ADD_OPTION}</Text>
                 </Button>
               </Col>
             </Row>
@@ -669,7 +673,7 @@ const QuestionCard = (props) => {
               </Col>
             </Row>
             <Row gutter={[5, 5]} style={{ marginLeft: 20 }}>
-              <Col md={12} xs={21}>
+              <Col md={16} xs={21}>
                 <Select
                   mode="tags"
                   style={{ width: '100%' }}
@@ -683,8 +687,8 @@ const QuestionCard = (props) => {
 
             <Row>
               <Col md={22} xs={21} style={{ marginTop: 40, marginLeft: 20 }}>
-                <Button onClick={props.onRemove} type="dashed" size={"large"} style={{ float: 'right', borderColor: red[5] }}>
-                  <Text style={{ color: red[5] }}>{QuizPhrases.BUILD_REMOVE_QUESTION}</Text>
+                <Button onClick={props.onRemove} type="dashed" size={ "large" } style={{ float: 'right', borderColor: red[5], backgroundColor: red[5] }}>
+                  <Text style={{ color: '#fff' }}>{QuizPhrases.BUILD_REMOVE_QUESTION}</Text>
                 </Button>
               </Col>
             </Row>

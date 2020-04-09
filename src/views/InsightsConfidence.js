@@ -157,6 +157,11 @@ const data = {
 };
 
 const options = {
+  title: {
+    display: true,
+    position: 'left',
+    text: 'No. of students'
+  },
   plugins: {
     // Change options for ALL labels of THIS CHART
     datalabels: {
@@ -164,6 +169,15 @@ const options = {
       align: 'end',
       anchor: 'end'
     }
+  },
+  scales: {
+    yAxes: [{
+      ticks: {
+        beginAtZero: true,
+        suggestedMin: 0,
+        stepSize: 10
+      }
+    }]
   },
   maintainAspectRatio: false,
   legend: {
@@ -314,7 +328,7 @@ export default class InsightsConfidence extends React.Component {
     const legendTableData = this.generateLegendTableData()
 
     return (
-      <SideBar activeTab='insights/confidence' title="Insights" subtitle="Confidence Insights">
+      <SideBar activeTab='insights/confidence' title="Students Insights" subtitle="Identify students who are at risk">
 
         <Modal
           visible={exportGroupModalVisible}
@@ -478,11 +492,11 @@ export default class InsightsConfidence extends React.Component {
 
         <Row>
           <Col md={24} xs={24} style={{ marginTop: 40, marginLeft: 20, paddingRight: 20 }}>
-            <Title level={3}>View Students in confidence group
+            <Title level={3}>Students in selected group
             </Title>
             <Button onClick={this.exportGroup} icon={<MailOutlined/>}>Export Emails</Button>
             <br/>
-            <Text>Select a student from any of the 4 groups above by clicking on their corresponding buttons.</Text>
+            <Text>This table will represent the students in the selected group from the chart above.</Text>
           </Col>
         </Row>
 
