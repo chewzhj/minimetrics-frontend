@@ -4,7 +4,10 @@ import {
   QUIZ_CREATION_OPEN_PREVIEW,
   QUIZ_CREATION_CLOSE_PREVIEW,
   QUIZ_CREATION_CHANGE_TITLE,
-  QUIZ_CREATION_CHANGE_DATES,
+  QUIZ_CREATION_CHANGE_OPENING_DATE,
+  QUIZ_CREATION_CHANGE_OPENING_TIME,
+  QUIZ_CREATION_CHANGE_CLOSING_DATE,
+  QUIZ_CREATION_CHANGE_CLOSING_TIME,
   QUIZ_CREATION_CHANGE_MAX_ATTEMPTS,
   QUIZ_CREATION_TOGGLE_ATTEMPT_LIMIT,
   QUIZ_CREATION_TOGGLE_CONFIDENCE,
@@ -98,9 +101,27 @@ export function changeTitle(value) {
     value
   }
 }
-export function changeDates(value) {
+export function changeOpeningDate(value) {
   return {
-    type: QUIZ_CREATION_CHANGE_DATES,
+    type: QUIZ_CREATION_CHANGE_OPENING_DATE,
+    value
+  }
+}
+export function changeOpeningTime(value) {
+  return {
+    type: QUIZ_CREATION_CHANGE_OPENING_TIME,
+    value
+  }
+}
+export function changeClosingDate(value) {
+  return {
+    type: QUIZ_CREATION_CHANGE_CLOSING_DATE,
+    value
+  }
+}
+export function changeClosingTime(value) {
+  return {
+    type: QUIZ_CREATION_CHANGE_CLOSING_TIME,
     value
   }
 }

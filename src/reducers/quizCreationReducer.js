@@ -4,7 +4,10 @@ import {
   QUIZ_CREATION_OPEN_PREVIEW,
   QUIZ_CREATION_CLOSE_PREVIEW,
   QUIZ_CREATION_CHANGE_TITLE,
-  QUIZ_CREATION_CHANGE_DATES,
+  QUIZ_CREATION_CHANGE_OPENING_DATE,
+  QUIZ_CREATION_CHANGE_OPENING_TIME,
+  QUIZ_CREATION_CHANGE_CLOSING_DATE,
+  QUIZ_CREATION_CHANGE_CLOSING_TIME,
   QUIZ_CREATION_CHANGE_MAX_ATTEMPTS,
   QUIZ_CREATION_TOGGLE_ATTEMPT_LIMIT,
   QUIZ_CREATION_TOGGLE_CONFIDENCE,
@@ -26,7 +29,10 @@ const initialState = {
 
   // quiz settings
   quizTitle: '',
-  quizStartEnd: [null, null],
+  quizStartDate: null,
+  quizStartTime: null,
+  quizEndDate: null,
+  quizEndTime: null,
   quizMaxAttempts: 1,
   quizAttemptUnlimited: false,
   quizConfidenceEnabled: true,
@@ -81,8 +87,14 @@ export function quizCreationReducer(state = initialState, action) {
       return {...state, quizPreviewVisible: false}
     case QUIZ_CREATION_CHANGE_TITLE:
       return {...state, quizTitle: action.value}
-    case QUIZ_CREATION_CHANGE_DATES:
-      return {...state, quizStartEnd: action.value}
+    case QUIZ_CREATION_CHANGE_OPENING_DATE:
+      return {...state, quizStartDate: action.value}
+    case QUIZ_CREATION_CHANGE_OPENING_TIME:
+      return {...state, quizStartTime: action.value}
+    case QUIZ_CREATION_CHANGE_CLOSING_DATE:
+      return {...state, quizEndDate: action.value}
+    case QUIZ_CREATION_CHANGE_CLOSING_TIME:
+      return {...state, quizEndTime: action.value}
     case QUIZ_CREATION_CHANGE_MAX_ATTEMPTS:
       return {...state, quizMaxAttempts: action.value}
     case QUIZ_CREATION_TOGGLE_ATTEMPT_LIMIT:
