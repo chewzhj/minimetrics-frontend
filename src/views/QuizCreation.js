@@ -345,25 +345,21 @@ export default class QuizCreation extends React.Component {
             <Button onClick={this.openPreview} disabled={currentStep === 0} style={{ float: 'right', marginTop: 10, marginLeft: 10 }}>
               Preview Quiz
             </Button>
-            {currentStep === 0 &&
-              <Button onClick={this.nextStep} type='primary' style={{ float: 'right', marginLeft: 10, marginTop: 10, width: 104 }}>
-                Next
-              </Button>
-            }
-            {currentStep === 1 &&
-              <Button onClick={this.checkSubmit} loading={submitting} type='primary' style={{ float: 'right', marginTop: 10, marginLeft: 10}}>
-                Create Quiz
-              </Button>
-            }
+            <Button onClick={this.checkSubmit} disabled={currentStep===0} loading={submitting} type='primary' style={{ float: 'right', marginTop: 10, marginLeft: 10}}>
+              Create Quiz
+            </Button>
+            <Button onClick={this.nextStep} disabled={currentStep===1} type='primary' style={{ float: 'right', marginLeft: 10, marginTop: 10}}>
+              Next
+            </Button>
             <Button onClick={this.prevStep} disabled={currentStep === 0} style={{ float: 'right', marginLeft: 10, marginTop: 10 }}>
               Previous
             </Button>
           </Col>
         </Row>
 
-        <Row gutter={[5, 5]} justify="start">
+        <Row gutter={[5, 5]} justify="center">
           <Col lg={16} md={16} sm={16} xs={24}>
-            <Steps size="small" direction="horizontal" onChange={this.changeStep} current={currentStep} style={{ marginRight: 20, marginTop: 40 }} >
+            <Steps type='navigation' size="small" direction="horizontal" onChange={this.changeStep} current={currentStep} style={{ marginRight: 20, marginTop: 40 }} >
               <Step title="Quiz Settings" />
               <Step title="Build Questions" />
             </Steps>

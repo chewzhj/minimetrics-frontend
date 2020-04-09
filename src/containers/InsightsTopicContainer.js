@@ -1,7 +1,11 @@
 import {connect} from 'react-redux'
 import View from '../views/InsightsTopic'
 import {
+  loadChartData,
   changeDropdown,
+  clickBar,
+  clickViewQuestion,
+  closeModal,
 } from '../actions/insightsTopicActions'
 
 const mapStateToProps = state => ({
@@ -9,7 +13,11 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  loadChartData: value => dispatch(loadChartData(value)),
   changeDropdown: value => dispatch(changeDropdown(value)),
+  clickBar: (tag, quiz) => dispatch(clickBar(tag, quiz)),
+  clickViewQuestion: value => dispatch(clickViewQuestion(value)),
+  closeModal: () => dispatch(closeModal()),
 })
 
 export default connect(

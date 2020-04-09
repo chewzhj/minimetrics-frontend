@@ -24,7 +24,7 @@ export default class SideBar extends React.Component {
   onVisibleChange = (visible) => this.setState({ visible })
 
   render() {
-    const { activeTab, title, subtitle } = this.props
+    const { activeTab, title, subtitle, disabled } = this.props
     const phtitle = title || "Title"
     const phsubtitle = subtitle || "Subtitle"
     const bpCallBack = this.props.onBreakpoint || (() => null)
@@ -43,19 +43,19 @@ export default class SideBar extends React.Component {
             </Link>
           </div>
           <Menu theme="dark" mode="inline" defaultSelectedKeys={[activeTab]} defaultOpenKeys={[insightsOpen]}>
-            <Menu.Item key="dashboard">
+            <Menu.Item key="dashboard" disabled={disabled}>
               <BarChartOutlined />
               <Link to="/index">
                 <span className="nav-text">Dashboard</span>
               </Link>
             </Menu.Item>
-            <Menu.Item key="quiz">
+            <Menu.Item key="quiz" disabled={disabled}>
               <BulbOutlined />
               <Link to="/quiz">
                 <span className="nav-text">Quizzes</span>
               </Link>
             </Menu.Item>
-            <Menu.Item key="tags">
+            <Menu.Item key="tags" disabled={disabled}>
               <TagOutlined />
               <Link to="/tags">
                 <span className="nav-text">Tags</span>
@@ -63,6 +63,7 @@ export default class SideBar extends React.Component {
             </Menu.Item>
             <SubMenu
               key="insights"
+              disabled={disabled}
               title={
                 <span>
                   <PieChartOutlined />
@@ -70,30 +71,12 @@ export default class SideBar extends React.Component {
                 </span>
               }
             >
-              <Menu.Item key="insights/overview"><Link to='/insights/overview'>Overview</Link></Menu.Item>
-              <Menu.Item key="insights/topic"><Link to='/insights/topic'>Topic Insights</Link></Menu.Item>
-              <Menu.Item key="insights/quiz"><Link to='/insights/quiz'>Quiz Insights</Link></Menu.Item>
-              <Menu.Item key="insights/student"><Link to='/insights/student'>Student Insights</Link></Menu.Item>
-              <Menu.Item key="insights/confidence"><Link to='/insights/confidence'>Confidence Insights</Link></Menu.Item>
+              {/* <Menu.Item key="insights/overview"><Link to='/insights/overview'>Overview</Link></Menu.Item> */}
+              <Menu.Item key="insights/topic" disabled={disabled}><Link to='/insights/topic'>Topic Insights</Link></Menu.Item>
+              {/* <Menu.Item key="insights/quiz"><Link to='/insights/quiz'>Quiz Insights</Link></Menu.Item>
+              <Menu.Item key="insights/student"><Link to='/insights/student'>Student Insights</Link></Menu.Item> */}
+              <Menu.Item key="insights/confidence" disabled={disabled}><Link to='/insights/confidence'>Confidence Insights</Link></Menu.Item>
             </SubMenu>
-            <Menu.Item key="studentquiz">
-              <UserOutlined />
-              <Link to="/studentquiz">
-                <span className="nav-text">(Stu) Quizzes</span>
-              </Link>
-            </Menu.Item>
-            <Menu.Item key="studentquizattempt">
-              <UserOutlined />
-              <Link to="/studentquiz/attempt">
-                <span className="nav-text">(Stu) Quiz Attempt</span>
-              </Link>
-            </Menu.Item>
-            <Menu.Item key="studentquizresults">
-              <UserOutlined />
-              <Link to="/studentquiz/result">
-                <span className="nav-text">(Stu) Quiz Results</span>
-              </Link>
-            </Menu.Item>
           </Menu>
         </Sider>
         <Layout>
