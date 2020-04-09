@@ -12,11 +12,10 @@ import {
   Card,
   Radio,
 } from 'antd';
-import { EyeOutlined, PlayCircleOutlined } from '@ant-design/icons'
+import { EyeOutlined } from '@ant-design/icons'
 import { ResponsiveBar } from '@nivo/bar'
 import { HorizontalBar } from 'react-chartjs-2';
 import { ChartDataLabels } from 'chartjs-plugin-datalabels';
-import { Link } from 'react-router-dom'
 import 'chartjs-plugin-style';
 import GlobalConstants from '../variables/GlobalConstants'
 import InsightsTopicData from '../variables/InsightsTopicData'
@@ -31,12 +30,18 @@ const percentage1dp = (number) => {
 
 export default class InsightsTopic extends React.Component {
 
-  componentDidMount() {
-    this.props.loadChartData(GlobalConstants.ModuleID)
+  state = {
+    step: 1,
+    graphDropdown: 'all',
+    selectedTag: '',
+    selectedQuiz: '',
+    viewQuestion: '',
+    graphLoading: false,
+    graphData: [],
   }
 
   cleanGraphData = () => {
-    const { graphDropdown } = this.props.insightsTopic
+    const { graphDropdown } = this.state
     const topicData = InsightsTopicData.topicData
 
     if (graphDropdown === 'all') {
@@ -119,7 +124,7 @@ export default class InsightsTopic extends React.Component {
     onClick: (e,arr) => this.clickBar(arr[0]._index),
   }
   generateTableData = () => {
-    const { selectedTag, selectedQuiz } = this.props.insightsTopic
+    const { selectedTag, selectedQuiz } = this.state
     const rawData = InsightsTopicData.quizQnsData
 
     const filtered = rawData.filter(qn => {
@@ -173,38 +178,28 @@ export default class InsightsTopic extends React.Component {
       }
     }
   ];
-  filterQuestion = () => {
-    const rawData = InsightsTopicData.quizQnsData
-    const { viewQuestion } = this.props.insightsTopic
 
-    if (viewQuestion === '') {
-      return null
-    }
-
-    return rawData.filter(qn => qn.questionID === viewQuestion)[0]
-  }
-
-  changeGraphDropdown = (value) => this.props.changeDropdown(value)
+  changeGraphDropdown = (value) => this.setState({graphDropdown: value})
   clickBar = (index) => {
     const graphData = this.cleanGraphData()
-    const quiz = this.props.insightsTopic.graphDropdown
+    const quiz = this.state.graphDropdown
     const tag = graphData[index].tag
 
-    this.props.clickBar(tag, quiz);
+    this.setState({selectedTag: tag, selectedQuiz: quiz})
   }
-  clickViewQuestion = (questionID) => this.props.clickViewQuestion(questionID)
-  closeModal = () => this.props.closeModal()
+  clickViewQuestion = (questionID) => this.setState({viewQuestion: questionID})
+  closeModal = () => this.setState({viewQuestion: ''})
 
   render() {
     const tableData = this.generateTableData()
     const graphData = this.cleanGraphData()
     const chartData = this.generateChartData(graphData)
-    const modalQuestion = this.filterQuestion()
+    const modalQuestion = InsightsTopicData.defaultQuestion
 
-    const { graphDropdown, viewQuestion } = this.props.insightsTopic
+    const { graphDropdown, viewQuestion } = this.state
 
     return (
-      <SideBar activeTab='insights/topic' title="Topic Insights" subtitle="Identify the most troublesome topics for students">
+      <SideBar activeTab='insights/topic' title="Topic Insights (Tutorial)" subtitle="Identify the most troublesome topics for students" disabled>
 
         {/* Quiz Question Modal */}
         <Modal
@@ -232,7 +227,7 @@ export default class InsightsTopic extends React.Component {
           <Col md={24} xs={24} style={{ marginTop: 20, marginLeft: 20, marginRight: 20 }}>
             <Title level={3}>Misunderstood Topics & Questions</Title>
             <Text>by percentage of incorrect 1st attempts&nbsp;</Text>
-            <Link to='/tutorials/insights/topic'><Button icon={<PlayCircleOutlined/>}>Tutorial</Button></Link>
+            <Button onClick={()=>{this.props.history.goBack()}}>End Tutorial</Button>
           </Col>
         </Row>
         <Row gutter={[15, 15]} justify="end" style={{ marginTop: 10, marginRight: 20 }}>
@@ -265,7 +260,7 @@ export default class InsightsTopic extends React.Component {
           </Col>
 
           <Col lg={12} md={24} xs={24} style={{ marginTop: 20, paddingLeft: 10, paddingRight: 20 }}>
-            <Table columns={this.columns} dataSource={tableData} bordered />
+            <Table columns={this.columns} dataSource={tableData} bordered/>
           </Col>
         </Row>
       </SideBar>

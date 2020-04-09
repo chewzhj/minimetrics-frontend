@@ -13,6 +13,7 @@ import InsightsTopicContainer from '../containers/InsightsTopicContainer'
 import InsightsQuiz from '../views/InsightsQuiz'
 import InsightsStudent from '../views/InsightsStudent'
 import InsightsConfidence from '../views/InsightsConfidence'
+import TutorialInsightsTopic from '../tutorials/TutorialInsightsTopic'
 import StudentQuizAttempt from '../views/StudentQuizAttempt'
 import StudentQuizList from '../views/StudentQuizList'
 import StudentQuizResult from '../views/StudentQuizResult'
@@ -37,6 +38,8 @@ const Routing = () => {
       <Route path="/studentquiz/attempt" component={StudentQuizAttempt} />
       <Route path="/studentquiz/result" component={StudentQuizResult} />
       <Route path="/studentquiz" component={StudentQuizList} />
+
+      <Route path="/tutorials/insights/topic" component={TutorialInsightsTopic} />
 
       <Route path="/counter" component={CounterContainer}/>
       <Route path="/react-default" component={DefaultReactApp}/>

@@ -26,7 +26,7 @@ export function insightsTopicReducer(state = initialState, action) {
     case INSIGHTS_TOPIC_LOAD_CHART_FAILURE:
       return {...state, graphLoading: false}
     case INSIGHTS_TOPIC_CHANGE_DROPDOWN:
-      return {...state, graphDropdown: action.value}
+      return {...state, graphDropdown: action.value, selectedTag: '', selectedQuiz: ''}
     case INSIGHTS_TOPIC_CLICK_BAR:
       return {...state, selectedTag: action.tag, selectedQuiz: action.quiz}
     case INSIGHTS_TOPIC_CLICK_VIEW_QUESTION:

@@ -444,7 +444,9 @@ const quizQnsData = [
 ]
 
 const defaultQuestion = {
+  quizTitle: 'Mission 2 Quiz',
   questionTitle: 'What is 1+1 ?',
+  questionNumber: 2,
   correctOption: 2,
   options: [
     {
