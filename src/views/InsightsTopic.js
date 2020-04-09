@@ -92,10 +92,10 @@ export default class InsightsTopic extends React.Component {
         hoverBackgroundColor: 'rgba(158, 158, 158, 0.7)',
         hoverBorderColor: 'rgba(158, 158, 158, 0.7)',
         data: prevChartData.map(line => line.percentage),
-        shadowOffsetX: 3,
-        shadowOffsetY: 3,
-        shadowBlur: 3,
-        shadowColor: 'rgba(0, 0, 0, 0.3)'
+        shadowOffsetX: 4,
+        shadowOffsetY: 4,
+        shadowBlur: 4,
+        shadowColor: 'rgba(0, 0, 0, 0.4)'
       }, {
         hidden: true,
         label: 'Total',
@@ -104,13 +104,36 @@ export default class InsightsTopic extends React.Component {
     };
   }
   chartOptions = {
+    title: {
+      display: true,
+      position: 'bottom',
+      text: 'Percentage of incorrect 1st attempts'
+    },
     plugins: {
       // Change options for ALL labels of THIS CHART
       datalabels: {
         color: '#000',
         align: 'end',
-        anchor: 'end'
+        anchor: 'end',
+        formatter: function (value, context) {
+          return value + '%';
+        }
       }
+    },
+    layout: {
+      padding: {
+        right: 50
+      }
+    },
+    scales: {
+      xAxes: [{
+        ticks: {
+          beginAtZero: true,
+          suggestedMin: 0,
+          suggestedMax: 100,
+          stepSize: 5
+        }
+      }]
     },
     maintainAspectRatio: false,
     legend: {
@@ -248,20 +271,20 @@ export default class InsightsTopic extends React.Component {
         </Row>
 
         <Row style={{ marginTop: 20 }}>
-          <Col md={12} xs={24}>
-            <div align="center">
-              <Text strong>Click on a Tag in the chart to view its questions.</Text>
-            </div>
-          </Col>
-          <Col md={12} xs={24}>
-            <div align="center">
-              <Text strong>Table of Questions</Text>
-            </div>
-          </Col>
+
+
         </Row>
 
         <Row>
           <Col lg={12} md={24} xs={24} style={{ marginTop: 20, paddingLeft: 20 }}>
+            <Col>
+              <div align="center">
+                <Text strong>Topic Bar Chart</Text>
+              </div>
+              <div align="center" style={{ marginTop: 10, marginBottom: 20 }}>
+                <Text>Click on a bar in the chart below to view a Table of Questions about the topic.</Text>
+              </div>
+            </Col>
             <Spin spinning={false}>
               <HorizontalBar
                 data={chartData}
@@ -273,6 +296,14 @@ export default class InsightsTopic extends React.Component {
           </Col>
 
           <Col lg={12} md={24} xs={24} style={{ marginTop: 20, paddingLeft: 10, paddingRight: 20 }}>
+            <Col>
+              <div align="center">
+                <Text strong>Table of Questions</Text>
+              </div>
+              <div align="center" style={{ marginTop: 10, marginBottom: 20 }}>
+                <Text>This table will populate with questions from the topics selected.</Text>
+              </div>
+            </Col>
             <Table columns={this.columns} dataSource={tableData} bordered />
           </Col>
         </Row>

@@ -23,8 +23,8 @@ const quizChartData = {
     backgroundColor: '#428bca',
     borderColor: '#428bca',
     borderWidth: 1,
-    hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-    hoverBorderColor: 'rgba(255,99,132,1)',
+    hoverBackgroundColor: '#428bca',
+    hoverBorderColor: '#428bca',
     data: [85, 60, 30, 15]
   }, {
     hidden: true,
@@ -34,13 +34,38 @@ const quizChartData = {
 };
 
 const misunderstoodTopicsOptions = {
+  title: {
+    display: true,
+    position: 'bottom',
+    text: 'Percentage of incorrect 1st attempts'
+  },
   plugins: {
     // Change options for ALL labels of THIS CHART
     datalabels: {
       color: '#000',
       align: 'end',
-      anchor: 'end'
+      anchor: 'end',
+      formatter: function (value, context) {
+        return value + '%';
+      }
     }
+  },
+  tooltips: {
+    enabled: false
+  },
+  layout: {
+    padding: {
+      right: 50
+    }
+  },
+  scales: {
+    xAxes: [{
+      ticks: {
+        beginAtZero: true,
+        suggestedMin: 0,
+        stepSize: 5
+      }
+    }]
   },
   maintainAspectRatio: false,
   legend: {
@@ -63,20 +88,43 @@ const data = {
     backgroundColor: chartColors,
     borderColor: chartColors,
     borderWidth: 1,
-    hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-    hoverBorderColor: 'rgba(255,99,132,1)',
+    hoverBackgroundColor: chartColors,
+    hoverBorderColor: chartColors,
     data: [85, 60, 30, 15]
   }]
 };
 
 const confidenceChartOptions = {
+  title: {
+    display: 'true',
+    position: 'left',
+    text: 'No. of students'
+  },
   plugins: {
     // Change options for ALL labels of THIS CHART
     datalabels: {
       color: '#000',
       align: 'end',
-      anchor: 'end'
+      anchor: 'end',
     }
+  },
+  layout: {
+    padding: {
+      top: 25,
+      right: 25
+    }
+  },
+  scales: {
+    yAxes: [{
+      ticks: {
+        beginAtZero: true,
+        suggestedMin: 0,
+        stepSize: 10
+      }
+    }]
+  },
+  tooltips: {
+    enabled: false
   },
   maintainAspectRatio: false,
   legend: {
