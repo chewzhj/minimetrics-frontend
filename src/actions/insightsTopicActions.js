@@ -7,15 +7,19 @@ import {
   INSIGHTS_TOPIC_CLICK_VIEW_QUESTION,
   INSIGHTS_TOPIC_CLOSE_MODAL,
 } from '../variables/constants/InsightsTopicConstants'
+import {getTags} from '../actions/tagActions'
+import {loadQuizzes} from '../actions/quizMainActions'
 import {getTopicInsightsAPI} from '../api/InsightsAPI'
 
 export function loadChartData(moduleID) {
   return function(dispatch) {
     dispatch(loadChartStart())
+    dispatch(getTags())
+    dispatch(loadQuizzes())
     return getTopicInsightsAPI(moduleID)
       .then(json => {
         if (!json.data.hasError) {
-          dispatch(loadChartSuccess(json.data.quizList))
+          dispatch(loadChartSuccess(json.data.tagInsights))
         } else {
           dispatch(loadChartFailure())
         }

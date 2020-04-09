@@ -9,7 +9,9 @@ import {
 } from '../actions/insightsTopicActions'
 
 const mapStateToProps = state => ({
-  insightsTopic: state.insightsTopic
+  insightsTopic: state.insightsTopic,
+  tags: state.tags,
+  quizMain: state.quizMain,
 })
 
 const mapDispatchToProps = dispatch => ({
