@@ -8,7 +8,7 @@ import {
 const initialState = {
   data: [],
   tagSelection: ["Deontology","Fair Use Doctrine","Values","Rights","Utilitarianism"],
-  selectedGroup: 1,
+  selectedGroup: 0,
   exportGroupModalVisible: false,
 }
 
