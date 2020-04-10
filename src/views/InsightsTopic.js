@@ -264,7 +264,6 @@ export default class InsightsTopic extends React.Component {
     if (arr && arr.length > 0) {
       index = arr[0]._index
     } else {
-      console.log('bar failed', arr);
       return
     }
     const graphData = this.cleanGraphData()
