@@ -190,7 +190,7 @@ export default class InsightsTopic extends React.Component {
     legend: {
       display: false
     },
-    onClick: (e,arr) => this.clickBar(arr[0]._index),
+    onClick: (e,arr) => this.clickBar(arr),
   }
   generateTableData = () => {
     const { selectedTag, selectedQuiz } = this.props.insightsTopic
@@ -259,7 +259,14 @@ export default class InsightsTopic extends React.Component {
   }
 
   changeGraphDropdown = (value) => this.props.changeDropdown(value)
-  clickBar = (index) => {
+  clickBar = (arr) => {
+    let index = -1
+    if (arr && arr.length > 0) {
+      index = arr[0]._index
+    } else {
+      console.log('bar failed', arr);
+      return
+    }
     const graphData = this.cleanGraphData()
     const quiz = this.props.insightsTopic.graphDropdown
     const tag = graphData[index].tag
