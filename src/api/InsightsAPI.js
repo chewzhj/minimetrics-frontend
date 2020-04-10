@@ -29,3 +29,18 @@ export async function getQuestionsOfTopicsAPI(moduleID, quizID, tagID) {
     return [];
   }
 }
+
+export async function getQuestionAPI(questionID) {
+  try {
+    let data = await API.post('question/retrieve',
+      {
+        questionID: questionID
+      }
+    )
+    console.log(data);
+    return data
+  } catch (e) {
+    console.log(`😱 Axios request failed: ${e}`);
+    return [];
+  }
+}

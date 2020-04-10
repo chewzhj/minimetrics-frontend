@@ -11,7 +11,8 @@ export function getTags() {
     return getAllTagAPI()
       .then(json => {
         if (!json.data.hasError) {
-          dispatch(loadTagsSuccess(json.data.tagList))
+          const data = json.data.tagList.sort((t1, t2) => t1.tagName.localeCompare(t2.tagName))
+          dispatch(loadTagsSuccess(data))
         } else {
           dispatch(loadTagsFailure())
         }

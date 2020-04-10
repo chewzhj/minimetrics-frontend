@@ -2,6 +2,8 @@ import {connect} from 'react-redux'
 import View from '../views/InsightsTopic'
 import {
   loadChartData,
+  getQuestionsOfTopics,
+  viewQuestion,
   changeDropdown,
   clickBar,
   clickViewQuestion,
@@ -16,9 +18,11 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   loadChartData: value => dispatch(loadChartData(value)),
+  getQuestionsOfTopics: (moduleID, quizID, tagID) => dispatch(getQuestionsOfTopics(moduleID, quizID, tagID)),
+  // viewQuestion: (questionID) => dispatch(viewQuestion(questionID)),
   changeDropdown: value => dispatch(changeDropdown(value)),
   clickBar: (tag, quiz) => dispatch(clickBar(tag, quiz)),
-  clickViewQuestion: value => dispatch(clickViewQuestion(value)),
+  clickViewQuestion: value => dispatch(viewQuestion(value)),
   closeModal: () => dispatch(closeModal()),
 })
 

@@ -13,6 +13,7 @@ import {
   Radio,
 } from 'antd';
 import { EyeOutlined, PlayCircleOutlined } from '@ant-design/icons'
+import { green } from '@ant-design/colors'
 import { ResponsiveBar } from '@nivo/bar'
 import { HorizontalBar } from 'react-chartjs-2';
 import { ChartDataLabels } from 'chartjs-plugin-datalabels';
@@ -43,9 +44,11 @@ export default class InsightsTopic extends React.Component {
     if (graphDropdown === 'all') {
       let accumulateIncorrect = {}
       let accumulateCorrect = {}
+      let holdingTagID = {}
       for (const quiz of topicData) {
         for (const tag of quiz.tagList) {
-          if (!accumulateCorrect[tag.tagName]) {
+          if (!holdingTagID[tag.tagName]) {
+            holdingTagID[tag.tagName] = tag.tagID
             accumulateCorrect[tag.tagName] = 0
             accumulateIncorrect[tag.tagName] = 0
           }
@@ -57,6 +60,7 @@ export default class InsightsTopic extends React.Component {
       for (const tag in accumulateIncorrect) {
         graphData.push({
           tag: tag,
+          tagID: holdingTagID[tag],
           percentage: percentage1dp(accumulateIncorrect[tag] / (accumulateIncorrect[tag]+accumulateCorrect[tag]))
         })
       }
@@ -76,6 +80,7 @@ export default class InsightsTopic extends React.Component {
       const quizTopicData = topicDataFiltered[0]
       return quizTopicData.tagList.map(tag => ({
         tag: tag.tagName,
+        tagID: tag.tagID,
         percentage: percentage1dp(tag.incorrect / (tag.correct+tag.incorrect))
       })).sort((t1, t2) => {
         if (t1.percentage !== t2.percentage) {
@@ -193,6 +198,45 @@ export default class InsightsTopic extends React.Component {
     onClick: (e,arr) => this.clickBar(arr),
   }
   generateTableData = () => {
+    const { questionTableData } = this.props.insightsTopic
+
+    const processed = []
+    // const filtered = rawData.filter(qn => {
+    //   const quizOk = selectedQuiz === 'all' || qn.quiz === selectedQuiz
+    //   const tagOk = qn.tag === selectedTag
+    //   return quizOk && tagOk
+    // })
+    for (const quiz of questionTableData) {
+      for (const qn of quiz.questionList) {
+        processed.push({
+          key: qn.questionID,
+          quizTitle: quiz.title,
+          questionNumber: qn.sequence,
+          percentage: percentage1dp(qn.incorrect/(qn.incorrect+qn.correct))
+        })
+      }
+    }
+
+    // const processed = filtered.map(qn => ({
+    //   key: qn.questionID,
+    //   quizTitle: qn.quizTitle,
+    //   questionNumber: qn.questionNumber,
+    //   percentage: percentage1dp(qn.incorrect/qn.total)
+    // }))
+
+    const sorted = processed.sort((q1, q2) => {
+      if (q1.percentage !== q2.percentage) {
+        return q2.percentage - q1.percentage
+      } else if (q1.quizTitle !== q2.quizTitle) {
+        return q1.quizTitle.localeCompare(q2.quizTitle)
+      } else {
+        return q1.questionNumber - q2.questionNumber
+      }
+    })
+
+    return sorted
+  }
+  generateTableDataTemp = () => {
     const { selectedTag, selectedQuiz } = this.props.insightsTopic
     const rawData = InsightsTopicData.quizQnsData
 
@@ -247,19 +291,42 @@ export default class InsightsTopic extends React.Component {
       }
     }
   ];
-  filterQuestion = () => {
-    const rawData = InsightsTopicData.quizQnsData
+  cleanViewQuestion = () => {
     const { viewQuestion } = this.props.insightsTopic
 
-    if (viewQuestion === '') {
+  }
+  filterQuestion = () => {
+    const rawData = InsightsTopicData.quizQnsData
+    const { viewQuestionID } = this.props.insightsTopic
+
+    if (viewQuestionID === '') {
       return null
     }
 
-    return rawData.filter(qn => qn.questionID === viewQuestion)[0]
+    return rawData.filter(qn => qn.questionID === viewQuestionID)[0]
   }
 
   changeGraphDropdown = (value) => this.props.changeDropdown(value)
   clickBar = (arr) => {
+    let index = -1
+    if (arr && arr.length > 0) {
+      index = arr[0]._index
+    } else {
+      return
+    }
+    const moduleID = sessionStorage.getItem('moduleID')
+    const graphData = this.cleanGraphData()
+    const tagID = graphData[index].tagID
+    const { quiz } = this.props.insightsTopic
+    let quizID = null
+    if (quiz && quiz !== 'all') {
+      quizID = quiz
+    }
+
+    this.props.getQuestionsOfTopics(moduleID, quizID, tagID)
+    // this.props.clickBar(tag, quiz);
+  }
+  clickBarTemp = (arr) => {
     let index = -1
     if (arr && arr.length > 0) {
       index = arr[0]._index
@@ -281,7 +348,14 @@ export default class InsightsTopic extends React.Component {
     const chartData = this.generateChartData(graphData)
     const modalQuestion = this.filterQuestion()
 
-    const { graphDropdown, viewQuestion, graphLoading } = this.props.insightsTopic
+    const {
+      graphDropdown,
+      viewQuestionID,
+      graphLoading,
+      viewQuestion,
+      viewQuestionLoading,
+      viewQuestionModalVisible,
+    } = this.props.insightsTopic
     const { tagsLoading, tagList } = this.props.tags
     const { quizLoading, quizzes } = this.props.quizMain
 
@@ -290,8 +364,29 @@ export default class InsightsTopic extends React.Component {
 
         {/* Quiz Question Modal */}
         <Modal
+          title="View Question"
+          visible={viewQuestionModalVisible}
+          footer={null}
+          onCancel={this.closeModal}
+        >
+          {viewQuestion.answerList &&
+            <div>
+              <Title level={4}>{viewQuestion.questionText}</Title>
+              {viewQuestion.answerList.map(option => (
+                <Card
+                  key={option.answerID}
+                  size='small'
+                  bodyStyle={{backgroundColor: option.isCorrect? green[1] : '#d9d9d9'}}>
+                  <Text disabled={!option.isCorrect}>{option.answerText}</Text>
+                </Card>
+              ))}
+            </div>
+          }
+        </Modal>
+        {/* Quiz Question Modal */}
+        <Modal
           title={modalQuestion ? `View ${modalQuestion.quizTitle} Question ${modalQuestion.questionNumber}`: "View Question"}
-          visible={viewQuestion !== ''}
+          visible={viewQuestionID !== ''}
           footer={null}
           onCancel={this.closeModal}
         >

@@ -11,7 +11,8 @@ export function loadQuizzes() {
     return getAllQuizAPI()
       .then(json => {
         if (!json.data.hasError) {
-          dispatch(loadQuizzesSuccess(json.data.quizList))
+          const data = json.data.quizList.sort((q1, q2)=>q1.title.localeCompare(q2.title))
+          dispatch(loadQuizzesSuccess(data))
         } else {
           dispatch(loadQuizzesFailure())
         }
