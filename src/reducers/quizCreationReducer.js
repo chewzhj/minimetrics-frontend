@@ -11,6 +11,7 @@ import {
   QUIZ_CREATION_CHANGE_MAX_ATTEMPTS,
   QUIZ_CREATION_TOGGLE_ATTEMPT_LIMIT,
   QUIZ_CREATION_TOGGLE_CONFIDENCE,
+  QUIZ_CREATION_CHANGE_QUESTION_PANEL,
   QUIZ_CREATION_UPDATE_QUESTIONS,
   QUIZ_CREATION_CREATE_START,
   QUIZ_CREATION_CREATE_SUCCESS,
@@ -36,6 +37,7 @@ const initialState = {
   quizMaxAttempts: 1,
   quizAttemptUnlimited: false,
   quizConfidenceEnabled: true,
+  questionPanelOpen: 0,
 
   /*
   within each question is
@@ -101,6 +103,8 @@ export function quizCreationReducer(state = initialState, action) {
       return {...state, quizAttemptUnlimited: action.value}
     case QUIZ_CREATION_TOGGLE_CONFIDENCE:
       return {...state, quizConfidenceEnabled: action.value}
+    case QUIZ_CREATION_CHANGE_QUESTION_PANEL:
+      return {...state, questionPanelOpen: action.value}
     case QUIZ_CREATION_UPDATE_QUESTIONS:
       return {...state, quizQuestions: action.value}
     case QUIZ_CREATION_CREATE_START:
