@@ -16,3 +16,14 @@ export async function loginAPI(username, password) {
     return [];
   }
 }
+
+export async function getAllModules() {
+  try {
+    let data = await API.get('/module');
+    console.log(data);
+    return data;
+  } catch (e) {
+    console.log(`😱 Axios request failed: ${e}`);
+    return [];
+  }
+}

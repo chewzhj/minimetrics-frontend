@@ -10,13 +10,17 @@ import {
 import {getTags} from '../actions/tagActions'
 import {loadQuizzes} from '../actions/quizMainActions'
 import {getTopicInsightsAPI} from '../api/InsightsAPI'
+import {getAllModules} from '../api/LoginAPI'
 
-export function loadChartData(moduleID) {
+// TODO: clean this up after login is made
+export function loadChartData() {
   return function(dispatch) {
     dispatch(loadChartStart())
     dispatch(getTags())
     dispatch(loadQuizzes())
-    return getTopicInsightsAPI(moduleID)
+    const moduleID = sessionStorage.getItem('moduleID')
+    if (moduleID && moduleID.length > 10) {
+      return getTopicInsightsAPI(moduleID)
       .then(json => {
         if (!json.data.hasError) {
           dispatch(loadChartSuccess(json.data.tagInsights))
@@ -27,6 +31,30 @@ export function loadChartData(moduleID) {
       .catch(err => {
         dispatch(loadChartFailure())
       })
+    } else {
+      return getAllModules()
+        .then(json => {
+          if (!json.data.hasError) {
+            sessionStorage.setItem('moduleID', json.data.results[0][0].id)
+            return getTopicInsightsAPI(json.data.results[0][0].id)
+            .then(json => {
+              if (!json.data.hasError) {
+                dispatch(loadChartSuccess(json.data.tagInsights))
+              } else {
+                dispatch(loadChartFailure())
+              }
+            })
+            .catch(err => {
+              dispatch(loadChartFailure())
+            })
+          } else {
+            dispatch(loadChartFailure())
+          }
+        })
+        .catch(err => {
+          dispatch(loadChartFailure())
+        })
+    }
   }
 }
 
