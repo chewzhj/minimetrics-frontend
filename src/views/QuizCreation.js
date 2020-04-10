@@ -17,7 +17,8 @@ import {
   notification,
   Steps,
   Popover,
-  Popconfirm
+  Popconfirm,
+  Collapse
 } from 'antd'
 import { blue, green, red } from '@ant-design/colors'
 import SideBar from '../components/SideBar'
@@ -25,7 +26,6 @@ import CommonPhrases from '../phrases/CommonPhrases'
 import QuizPhrases from '../phrases/QuizPhrases'
 import GlobalConstants from '../variables/GlobalConstants'
 import Tooltip_Image from '../assets/img/confidence_tooltip.jpg'
-
 import {
   QuestionOutlined,
 } from '@ant-design/icons';
@@ -34,8 +34,13 @@ const { TextArea } = Input;
 const { Title, Text } = Typography;
 const { Option } = Select;
 const { Step } = Steps;
+const { Panel } = Collapse;
 
 export default class QuizCreation extends React.Component {
+
+  componentDidMount() {
+    this.props.getTags()
+  }
 
   changeTab = (tab) => this.props.changeTab(tab)
   changeStep = (step) => this.props.changeStep(step)
@@ -55,6 +60,7 @@ export default class QuizCreation extends React.Component {
   changeClosingDate = (m, s) => this.props.changeClosingDate(m)
   changeClosingTime = (e) => this.props.changeClosingTime(e.target.value)
   changeMaxAttempts = (value) => this.props.changeMaxAttempts(value)
+  changeQuestionPanel = (value) => this.props.changeQuestionPanel(value)
   toggleAttemptLimit = (e) => this.props.toggleAttemptLimit(e.target.checked)
   toggleConfidence = (checked) => this.props.toggleConfidence(checked)
   changeQuestions = (value) => this.props.updateQuestions(value)
@@ -83,6 +89,7 @@ export default class QuizCreation extends React.Component {
 
     updatedQuestions.push(newQuestion)
     this.changeQuestions(updatedQuestions)
+    this.changeQuestionPanel(newQuestionNumber)
   }
   removeQuestion = (qnNumber) => {
     const { quizQuestions } = this.props.quizCreation
@@ -317,10 +324,12 @@ export default class QuizCreation extends React.Component {
       quizMaxAttempts,
       quizAttemptUnlimited,
       quizConfidenceEnabled,
+      questionPanelOpen,
       quizQuestions,
       submitting,
       growlNotification,
     } = this.props.quizCreation
+    const { tagList } = this.props.tags
     if (growlNotification) {
       this.onNotification(growlNotification)
     }
@@ -510,15 +519,25 @@ export default class QuizCreation extends React.Component {
               </Col>
             </Row>
 
-            {quizQuestions.map((question, index) => (
-              <QuestionCard
-                key={question.questionNumber}
-                question={question}
-                index={index + 1}
-                onChange={(qn) => this.onChangeQuestion(question.questionNumber, qn)}
-                onRemove={() => this.removeQuestion(question.questionNumber)}
-              />
-            ))}
+            <Collapse style={{width: '85%'}} accordion activeKey={questionPanelOpen} onChange={this.changeQuestionPanel}>
+              {quizQuestions.map((question, index) => {
+                let title = `Question ${index+1}`
+                if (question.title.trim()) {
+                  title += ": " + question.title.trim()
+                }
+                return (
+                  <Panel key={question.questionNumber} header={title}>
+                    <QuestionCard
+                      question={question}
+                      tags={tagList}
+                      index={index + 1}
+                      onChange={(qn) => this.onChangeQuestion(question.questionNumber, qn)}
+                      onRemove={() => this.removeQuestion(question.questionNumber)}
+                    />
+                  </Panel>
+                )
+              })}
+            </Collapse>
 
             <Row gutter={[30, 30]}>
               <Col md={20} xs={21} style={{ marginTop: 20, marginLeft: 20 }}>
@@ -610,91 +629,81 @@ const QuestionCard = (props) => {
     onChange('options', updatedOptions)
   }
 
-  const tags = ["Deontology", "Rights", "Virtues", "Fair Use Doctrine", "Utilitarianism"];
-  const tags_options = [];
-  for (let i = 0; i < tags.length; i++) {
-    tags_options.push(<Option key={tags[i]} value={tags[i]}>{tags[i]}</Option>);
-  }
+  const tags = props.tags
+  const tags_options = tags.map(tag => (
+    <Option key={tag.tagID} value={tag.tagName}>{tag.tagName}</Option>
+  ))
 
   return (
     <div id="appendNewQuestion">
-      <Row style={{ marginTop: 20, marginLeft: 20 }}>
+      <Row gutter={[5, 5]}>
+        <Col md={24} xs={24} style={{ marginTop: 20, marginLeft: 20 }}>
+          <Text strong>Title</Text>
+        </Col>
+      </Row>
+      <Row gutter={[5, 5]} style={{ marginLeft: 20 }}>
+        <Col md={24} xs={24}>
+          <TextArea
+            placeholder="Question Title"
+            autoSize={{ minRows: 4 }}
+            value={props.question.title}
+            onChange={onChangeTitle}
+          />
+        </Col>
+      </Row>
+
+      <Row gutter={[5, 5]} style={{ marginTop: 20, marginLeft: 40 }}>
+        <Col md={18} xs={21}>
+          <Text strong>{QuizPhrases.BUILD_SELECT_CORRECT_OPTION}</Text>
+        </Col>
+      </Row>
+      <Row gutter={[5, 5]} style={{ marginLeft: 40 }}>
+
+        <Radio.Group style={{width: '100%'}} value={props.question.correctOptionNumber} onChange={onChangeCorrect}>
+          {props.question.options.map((option) => (
+            <QuizQuestionOption
+              key={`option${option.optionNumber}`}
+              option={option}
+              correct={props.question.correctOptionNumber === option.optionNumber}
+              onChange={(op) => onChangeOption(option.optionNumber, op)}
+              onRemove={() => removeOption(option.optionNumber)}
+              disableRemove={props.question.options.length <= 1}
+            />
+          ))}
+        </Radio.Group>
+
+      </Row>
+      <Row>
+        <Col md={20} xs={21} style={{ marginTop: 20, marginLeft: 40 }}>
+          <Button onClick={addOption} style={{ borderColor: green[5], backgroundColor: green[5] }}>
+            <Text style={{ color: '#fff' }}>{QuizPhrases.BUILD_ADD_OPTION}</Text>
+          </Button>
+        </Col>
+      </Row>
+
+      <Row gutter={[5, 5]} style={{ marginTop: 20, marginLeft: 20 }}>
         <Col md={20} xs={21}>
+          <Text strong>{QuizPhrases.BUILD_QUESTION_TAGS}</Text>
+        </Col>
+      </Row>
+      <Row gutter={[5, 5]} style={{ marginLeft: 20 }}>
+        <Col md={24} xs={24}>
+          <Select
+            mode="tags"
+            style={{ width: '100%' }}
+            placeholder="Type to add a new topic or select from the list"
+            value={props.question.tags}
+            onChange={onChangeTags}>
+            {tags_options}
+          </Select>
+        </Col>
+      </Row>
 
-          <Card title={QuizPhrases.BUILD_QUESTION + " " + props.index}>
-
-            <Row gutter={[5, 5]}>
-              <Col md={24} xs={21} style={{ marginTop: 20, marginLeft: 20 }}>
-                <Text strong>Title</Text>
-              </Col>
-            </Row>
-            <Row gutter={[5, 5]} style={{ marginLeft: 20 }}>
-              <Col md={18} xs={21}>
-                <TextArea
-                  placeholder="Question Title"
-                  autoSize={{ minRows: 4 }}
-                  value={props.question.title}
-                  onChange={onChangeTitle}
-                />
-              </Col>
-            </Row>
-
-            <Row gutter={[5, 5]} style={{ marginTop: 20, marginLeft: 40 }}>
-              <Col md={18} xs={21}>
-                <Text strong>{QuizPhrases.BUILD_SELECT_CORRECT_OPTION}</Text>
-              </Col>
-            </Row>
-            <Row gutter={[5, 5]} style={{ marginLeft: 40 }}>
-
-              <Radio.Group style={{ width: '90%', paddingRight: 30 }} value={props.question.correctOptionNumber} onChange={onChangeCorrect}>
-                {props.question.options.map((option) => (
-                  <QuizQuestionOption
-                    key={`option${option.optionNumber}`}
-                    option={option}
-                    onChange={(op) => onChangeOption(option.optionNumber, op)}
-                    onRemove={() => removeOption(option.optionNumber)}
-                    disableRemove={props.question.options.length <= 1}
-                  />
-                ))}
-              </Radio.Group>
-
-            </Row>
-            <Row>
-              <Col md={20} xs={21} style={{ marginTop: 20, marginLeft: 40 }}>
-                <Button onClick={addOption} style={{ borderColor: green[5], backgroundColor: green[5] }}>
-                  <Text style={{ color: '#fff' }}>{QuizPhrases.BUILD_ADD_OPTION}</Text>
-                </Button>
-              </Col>
-            </Row>
-
-            <Row gutter={[5, 5]} style={{ marginTop: 20, marginLeft: 20 }}>
-              <Col md={20} xs={21}>
-                <Text strong>{QuizPhrases.BUILD_QUESTION_TAGS}</Text>
-              </Col>
-            </Row>
-            <Row gutter={[5, 5]} style={{ marginLeft: 20 }}>
-              <Col md={16} xs={21}>
-                <Select
-                  mode="tags"
-                  style={{ width: '100%' }}
-                  placeholder="Type to add a new tag or select from the list"
-                  value={props.question.tags}
-                  onChange={onChangeTags}>
-                  {tags_options}
-                </Select>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col md={22} xs={21} style={{ marginTop: 40, marginLeft: 20 }}>
-                <Button onClick={props.onRemove} type="dashed" size={ "large" } style={{ float: 'right', borderColor: red[5], backgroundColor: red[5] }}>
-                  <Text style={{ color: '#fff' }}>{QuizPhrases.BUILD_REMOVE_QUESTION}</Text>
-                </Button>
-              </Col>
-            </Row>
-
-          </Card>
-
+      <Row>
+        <Col md={22} xs={21} style={{ marginTop: 40, marginLeft: 20 }}>
+          <Button onClick={props.onRemove} type="dashed" size={ "large" } style={{ float: 'right', borderColor: red[5], backgroundColor: red[5] }}>
+            <Text style={{ color: '#fff' }}>{QuizPhrases.BUILD_REMOVE_QUESTION}</Text>
+          </Button>
         </Col>
       </Row>
     </div>
@@ -717,13 +726,14 @@ const QuizQuestionOption = (props) => {
     height: 'auto',
     width: '100%',
     lineHeight: '30px',
-    marginTop: 10
+    marginTop: 10,
+    border: props.correct ? '4px solid rgb(24, 144, 255, 0.4)' : ''
   };
 
   return (
     <Radio style={radioStyle} value={props.option.optionNumber}>
-      <Text>This is the correct option</Text>
-      <Col xs={20}>
+      <Text>Correct Option</Text>
+      <Col xs={24}>
         <TextArea autoSize={{ minRows: 4 }} style={{ width: '100%' }} value={props.option.optionText} onChange={onChangeOptionText} />
       </Col>
 

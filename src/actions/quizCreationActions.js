@@ -11,6 +11,7 @@ import {
   QUIZ_CREATION_CHANGE_MAX_ATTEMPTS,
   QUIZ_CREATION_TOGGLE_ATTEMPT_LIMIT,
   QUIZ_CREATION_TOGGLE_CONFIDENCE,
+  QUIZ_CREATION_CHANGE_QUESTION_PANEL,
   QUIZ_CREATION_UPDATE_QUESTIONS,
   QUIZ_CREATION_CREATE_START,
   QUIZ_CREATION_CREATE_SUCCESS,
@@ -140,6 +141,12 @@ export function toggleAttemptLimit(value) {
 export function toggleConfidence(value) {
   return {
     type: QUIZ_CREATION_TOGGLE_CONFIDENCE,
+    value
+  }
+}
+export function changeQuestionPanel(value) {
+  return {
+    type: QUIZ_CREATION_CHANGE_QUESTION_PANEL,
     value
   }
 }
