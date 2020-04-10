@@ -20,6 +20,7 @@ import {
   Popconfirm,
   Collapse
 } from 'antd'
+import moment from 'moment'
 import { blue, green, red } from '@ant-design/colors'
 import SideBar from '../components/SideBar'
 import CommonPhrases from '../phrases/CommonPhrases'
@@ -31,7 +32,7 @@ import {
 } from '@ant-design/icons';
 
 const { TextArea } = Input;
-const { Title, Text } = Typography;
+const { Title, Text, Paragraph } = Typography;
 const { Option } = Select;
 const { Step } = Steps;
 const { Panel } = Collapse;
@@ -133,9 +134,12 @@ export default class QuizCreation extends React.Component {
       outputs.push(`\n${++i}. Quiz Closing Time is invalid`)
     }
     if (!checks[5]) {
-      outputs.push(`\n${++i}. Maximum Attempts is invalid`)
+      outputs.push(`\n${++i}. Quiz Opening Date/Time is same as or after Closing Date/Time`)
     }
     if (!checks[6]) {
+      outputs.push(`\n${++i}. Maximum Attempts is invalid`)
+    }
+    if (!checks[7]) {
       outputs.push(`\n${++i}. Question or Options are invalid`)
     }
 
@@ -189,8 +193,11 @@ export default class QuizCreation extends React.Component {
     if (quizEndTime) {
       checks[4] = true
     }
-    if (quizAttemptUnlimited || quizMaxAttempts > 0) {
+    if (this.checkDates()) {
       checks[5] = true
+    }
+    if (quizAttemptUnlimited || quizMaxAttempts > 0) {
+      checks[6] = true
     }
     // check questions
     let qnCheck = true
@@ -223,7 +230,7 @@ export default class QuizCreation extends React.Component {
         }
       }
     }
-    checks[6] = qnCheck
+    checks[7] = qnCheck
 
     return checks
   }
@@ -285,6 +292,27 @@ export default class QuizCreation extends React.Component {
     console.log(JSON.stringify(quizObject));
     this.props.createQuiz(quizObject)
   }
+  checkDates = () => {
+    const {
+      quizStartDate,
+      quizStartTime,
+      quizEndDate,
+      quizEndTime,
+    } = this.props.quizCreation
+
+    if (quizStartDate === null || quizEndDate === null || quizStartTime === '' || quizEndTime === '') {
+      return true
+    }
+
+    const dateFormat = 'YYYY-MM-DD'
+    const dtf = 'YYYY-MM-DD HH:mm:ss'
+    const startCopy = moment(quizStartDate.format(dateFormat))
+    startCopy.hour(quizStartTime.substring(0,2)).minute(quizStartTime.substring(3,5))
+    const endCopy = moment(quizEndDate.format(dateFormat))
+    endCopy.hour(quizEndTime.substring(0,2)).minute(quizEndTime.substring(3,5))
+
+    return startCopy.isBefore(endCopy)
+  }
   onNotification = (growlNotification) => {
     const { quizTitle } = this.props.quizCreation
 
@@ -330,6 +358,8 @@ export default class QuizCreation extends React.Component {
       growlNotification,
     } = this.props.quizCreation
     const { tagList } = this.props.tags
+    const datesValid = this.checkDates()
+    console.log(datesValid);
     if (growlNotification) {
       this.onNotification(growlNotification)
     }
@@ -446,6 +476,15 @@ export default class QuizCreation extends React.Component {
                 />
               </Col>
             </Row>
+            <Row gutter={[5, 5]} style={{marginLeft: 20}}>
+              <Col md={20} sm={21} xs={21}>
+                {datesValid ? <div style={{height: 22}}/> :
+                  <div style={{height: 22, color: 'red'}}>
+                    Closing Date/Time cannot be the same as or after Start Date/Time
+                  </div>
+                }
+              </Col>
+            </Row>
 
             <Row>
               <Col md={20} sm={21} xs={21} style={{ marginTop: 20, marginLeft: 20 }}>
@@ -526,7 +565,7 @@ export default class QuizCreation extends React.Component {
                   title += ": " + question.title.trim()
                 }
                 return (
-                  <Panel key={question.questionNumber} header={title}>
+                  <Panel key={question.questionNumber} header={<CollapseHeader title={title}/>}>
                     <QuestionCard
                       question={question}
                       tags={tagList}
@@ -561,6 +600,14 @@ export default class QuizCreation extends React.Component {
       </SideBar>
     )
   }
+}
+
+const CollapseHeader = (props) => {
+  return (
+    <div style={{width: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'}}>
+      {props.title}
+    </div>
+  )
 }
 
 const QuestionCard = (props) => {
@@ -701,9 +748,17 @@ const QuestionCard = (props) => {
 
       <Row>
         <Col md={22} xs={21} style={{ marginTop: 40, marginLeft: 20 }}>
-          <Button onClick={props.onRemove} type="dashed" size={ "large" } style={{ float: 'right', borderColor: red[5], backgroundColor: red[5] }}>
-            <Text style={{ color: '#fff' }}>{QuizPhrases.BUILD_REMOVE_QUESTION}</Text>
-          </Button>
+          <Popconfirm
+            title="Are you sure you want to remove this question?"
+            onConfirm={props.onRemove}
+            okText="Yes"
+            okType='danger'
+            cancelText="No"
+          >
+            <Button type="dashed" size={ "large" } style={{ float: 'right', borderColor: red[5], backgroundColor: red[5] }}>
+              <Text style={{ color: '#fff' }}>{QuizPhrases.BUILD_REMOVE_QUESTION}</Text>
+            </Button>
+          </Popconfirm>
         </Col>
       </Row>
     </div>

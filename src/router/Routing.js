@@ -9,8 +9,8 @@ import InsightsTopicContainer from '../containers/InsightsTopicContainer'
 import InsightsConfidenceContainer from '../containers/InsightsConfidenceContainer'
 import TutorialInsightsTopic from '../tutorials/TutorialInsightsTopic'
 
-import '../assets/css/App.css';
 import 'antd/dist/antd.css'
+import '../assets/css/App.css';
 
 const Routing = () => {
   return (

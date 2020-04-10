@@ -31,9 +31,9 @@ const initialState = {
   // quiz settings
   quizTitle: '',
   quizStartDate: null,
-  quizStartTime: null,
+  quizStartTime: "",
   quizEndDate: null,
-  quizEndTime: null,
+  quizEndTime: "",
   quizMaxAttempts: 1,
   quizAttemptUnlimited: false,
   quizConfidenceEnabled: true,
