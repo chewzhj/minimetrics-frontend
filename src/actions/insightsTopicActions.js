@@ -2,6 +2,12 @@ import {
   INSIGHTS_TOPIC_LOAD_CHART_START,
   INSIGHTS_TOPIC_LOAD_CHART_SUCCESS,
   INSIGHTS_TOPIC_LOAD_CHART_FAILURE,
+  INSIGHTS_TOPIC_GET_QUESTIONS_START,
+  INSIGHTS_TOPIC_GET_QUESTIONS_SUCCESS,
+  INSIGHTS_TOPIC_GET_QUESTIONS_FAILURE,
+  INSIGHTS_TOPIC_VIEW_QUESTION_START,
+  INSIGHTS_TOPIC_VIEW_QUESTION_SUCCESS,
+  INSIGHTS_TOPIC_VIEW_QUESTION_FAILURE,
   INSIGHTS_TOPIC_CHANGE_DROPDOWN,
   INSIGHTS_TOPIC_CLICK_BAR,
   INSIGHTS_TOPIC_CLICK_VIEW_QUESTION,
@@ -9,7 +15,7 @@ import {
 } from '../variables/constants/InsightsTopicConstants'
 import {getTags} from '../actions/tagActions'
 import {loadQuizzes} from '../actions/quizMainActions'
-import {getTopicInsightsAPI} from '../api/InsightsAPI'
+import {getTopicInsightsAPI, getQuestionsOfTopicsAPI, getQuestionAPI} from '../api/InsightsAPI'
 import {getAllModules} from '../api/LoginAPI'
 
 // TODO: clean this up after login is made
@@ -29,9 +35,11 @@ export function loadChartData() {
         }
       })
       .catch(err => {
+        // console.log('hi');
+        sessionStorage.removeItem('moduleID') //TODO: fix this properly
         dispatch(loadChartFailure())
       })
-    } else {
+    } else { // TODO: fix this properly
       return getAllModules()
         .then(json => {
           if (!json.data.hasError) {
@@ -57,6 +65,40 @@ export function loadChartData() {
     }
   }
 }
+export function getQuestionsOfTopics(moduleID, quizID, tagID) {
+  return function(dispatch) {
+    dispatch(getQuestionsStart())
+    return getQuestionsOfTopicsAPI(moduleID, quizID, tagID)
+      .then(json => {
+        // console.log(json.data);
+        if (!json.data.hasError) {
+          dispatch(getQuestionsSuccess(json.data.quizList))
+        } else {
+          dispatch(getQuestionsFailure())
+        }
+      })
+      .catch(err => {
+        dispatch(getQuestionsFailure())
+      })
+  }
+}
+export function viewQuestion(questionID) {
+  return function(dispatch) {
+    dispatch(viewQuestionStart())
+    return getQuestionAPI(questionID)
+      .then(json => {
+        console.log(json.data);
+        if (!json.data.hasError) {
+          dispatch(viewQuestionSuccess(json.data.question))
+        } else {
+          dispatch(viewQuestionFailure())
+        }
+      })
+      .catch(err => {
+        dispatch(viewQuestionFailure())
+      })
+  }
+}
 
 function loadChartStart() {
   return {
@@ -72,6 +114,38 @@ function loadChartSuccess(value) {
 function loadChartFailure() {
   return {
     type: INSIGHTS_TOPIC_LOAD_CHART_FAILURE,
+  }
+}
+function getQuestionsStart() {
+  return {
+    type: INSIGHTS_TOPIC_GET_QUESTIONS_START,
+  }
+}
+function getQuestionsSuccess(value) {
+  return {
+    type: INSIGHTS_TOPIC_GET_QUESTIONS_SUCCESS,
+    value
+  }
+}
+function getQuestionsFailure() {
+  return {
+    type: INSIGHTS_TOPIC_GET_QUESTIONS_FAILURE,
+  }
+}
+function viewQuestionStart() {
+  return {
+    type: INSIGHTS_TOPIC_VIEW_QUESTION_START,
+  }
+}
+function viewQuestionSuccess(value) {
+  return {
+    type: INSIGHTS_TOPIC_VIEW_QUESTION_SUCCESS,
+    value
+  }
+}
+function viewQuestionFailure() {
+  return {
+    type: INSIGHTS_TOPIC_VIEW_QUESTION_FAILURE,
   }
 }
 
