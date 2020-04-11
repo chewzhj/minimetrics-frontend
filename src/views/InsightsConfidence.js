@@ -155,6 +155,11 @@ export default class InsightsConfidence extends React.Component {
         anchor: 'end'
       }
     },
+    layout: {
+      padding: {
+        top: 30
+      }
+    },
     scales: {
       yAxes: [{
         ticks: {
@@ -167,6 +172,10 @@ export default class InsightsConfidence extends React.Component {
     maintainAspectRatio: false,
     legend: {
       display: false
+    },
+    events: ['mousemove','click'],
+    onHover: (event, chartElement) => {
+      event.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
     },
     onClick: (e,arr) => this.clickBar(arr),
   }
@@ -427,6 +436,7 @@ export default class InsightsConfidence extends React.Component {
               data={chartData}
               width={100}
               height={400}
+              style={{paddingTop: 10}}
               options={this.chartOptions}
             />
           </Col>

@@ -158,7 +158,7 @@ export default class InsightsTopic extends React.Component {
     },
     events: ['mousemove','click'],
     onHover: (event, chartElement) => {
-    event.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
+      event.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
     },
     onClick: (e,arr) => this.clickBar(arr),
   }
