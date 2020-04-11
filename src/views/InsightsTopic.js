@@ -393,14 +393,14 @@ export default class InsightsTopic extends React.Component {
             </div>
           }
         </Modal>
-        {/* Tutorial Modal */}
+        {/* Start Tutorial Modal */}
         <Modal
           title='Introduction to Topic Insights - Misunderstood Topics'
           visible={tutorialModalVisible}
           onCancel={this.closeTutorialModal}
           footer={[
-            <Paragraph style={{ textAlign: 'center' }}>Proceed to the next step to see how you can analyse this insight.</Paragraph>,
-            <Row justify="space-between">
+            <Paragraph key='para' style={{ textAlign: 'center' }}>Proceed to the next step to see how you can analyse this insight.</Paragraph>,
+            <Row key='buttons' justify="space-between">
             <Col>
               <Button key="back" onClick={this.closeTutorialModal}>
                 End Tutorial
@@ -414,15 +414,16 @@ export default class InsightsTopic extends React.Component {
             </Row>,
           ]}
         >
-        <div>
-          <Paragraph>Curious to find out which topics are the most misunderstood?</Paragraph>
-          <Paragraph>This page provides insights of percentage of incorrect 1st attempts.</Paragraph>
-          <Paragraph>Topics with higher percentage of incorrect 1st attempts indicate misunderstanding.</Paragraph>
-        </div>
+          <div>
+            <Paragraph>Curious to find out which topics are the most misunderstood?</Paragraph>
+            <Paragraph>This page provides insights of percentage of incorrect 1st attempts.</Paragraph>
+            <Paragraph>Topics with higher percentage of incorrect 1st attempts indicate misunderstanding.</Paragraph>
+          </div>
         </Modal>
         <Row>
           <Col md={24} xs={24} style={{ marginTop: 20, marginLeft: 20, marginRight: 20 }}>
-            <Title level={3}>Misunderstood Topics & Questions&nbsp;&nbsp;
+            <Title level={3}>
+              Misunderstood Topics & Questions&nbsp;&nbsp;
               <Button onClick={this.openTutorialModal} icon={<PlayCircleOutlined/>}>
                 Tutorial
               </Button>

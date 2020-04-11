@@ -8,6 +8,7 @@ import TagsContainer from '../containers/TagsContainer'
 import InsightsTopicContainer from '../containers/InsightsTopicContainer'
 import InsightsConfidenceContainer from '../containers/InsightsConfidenceContainer'
 import TutorialInsightsTopic from '../tutorials/TutorialInsightsTopic'
+import TutorialInsightsConfidence from '../tutorials/TutorialInsightsConfidence'
 
 import 'antd/dist/antd.css'
 import '../assets/css/App.css';
@@ -26,6 +27,7 @@ const Routing = () => {
       <Route path="/insights/confidence" component={InsightsConfidenceContainer} />
 
       <Route path="/tutorials/insights/topic" component={TutorialInsightsTopic} />
+      <Route path="/tutorials/insights/confidence" component={TutorialInsightsConfidence} />
 
       {/* fall through */}
       <Route path="/" component={Fallthrough} />
