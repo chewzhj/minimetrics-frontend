@@ -12,7 +12,7 @@ import {
   Divider,
   Modal,
 } from 'antd';
-import {MailOutlined} from '@ant-design/icons'
+import {MailOutlined, CopyOutlined} from '@ant-design/icons'
 import CommonPhrases from '../phrases/CommonPhrases'
 import InsightsPhrases from '../phrases/InsightsPhrases'
 import { QuestionCircleFilled, SmileTwoTone, CloseCircleTwoTone, CheckCircleTwoTone, EyeOutlined, CheckOutlined, CloseOutlined} from '@ant-design/icons'
@@ -22,17 +22,20 @@ import InsightsConfidenceData from '../variables/InsightsConfidenceData'
 import 'chartjs-plugin-style';
 
 const { Option } = Select;
-const { Title, Text } = Typography;
+const { Title, Text, Paragraph } = Typography;
 
 const pageSize = 1;
 
 const chartColors = ['#f79992', '#f78e3d', '#ffdd76', '#76d0a3'];
 
-
 export default class InsightsConfidence extends React.Component {
 
+  selectedTableRef = null
   changeSelect = (value, option) => this.props.changeSelect(value)
-  clickGroup = (value) => this.props.clickGroup(value)
+  clickGroup = (value) => {
+    this.props.clickGroup(value)
+    this.scrollToTable()
+  }
   exportGroup = () => this.props.exportGroup()
   closeExportModal = () => this.props.closeExportModal()
   clickBar = (arr) => {
@@ -45,6 +48,7 @@ export default class InsightsConfidence extends React.Component {
 
     this.clickGroup(index+1)
   }
+  scrollToTable = () => this.selectedTableRef.scrollIntoView({behavior: 'smooth'})
 
   generateStudentData = () => {
     const names = InsightsConfidenceData.studentNames
@@ -303,6 +307,13 @@ export default class InsightsConfidence extends React.Component {
       },
     ];
   }
+  generateStudentEmailList = (studentList) => {
+    let output = ""
+    studentList.forEach(student => {
+      output += student.studentEmail + "; "
+    })
+    return output
+  }
 
   render() {
     const {
@@ -314,6 +325,7 @@ export default class InsightsConfidence extends React.Component {
     const aggregated = this.aggregateChartData(processedStudentData)
     const chartData = this.generateChartData(aggregated)
     const tableData = this.filterStudents(processedStudentData)
+    const emailList = this.generateStudentEmailList(tableData)
     const legendTableData = this.generateLegendTableData()
     const selectedTableColumns = this.generateSelectedTableColumns()
     const selectedLabel = this.generateSelectedLabel()
@@ -326,6 +338,12 @@ export default class InsightsConfidence extends React.Component {
           footer={null}
           onCancel={this.closeExportModal}
           title={`Export ${selectedLabel} Students' Emails`}>
+
+          {/* <Button icon={<CopyOutlined/>}>Copy to Clipboard</Button> */}
+          <Paragraph copyable={{text: emailList}} strong>
+            Copy Emails to Clipboard
+          </Paragraph>
+
           {tableData.map(student => (
             <p key={student.studentID}>{student.studentEmail}</p>
           ))}
@@ -393,13 +411,15 @@ export default class InsightsConfidence extends React.Component {
 
         <Row style={{ marginTop: 20, marginLeft: 20, marginRight: 20 }}>
           <Col lg={12} md={18} xs={24}>
-            <Table
-              columns={selectedTableColumns}
-              dataSource={tableData}
-              rowKey='studentID'
-              bordered
-              size='small'
-            />
+            <div ref={(table) => this.selectedTableRef = table}>
+              <Table
+                columns={selectedTableColumns}
+                dataSource={tableData}
+                rowKey='studentID'
+                bordered
+                size='small'
+              />
+            </div>
           </Col>
         </Row>
       </SideBar>
