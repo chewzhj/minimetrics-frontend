@@ -12,6 +12,8 @@ import {
   INSIGHTS_TOPIC_CLICK_BAR,
   INSIGHTS_TOPIC_CLICK_VIEW_QUESTION,
   INSIGHTS_TOPIC_CLOSE_MODAL,
+  INSIGHTS_TOPIC_OPEN_TUTORIAL_MODAL,
+  INSIGHTS_TOPIC_CLOSE_TUTORIAL_MODAL,
 } from '../variables/constants/InsightsTopicConstants'
 import {getTags} from '../actions/tagActions'
 import {loadQuizzes} from '../actions/quizMainActions'
@@ -171,5 +173,15 @@ export function clickViewQuestion(value) {
 export function closeModal() {
   return {
     type: INSIGHTS_TOPIC_CLOSE_MODAL
+  }
+}
+export function openTutorialModal() {
+  return {
+    type: INSIGHTS_TOPIC_OPEN_TUTORIAL_MODAL,
+  }
+}
+export function closeTutorialModal() {
+  return {
+    type: INSIGHTS_TOPIC_CLOSE_TUTORIAL_MODAL,
   }
 }

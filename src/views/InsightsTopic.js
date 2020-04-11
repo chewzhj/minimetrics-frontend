@@ -305,6 +305,10 @@ export default class InsightsTopic extends React.Component {
 
     return rawData.filter(qn => qn.questionID === viewQuestionID)[0]
   }
+  openTutorial = () => {
+    this.closeTutorialModal()
+    this.props.history.push('/tutorials/insights/topic')
+  }
 
   changeGraphDropdown = (value) => this.props.changeDropdown(value)
   clickBar = (arr) => {
@@ -341,6 +345,8 @@ export default class InsightsTopic extends React.Component {
   }
   clickViewQuestion = (questionID) => this.props.clickViewQuestion(questionID)
   closeModal = () => this.props.closeModal()
+  openTutorialModal = () => this.props.openTutorialModal()
+  closeTutorialModal = () => this.props.closeTutorialModal()
 
   render() {
     const tableData = this.generateTableData()
@@ -355,6 +361,7 @@ export default class InsightsTopic extends React.Component {
       viewQuestion,
       viewQuestionLoading,
       viewQuestionModalVisible,
+      tutorialModalVisible,
     } = this.props.insightsTopic
     const { tagsLoading, tagList } = this.props.tags
     const { quizLoading, quizzes } = this.props.quizMain
@@ -383,12 +390,13 @@ export default class InsightsTopic extends React.Component {
             </div>
           }
         </Modal>
-        {/* Quiz Question Modal */}
+        {/* Tutorial Modal */}
         <Modal
-          title={modalQuestion ? `View ${modalQuestion.quizTitle} Question ${modalQuestion.questionNumber}`: "View Question"}
-          visible={viewQuestionID !== ''}
-          footer={null}
-          onCancel={this.closeModal}
+          title='start tutorial'
+          visible={tutorialModalVisible}
+          onOk={this.openTutorial}
+          okText='Proceed'
+          onCancel={this.closeTutorialModal}
         >
           {modalQuestion &&
             <div>
@@ -407,7 +415,11 @@ export default class InsightsTopic extends React.Component {
         </Modal>
         <Row>
           <Col md={24} xs={24} style={{ marginTop: 20, marginLeft: 20, marginRight: 20 }}>
-            <Title level={3}>Misunderstood Topics & Questions&nbsp;&nbsp;<Link to='/tutorials/insights/topic'><Button icon={<PlayCircleOutlined/>}>Tutorial</Button></Link></Title>
+            <Title level={3}>Misunderstood Topics & Questions&nbsp;&nbsp;
+              <Button onClick={this.openTutorialModal} icon={<PlayCircleOutlined/>}>
+                Tutorial
+              </Button>
+            </Title>
             <Text>by percentage of incorrect 1st attempts</Text>
           </Col>
         </Row>

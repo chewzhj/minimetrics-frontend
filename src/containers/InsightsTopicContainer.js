@@ -8,6 +8,8 @@ import {
   clickBar,
   clickViewQuestion,
   closeModal,
+  openTutorialModal,
+  closeTutorialModal,
 } from '../actions/insightsTopicActions'
 
 const mapStateToProps = state => ({
@@ -24,6 +26,8 @@ const mapDispatchToProps = dispatch => ({
   clickBar: (tag, quiz) => dispatch(clickBar(tag, quiz)),
   clickViewQuestion: value => dispatch(viewQuestion(value)),
   closeModal: () => dispatch(closeModal()),
+  openTutorialModal: () => dispatch(openTutorialModal()),
+  closeTutorialModal: () => dispatch(closeTutorialModal()),
 })
 
 export default connect(
