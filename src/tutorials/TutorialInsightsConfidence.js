@@ -32,6 +32,7 @@ import { Bar } from 'react-chartjs-2';
 import { ChartDataLabels } from 'chartjs-plugin-datalabels';
 import InsightsConfidenceData from '../variables/InsightsConfidenceData'
 import Confidence_Quadrants from '../assets/img/confidence_quadrants.jpg'
+import Part2CountGroups from '../assets/img/tutorials/confidenceInsights/part2countgroups.png'
 import 'chartjs-plugin-style';
 
 const { Option } = Select;
@@ -44,6 +45,7 @@ const chartColors = ['#f79992', '#f78e3d', '#ffdd76', '#76d0a3'];
 export default class InsightsConfidence extends React.Component {
 
   state = {
+    step: 3,
     data: [],
     selectedGroup: 0,
     exportGroupModalVisible: false,
@@ -54,6 +56,7 @@ export default class InsightsConfidence extends React.Component {
     this.setState({selectedGroup: value})
     this.scrollToTable()
   }
+  changeStep = (value) => this.setState({step: value})
   openExportModal = () => this.setState({exportGroupModalVisible: true})
   closeExportModal = () => this.setState({exportGroupModalVisible: false})
   clickBar = (arr) => {
@@ -336,6 +339,7 @@ export default class InsightsConfidence extends React.Component {
 
   render() {
     const {
+      step,
       exportGroupModalVisible,
     } = this.state
 
@@ -351,6 +355,7 @@ export default class InsightsConfidence extends React.Component {
     return (
       <SideBar activeTab='insights/confidence' title="Students Insights" subtitle="Identify students who are at risk" disabled>
 
+        {/* Export Student Email Modal */}
         <Modal
           visible={exportGroupModalVisible}
           footer={null}
@@ -367,17 +372,85 @@ export default class InsightsConfidence extends React.Component {
           ))}
         </Modal>
 
+        {/* Tutorial Part 1a (step 1) Modal */}
+        <Modal
+          title={InsightsPhrases.CONFIDENCE_TUTORIAL_PART_1A_HEADER}
+          visible={step===1}
+          closable={false}
+          footer={
+            <div>
+              <Row justify="space-between">
+                <Col>
+                  <Button onClick={this.endTutorial}>
+                    End Tutorial
+                  </Button>
+                </Col>
+                <Col>
+                  <Button type="primary" onClick={()=>this.changeStep(2)}>
+                    Proceed &rarr;
+                  </Button>
+                </Col>
+              </Row>
+            </div>
+          }
+        >
+          <Paragraph>
+            Based on the <b>answer accuracy</b> and <b>chosen confidence level</b>, students are classified into one of these 4 groups.
+          </Paragraph>
+          <img src={Confidence_Quadrants} alt="Confidence Quadrants" style={{ height: 346, width: 480 }} />
+        </Modal>
+
+        {/* Tutorial Part 2 (step 3) Modal */}
+        <Modal
+          title={InsightsPhrases.CONFIDENCE_TUTORIAL_PART_2_HEADER}
+          visible={step===3}
+          closable={false}
+          footer={
+            <div>
+              <Row justify="space-between">
+                <Col>
+                  <Button onClick={this.endTutorial}>
+                    End Tutorial
+                  </Button>
+                </Col>
+                <Col>
+                  <Button onClick={()=>this.changeStep(2)}>
+                    &larr; Back
+                  </Button>
+                  <Button type="primary" onClick={()=>this.changeStep(4)} style={{ marginLeft: 10 }}>
+                    Proceed &rarr;
+                  </Button>
+                </Col>
+              </Row>
+            </div>
+          }
+        >
+          <Paragraph>
+            This categorization will happen for <u>each quiz question attempted by the student</u>.
+            As such, one student will have different frequency counts in each of the 4 groups.
+          </Paragraph>
+          <Paragraph>
+            In this example, Student A has answered 30 questions across all quizzes.
+            14 questions were <b>answered incorrectly</b> with '<b>No Confidence</b>' selected.
+            Hence there are <b>14 occurrences</b> in the '<b>Misinformed</b>' category for Student A.
+            This reasoning can be extended to the other 3 categories.
+          </Paragraph>
+          <img src={Part2CountGroups} alt="Student Confidence Groups" style={{ width: '100%'}} />
+        </Modal>
+
         <Row>
           <Col md={24} xs={24} style={{ marginTop: 20, marginLeft: 20, paddingRight: 20 }}>
             <Title level={3}>
               {InsightsPhrases.CONFIDENCE_INSIGHTS_HEADER}
               &nbsp;&nbsp;
               <Popover
-                title='Confidence Level Groups'
+                title='Confidence Level Categories'
                 content={
                   <div style={{width: 480}}>
                     <img src={Confidence_Quadrants} alt="Confidence Quadrants" style={{ height: 346, width: 480 }} />
-                    <Paragraph>{InsightsPhrases.CONFIDENCE_INSIGHTS_EXPLN_GRP}</Paragraph>
+                    <Paragraph>{InsightsPhrases.CONFIDENCE_INSIGHTS_EXPLN_GRP_PARA_1}</Paragraph>
+                    <Paragraph>{InsightsPhrases.CONFIDENCE_INSIGHTS_EXPLN_GRP_PARA_2}</Paragraph>
+                    <Paragraph>{InsightsPhrases.CONFIDENCE_INSIGHTS_EXPLN_GRP_PARA_3}</Paragraph>
                   </div>
                 }><Button icon={<QuestionOutlined />} shape='circle'/>
               </Popover>
@@ -398,15 +471,29 @@ export default class InsightsConfidence extends React.Component {
             />
           </Col>
           <Col lg={12} md={24} xs={24}>
-            <Table
-              title={() => <div style={{ marginTop: 20 }} align='center'><Text strong>Legend</Text></div>}
-              columns={this.legendTableColumns}
-              rowClassName={(record) => record.color.replace('#', '')}
-              dataSource={legendTableData}
-              rowKey='groupTitle'
-              pagination={chartData.length > pageSize && { pageSize }}
-              size="middle"
-            />
+
+            {/* Tutorial Part 1b (step 2) Modal */}
+            <Popover
+              visible={step === 2}
+              // placement='top'
+              title={InsightsPhrases.CONFIDENCE_TUTORIAL_PART_1B_HEADER}
+              content={
+                <Step2PopoverContent
+                  endTutorial={this.endTutorial}
+                  changeStep={this.changeStep}
+                />
+              }
+              >
+              <Table
+                title={() => <div style={{ marginTop: 20 }} align='center'><Text strong>Legend</Text></div>}
+                columns={this.legendTableColumns}
+                rowClassName={(record) => record.color.replace('#', '')}
+                dataSource={legendTableData}
+                rowKey='groupTitle'
+                pagination={chartData.length > pageSize && { pageSize }}
+                size="middle"
+              />
+            </Popover>
           </Col>
         </Row>
 
@@ -436,4 +523,28 @@ export default class InsightsConfidence extends React.Component {
       </SideBar>
     )
   }
+}
+
+const Step2PopoverContent = (props) => {
+  return (
+    <div style={{ width: 350 }}>
+      <Paragraph>{InsightsPhrases.CONFIDENCE_TUTORIAL_PART_1B_DESC}</Paragraph>
+      <Divider/>
+      <Row justify="space-between">
+        <Col>
+          <Button onClick={props.endTutorial}>
+            End Tutorial
+          </Button>
+        </Col>
+        <Col>
+          <Button onClick={()=>props.changeStep(1)}>
+            &larr; Back
+          </Button>
+          <Button type="primary" style={{ marginLeft: 10 }} onClick={()=>props.changeStep(3)}>
+            Proceed &rarr;
+          </Button>
+        </Col>
+      </Row>
+    </div>
+  )
 }
