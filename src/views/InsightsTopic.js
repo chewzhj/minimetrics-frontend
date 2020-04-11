@@ -3,6 +3,7 @@ import SideBar from '../components/SideBar'
 import {
   Row,
   Col,
+  Divider,
   Select,
   Table,
   Button,
@@ -23,7 +24,7 @@ import GlobalConstants from '../variables/GlobalConstants'
 import InsightsTopicData from '../variables/InsightsTopicData'
 
 const { Option } = Select;
-const { Title, Text } = Typography;
+const { Title, Paragraph, Text } = Typography;
 
 const percentage1dp = (number) => {
   const thousandtimes = Math.round(number * 1000)
@@ -394,26 +395,30 @@ export default class InsightsTopic extends React.Component {
         </Modal>
         {/* Tutorial Modal */}
         <Modal
-          title='start tutorial'
+          title='Introduction to Topic Insights - Misunderstood Topics'
           visible={tutorialModalVisible}
-          onOk={this.openTutorial}
-          okText='Proceed'
           onCancel={this.closeTutorialModal}
+          footer={[
+            <Paragraph style={{ textAlign: 'center' }}>Proceed to the next step to see how you can analyse this insight.</Paragraph>,
+            <Row justify="space-between">
+            <Col>
+              <Button key="back" onClick={this.closeTutorialModal}>
+                End Tutorial
+              </Button>
+            </Col>
+            <Col>
+              <Button key="submit" type="primary" onClick={this.openTutorial}>
+                Proceed &rarr;
+              </Button>
+            </Col>
+            </Row>,
+          ]}
         >
-          {modalQuestion &&
-            <div>
-              <Title level={3}>{modalQuestion.questionTitle}</Title>
-              {modalQuestion.options.map(option => (
-                <Card key={option.optionNumber}>
-                  <Radio
-                    checked={option.optionNumber === modalQuestion.correctOption}
-                    disabled={option.optionNumber !== modalQuestion.correctOption}>
-                    {option.title}
-                  </Radio>
-                </Card>
-              ))}
-            </div>
-          }
+        <div>
+          <Paragraph>Curious to find out which topics are the most misunderstood?</Paragraph>
+          <Paragraph>This page provides insights of percentage of incorrect 1st attempts.</Paragraph>
+          <Paragraph>Topics with higher percentage of incorrect 1st attempts indicate misunderstanding.</Paragraph>
+        </div>
         </Modal>
         <Row>
           <Col md={24} xs={24} style={{ marginTop: 20, marginLeft: 20, marginRight: 20 }}>
