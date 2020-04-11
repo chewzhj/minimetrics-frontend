@@ -259,6 +259,7 @@ export default class InsightsTopic extends React.Component {
       this.changeStep(10)
     }
   }
+  endTutorial = () => this.props.history.push('/insights/topic')
   showEndTutorialButton = () => {
     if (this.state.step === 9) {
       return (
@@ -324,7 +325,7 @@ export default class InsightsTopic extends React.Component {
               <Paragraph style={{ textAlign: 'center' }}>Proceed to the next step to find out how to get deeper insights.</Paragraph>
               <Row justify="space-between">
                 <Col>
-                  <Button onClick={()=>{this.props.history.push('/insights/topic')}}>
+                  <Button onClick={this.endTutorial}>
                     End Tutorial
                   </Button>
                 </Col>
@@ -353,7 +354,7 @@ export default class InsightsTopic extends React.Component {
             <div>
               <Row justify="space-between">
                 <Col>
-                  <Button onClick={()=>{this.props.history.push('/insights/topic')}}>
+                  <Button onClick={this.endTutorial}>
                     End Tutorial
                   </Button>
                 </Col>
@@ -380,24 +381,27 @@ export default class InsightsTopic extends React.Component {
           closable={ false }
           footer={null}
         >
-        <Result
-          status="success"
-          title="Congratulations on completing the tutorial!"
-        />
-        <Paragraph style={{ textAlign: 'center' }}>We have covered how to identify the most misunderstood topic and what has caused it.</Paragraph>
-        <Paragraph style={{ textAlign: 'center' }}>Now you are able to analyse the insights for misunderstood topics and misunderstood questions on your own.</Paragraph>
-        <Row justify="center">
-          <Col>
-            <Button type="primary" style={{ marginTop: 20 }} onClick={()=>{this.props.history.push('/insights/topic')}}>
-              End Tutorial
-            </Button>
-          </Col>
-        </Row>
+          <Result
+            status="success"
+            title="Congratulations on completing the tutorial!"
+          />
+          <Paragraph style={{ textAlign: 'center' }}>We have covered how to identify the most misunderstood topic and what has caused it.</Paragraph>
+          <Paragraph style={{ textAlign: 'center' }}>Now you are able to analyse the insights for misunderstood topics and misunderstood questions on your own.</Paragraph>
+          <Row justify="center">
+            <Col>
+              <Button type="primary" style={{ marginTop: 20 }} onClick={this.endTutorial}>
+                End Tutorial
+              </Button>
+            </Col>
+          </Row>
         </Modal>
 
         <Row>
           <Col md={24} xs={24} style={{ marginTop: 20, marginLeft: 20, marginRight: 20 }}>
-            <Title level={3}>Misunderstood Topics & Questions&nbsp;&nbsp;<Button onClick={()=>{this.props.history.push('/insights/topic')}}>End Tutorial</Button></Title>
+            <Title level={3}>
+              Misunderstood Topics & Questions&nbsp;&nbsp;
+              <Button onClick={this.endTutorial}>End Tutorial</Button>
+            </Title>
             <Text>by percentage of incorrect 1st attempts</Text>
           </Col>
         </Row>
@@ -417,7 +421,7 @@ export default class InsightsTopic extends React.Component {
               <Divider/>
               <Row justify="space-between">
                 <Col>
-                  <Button onClick={()=>{this.props.history.push('/insights/topic')}}>
+                  <Button onClick={this.endTutorial}>
                     End Tutorial
                   </Button>
                 </Col>
@@ -464,7 +468,7 @@ export default class InsightsTopic extends React.Component {
                   <Divider/>
                   <Row justify="space-between">
                     <Col>
-                      <Button onClick={()=>{this.props.history.push('/insights/topic')}}>
+                      <Button onClick={this.endTutorial}>
                         End Tutorial
                       </Button>
                     </Col>
@@ -490,7 +494,7 @@ export default class InsightsTopic extends React.Component {
                     <Divider/>
                     <Row justify="space-between">
                       <Col>
-                        <Button onClick={()=>{this.props.history.push('/insights/topic')}}>
+                        <Button onClick={this.endTutorial}>
                           End Tutorial
                         </Button>
                       </Col>
@@ -530,7 +534,7 @@ export default class InsightsTopic extends React.Component {
               <Divider/>
               <Row justify="space-between">
                 <Col>
-                  <Button onClick={()=>{this.props.history.push('/insights/topic')}}>
+                  <Button onClick={this.endTutorial}>
                     End Tutorial
                   </Button>
                 </Col>
@@ -566,7 +570,7 @@ export default class InsightsTopic extends React.Component {
                 <Divider/>
                 <Row justify="space-between">
                   <Col>
-                    <Button onClick={()=>{this.props.history.push('/insights/topic')}}>
+                    <Button onClick={this.endTutorial}>
                       End Tutorial
                     </Button>
                   </Col>

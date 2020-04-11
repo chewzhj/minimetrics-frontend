@@ -43,19 +43,19 @@ const chartColors = ['#f79992', '#f78e3d', '#ffdd76', '#76d0a3'];
 
 export default class InsightsConfidence extends React.Component {
 
+  state = {
+    data: [],
+    selectedGroup: 0,
+    exportGroupModalVisible: false,
+  }
+
   selectedTableRef = null
   clickGroup = (value) => {
-    this.props.clickGroup(value)
+    this.setState({selectedGroup: value})
     this.scrollToTable()
   }
-  openExportModal = () => this.props.exportGroup()
-  closeExportModal = () => this.props.closeExportModal()
-  openTutorialModal = () => this.props.openTutorialModal()
-  closeTutorialModal = () => this.props.closeTutorialModal()
-  openTutorial = () => {
-    this.closeTutorialModal()
-    this.props.history.push('/tutorials/insights/confidence')
-  }
+  openExportModal = () => this.setState({exportGroupModalVisible: true})
+  closeExportModal = () => this.setState({exportGroupModalVisible: false})
   clickBar = (arr) => {
     let index = -1
     if (arr && arr.length > 0) {
@@ -67,6 +67,7 @@ export default class InsightsConfidence extends React.Component {
     this.clickGroup(index+1)
   }
   scrollToTable = () => this.selectedTableRef.scrollIntoView({behavior: 'smooth'})
+  endTutorial = () => this.props.history.push('/insights/confidence')
 
   generateStudentData = () => {
     const names = InsightsConfidenceData.studentNames
@@ -171,7 +172,7 @@ export default class InsightsConfidence extends React.Component {
     onClick: (e,arr) => this.clickBar(arr),
   }
   filterStudents = (processedStudentData) => {
-    const { selectedGroup } = this.props.insightsConfidence
+    const { selectedGroup } = this.state
     if (selectedGroup <= 0 || selectedGroup >= 5 ) {
       return []
     }
@@ -299,12 +300,12 @@ export default class InsightsConfidence extends React.Component {
     }
   ];
   generateSelectedLabel = () => {
-    const { selectedGroup } = this.props.insightsConfidence
+    const { selectedGroup } = this.state
     const labels = ["Misinformed", "Uninformed", "Almost There", "Knowledgeable"]
     return labels[selectedGroup-1]
   }
   generateSelectedTableColumns = () => {
-    const { selectedGroup } = this.props.insightsConfidence
+    const { selectedGroup } = this.state
     let label = 'Freq. in Group'
     let sortKey = 'freqMisinformed'
     if (selectedGroup > 0 && selectedGroup < 5 ) {
@@ -336,8 +337,7 @@ export default class InsightsConfidence extends React.Component {
   render() {
     const {
       exportGroupModalVisible,
-      tutorialModalVisible
-    } = this.props.insightsConfidence
+    } = this.state
 
     const processedStudentData = this.processStudentData(InsightsConfidenceData.studentConfidenceData)
     const aggregated = this.aggregateChartData(processedStudentData)
@@ -349,9 +349,8 @@ export default class InsightsConfidence extends React.Component {
     const selectedLabel = this.generateSelectedLabel()
 
     return (
-      <SideBar activeTab='insights/confidence' title="Students Insights" subtitle="Identify students who are at risk">
+      <SideBar activeTab='insights/confidence' title="Students Insights" subtitle="Identify students who are at risk" disabled>
 
-        {/* Export Student Emails Modal */}
         <Modal
           visible={exportGroupModalVisible}
           footer={null}
@@ -368,38 +367,11 @@ export default class InsightsConfidence extends React.Component {
           ))}
         </Modal>
 
-        {/* Start Tutorial Modal */}
-        <Modal
-          title='Introduction to Student Insights - Confidence Levels & Student Competency'
-          visible={tutorialModalVisible}
-          onCancel={this.closeTutorialModal}
-          footer={[
-            <Paragraph key='para' style={{ textAlign: 'center' }}>Proceed to the next step to see how you can analyse this insight.</Paragraph>,
-            <Row key='buttons' justify="space-between">
-            <Col>
-              <Button key="back" onClick={this.closeTutorialModal}>
-                End Tutorial
-              </Button>
-            </Col>
-            <Col>
-              <Button key="submit" type="primary" onClick={this.openTutorial}>
-                Proceed &rarr;
-              </Button>
-            </Col>
-            </Row>,
-          ]}
-        >
-          <div>
-            <Paragraph>Curious to find out which topics are the most misunderstood?</Paragraph>
-            <Paragraph>This page provides insights of percentage of incorrect 1st attempts.</Paragraph>
-            <Paragraph>Topics with higher percentage of incorrect 1st attempts indicate misunderstanding.</Paragraph>
-          </div>
-        </Modal>
-
         <Row>
           <Col md={24} xs={24} style={{ marginTop: 20, marginLeft: 20, paddingRight: 20 }}>
             <Title level={3}>
-              {InsightsPhrases.CONFIDENCE_INSIGHTS_HEADER}&nbsp;&nbsp;
+              {InsightsPhrases.CONFIDENCE_INSIGHTS_HEADER}
+              &nbsp;&nbsp;
               <Popover
                 title='Confidence Level Groups'
                 content={
@@ -410,11 +382,8 @@ export default class InsightsConfidence extends React.Component {
                 }><Button icon={<QuestionOutlined />} shape='circle'/>
               </Popover>
               &nbsp;&nbsp;
-              <Button onClick={this.openTutorialModal} icon={<PlayCircleOutlined/>}>
-                Tutorial
-              </Button>
+              <Button onClick={this.endTutorial}>End Tutorial</Button>
             </Title>
-
             <Text>{InsightsPhrases.CONFIDENCE_INSIGHTS_SUBHEADER}</Text>
           </Col>
         </Row>

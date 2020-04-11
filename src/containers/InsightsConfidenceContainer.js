@@ -1,9 +1,10 @@
 import {connect} from 'react-redux'
 import {
-  changeSelect,
   clickGroup,
   exportGroup,
   closeExportModal,
+  openTutorialModal,
+  closeTutorialModal,
 } from '../actions/insightsConfidenceActions'
 import View from '../views/InsightsConfidence'
 
@@ -12,10 +13,11 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  changeSelect: (value) => dispatch(changeSelect(value)),
   clickGroup: (value) => dispatch(clickGroup(value)),
   exportGroup: () => dispatch(exportGroup()),
-  closeExportModal: () => dispatch(closeExportModal())
+  closeExportModal: () => dispatch(closeExportModal()),
+  openTutorialModal: () => dispatch(openTutorialModal()),
+  closeTutorialModal: () => dispatch(closeTutorialModal()),
 })
 
 export default connect(
