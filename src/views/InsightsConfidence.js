@@ -445,25 +445,31 @@ export default class InsightsConfidence extends React.Component {
 
         <Row>
           <Col md={24} xs={24} style={{ marginTop: 40, marginLeft: 20, paddingRight: 20 }}>
-            <Title level={3}>Students in selected group
-            </Title>
-            <Button disabled={tableData.length === 0} onClick={this.openExportModal} icon={<MailOutlined/>}>Export Emails</Button>
-            <br/>
+            <div ref={(table) => this.selectedTableRef = table}>
+              <Title level={3}>
+                Students in selected group
+                <Button
+                  disabled={tableData.length === 0}
+                  onClick={this.openExportModal}
+                  style={{marginLeft: 10}}
+                  icon={<MailOutlined/>}>
+                  Export Emails
+                </Button>
+              </Title>
+            </div>
             <Text>This table will represent the students in the selected group from the chart above.</Text>
           </Col>
         </Row>
 
         <Row style={{ marginTop: 20, marginLeft: 20, marginRight: 20 }}>
           <Col lg={12} md={18} xs={24}>
-            <div ref={(table) => this.selectedTableRef = table}>
-              <Table
-                columns={selectedTableColumns}
-                dataSource={tableData}
-                rowKey='studentID'
-                bordered
-                size='small'
-              />
-            </div>
+            <Table
+              columns={selectedTableColumns}
+              dataSource={tableData}
+              rowKey='studentID'
+              bordered
+              size='small'
+            />
           </Col>
         </Row>
       </SideBar>

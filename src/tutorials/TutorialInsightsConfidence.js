@@ -33,6 +33,8 @@ import { ChartDataLabels } from 'chartjs-plugin-datalabels';
 import InsightsConfidenceData from '../variables/InsightsConfidenceData'
 import Confidence_Quadrants from '../assets/img/confidence_quadrants.jpg'
 import Part2CountGroups from '../assets/img/tutorials/confidenceInsights/part2countgroups.png'
+import Part3Scenario1 from '../assets/img/tutorials/confidenceInsights/part3scenario1.png'
+import Part3Scenario2 from '../assets/img/tutorials/confidenceInsights/part3scenario2.png'
 import 'chartjs-plugin-style';
 
 const { Option } = Select;
@@ -45,7 +47,7 @@ const chartColors = ['#f79992', '#f78e3d', '#ffdd76', '#76d0a3'];
 export default class InsightsConfidence extends React.Component {
 
   state = {
-    step: 3,
+    step: 6,
     data: [],
     selectedGroup: 0,
     exportGroupModalVisible: false,
@@ -405,6 +407,7 @@ export default class InsightsConfidence extends React.Component {
           title={InsightsPhrases.CONFIDENCE_TUTORIAL_PART_2_HEADER}
           visible={step===3}
           closable={false}
+          width={600}
           footer={
             <div>
               <Row justify="space-between">
@@ -429,13 +432,97 @@ export default class InsightsConfidence extends React.Component {
             This categorization will happen for <u>each quiz question attempted by the student</u>.
             As such, one student will have different frequency counts in each of the 4 groups.
           </Paragraph>
+          <img src={Part2CountGroups} alt="Student Confidence Groups" style={{ width: '100%'}} />
           <Paragraph>
             In this example, Student A has answered 30 questions across all quizzes.
             14 questions were <b>answered incorrectly</b> with '<b>No Confidence</b>' selected.
             Hence there are <b>14 occurrences</b> in the '<b>Misinformed</b>' category for Student A.
             This reasoning can be extended to the other 3 categories.
           </Paragraph>
-          <img src={Part2CountGroups} alt="Student Confidence Groups" style={{ width: '100%'}} />
+        </Modal>
+
+        {/* Tutorial Part 3 (step 4) Modal */}
+        <Modal
+          title={InsightsPhrases.CONFIDENCE_TUTORIAL_PART_3_HEADER}
+          visible={step===4}
+          closable={false}
+          width={600}
+          footer={
+            <div>
+              <Row justify="space-between">
+                <Col>
+                  <Button onClick={this.endTutorial}>
+                    End Tutorial
+                  </Button>
+                </Col>
+                <Col>
+                  <Button onClick={()=>this.changeStep(3)}>
+                    &larr; Back
+                  </Button>
+                  <Button type="primary" onClick={()=>this.changeStep(5)} style={{ marginLeft: 10 }}>
+                    Proceed &rarr;
+                  </Button>
+                </Col>
+              </Row>
+            </div>
+          }
+        >
+          <Paragraph>
+            Each student will be assigned to an overall category.
+            There are 2 scenarios on how the overall category is assigned.
+          </Paragraph>
+          <Paragraph>
+            <b>Scenario 1</b>: The highest frequency of occurrence for Student A is <u>distinct</u> and it is for '<b>Misinformed</b>'.
+            Student A would be classified as '<b>Misinformed</b>'.
+          </Paragraph>
+          <img src={Part3Scenario1} alt="Student A Classification" style={{ width: '100%'}} />
+          <Paragraph>
+            <b>Scenario 2</b>: The highest frequency of occurrence for Student B is <u>not distinct</u> and it associated with both '<b>Misinformed</b>' and '<b>Uninformed</b>'.
+            Student B will be assigned to the <b>category with higher risk</b>. In this case it would be '<b>Misinformed</b>'.
+          </Paragraph>
+          <img src={Part3Scenario2} alt="Student B Classification" style={{ width: '100%'}} />
+        </Modal>
+
+        {/* Tutorial Part 5a (step 6) Modal */}
+        <Modal
+          title={InsightsPhrases.CONFIDENCE_TUTORIAL_PART_5A_HEADER}
+          visible={step===6}
+          closable={false}
+          width={600}
+          footer={
+            <div>
+              <Row justify="space-between">
+                <Col>
+                  <Button onClick={this.endTutorial}>
+                    End Tutorial
+                  </Button>
+                </Col>
+                <Col>
+                  <Button onClick={()=>this.changeStep(5)}>
+                    &larr; Back
+                  </Button>
+                  <Button type="primary" onClick={()=>this.changeStep(7)} style={{ marginLeft: 10 }}>
+                    Proceed &rarr;
+                  </Button>
+                </Col>
+              </Row>
+            </div>
+          }
+        >
+          <Paragraph>
+            Each student will be assigned to an overall category.
+            There are 2 scenarios on how the overall category is assigned.
+          </Paragraph>
+          <Paragraph>
+            <b>Scenario 1</b>: The highest frequency of occurrence for Student A is <u>distinct</u> and it is for '<b>Misinformed</b>'.
+            Student A would be classified as '<b>Misinformed</b>'.
+          </Paragraph>
+          <img src={Part3Scenario1} alt="Student A Classification" style={{ width: '100%'}} />
+          <Paragraph>
+            <b>Scenario 2</b>: The highest frequency of occurrence for Student B is <u>not distinct</u> and it associated with both '<b>Misinformed</b>' and '<b>Uninformed</b>'.
+            Student B will be assigned to the <b>category with higher risk</b>. In this case it would be '<b>Misinformed</b>'.
+          </Paragraph>
+          <img src={Part3Scenario2} alt="Student B Classification" style={{ width: '100%'}} />
         </Modal>
 
         <Row>
@@ -463,16 +550,34 @@ export default class InsightsConfidence extends React.Component {
 
         <Row>
           <Col lg={12} md={24} xs={24} style={{ paddingLeft: 20, paddingRight: 20 }}>
-            <Bar
-              data={chartData}
-              width={100}
-              height={400}
-              options={this.chartOptions}
-            />
+
+            {/* Tutorial Part 4 (step 5) Popover */}
+            <Popover
+              visible={step === 5}
+              // placement='top'
+              title={
+                <div style={{width: 350}}>
+                  {InsightsPhrases.CONFIDENCE_TUTORIAL_PART_4_HEADER}
+                </div>
+              }
+              content={
+                <Step5PopoverContent
+                  endTutorial={this.endTutorial}
+                  changeStep={this.changeStep}
+                />
+              }
+            >
+              <Bar
+                data={chartData}
+                width={100}
+                height={400}
+                options={this.chartOptions}
+              />
+            </Popover>
           </Col>
           <Col lg={12} md={24} xs={24}>
 
-            {/* Tutorial Part 1b (step 2) Modal */}
+            {/* Tutorial Part 1b (step 2) Popover */}
             <Popover
               visible={step === 2}
               // placement='top'
@@ -483,7 +588,7 @@ export default class InsightsConfidence extends React.Component {
                   changeStep={this.changeStep}
                 />
               }
-              >
+            >
               <Table
                 title={() => <div style={{ marginTop: 20 }} align='center'><Text strong>Legend</Text></div>}
                 columns={this.legendTableColumns}
@@ -499,25 +604,31 @@ export default class InsightsConfidence extends React.Component {
 
         <Row>
           <Col md={24} xs={24} style={{ marginTop: 40, marginLeft: 20, paddingRight: 20 }}>
-            <Title level={3}>Students in selected group
-            </Title>
-            <Button disabled={tableData.length === 0} onClick={this.openExportModal} icon={<MailOutlined/>}>Export Emails</Button>
-            <br/>
+            <div ref={(table) => this.selectedTableRef = table}>
+              <Title level={3}>
+                Students in selected group
+                <Button
+                  disabled={tableData.length === 0}
+                  onClick={this.openExportModal}
+                  style={{marginLeft: 10}}
+                  icon={<MailOutlined/>}>
+                  Export Emails
+                </Button>
+              </Title>
+            </div>
             <Text>This table will represent the students in the selected group from the chart above.</Text>
           </Col>
         </Row>
 
         <Row style={{ marginTop: 20, marginLeft: 20, marginRight: 20 }}>
           <Col lg={12} md={18} xs={24}>
-            <div ref={(table) => this.selectedTableRef = table}>
-              <Table
-                columns={selectedTableColumns}
-                dataSource={tableData}
-                rowKey='studentID'
-                bordered
-                size='small'
-              />
-            </div>
+            <Table
+              columns={selectedTableColumns}
+              dataSource={tableData}
+              rowKey='studentID'
+              bordered
+              size='small'
+            />
           </Col>
         </Row>
       </SideBar>
@@ -541,6 +652,35 @@ const Step2PopoverContent = (props) => {
             &larr; Back
           </Button>
           <Button type="primary" style={{ marginLeft: 10 }} onClick={()=>props.changeStep(3)}>
+            Proceed &rarr;
+          </Button>
+        </Col>
+      </Row>
+    </div>
+  )
+}
+const Step5PopoverContent = (props) => {
+  return (
+    <div style={{ width: 350 }}>
+      <Paragraph>{InsightsPhrases.CONFIDENCE_TUTORIAL_PART_4_DESC}</Paragraph>
+      <Paragraph>
+        There are <b>18</b> students who are <b>Misinformed</b>,&nbsp;
+        <b>28</b> students who are <b>Uninformed</b>,&nbsp;
+        <b>29</b> students who are <b>Almost There</b>,&nbsp;
+        <b>25</b> students who are <b>Knowledgeable</b>.
+      </Paragraph>
+      <Divider/>
+      <Row justify="space-between">
+        <Col>
+          <Button onClick={props.endTutorial}>
+            End Tutorial
+          </Button>
+        </Col>
+        <Col>
+          <Button onClick={()=>props.changeStep(4)}>
+            &larr; Back
+          </Button>
+          <Button type="primary" style={{ marginLeft: 10 }} onClick={()=>props.changeStep(6)}>
             Proceed &rarr;
           </Button>
         </Col>

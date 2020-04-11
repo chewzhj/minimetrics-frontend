@@ -21,6 +21,10 @@ const CONFIDENCE_TUTORIAL_PART_1A_HEADER = "Part 1a: Understanding the four grou
 const CONFIDENCE_TUTORIAL_PART_1B_HEADER = "Part 1b: Understanding the four groups of students"
 const CONFIDENCE_TUTORIAL_PART_1B_DESC = "These 4 groups are summarized in the legend."
 const CONFIDENCE_TUTORIAL_PART_2_HEADER = "Part 2: Understanding how each student is categorised"
+const CONFIDENCE_TUTORIAL_PART_3_HEADER = "Part 3: Understanding how an overall category is assigned to a student"
+const CONFIDENCE_TUTORIAL_PART_4_HEADER = "Part 4: Understanding how to identify the number of students in each category"
+const CONFIDENCE_TUTORIAL_PART_4_DESC = "The graph shows the number of students assigned to each of the 4 categories."
+const CONFIDENCE_TUTORIAL_PART_5A_HEADER = "Part 5a: Understanding how to identify who the students are in each category"
 
 export default {
   CONFIDENCE_INSIGHTS_TITLE,
@@ -43,4 +47,8 @@ export default {
   CONFIDENCE_TUTORIAL_PART_1B_HEADER,
   CONFIDENCE_TUTORIAL_PART_1B_DESC,
   CONFIDENCE_TUTORIAL_PART_2_HEADER,
+  CONFIDENCE_TUTORIAL_PART_3_HEADER,
+  CONFIDENCE_TUTORIAL_PART_4_HEADER,
+  CONFIDENCE_TUTORIAL_PART_4_DESC,
+  CONFIDENCE_TUTORIAL_PART_5A_HEADER,
 }
