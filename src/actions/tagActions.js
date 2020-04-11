@@ -2,8 +2,11 @@ import {
   TAG_LOAD_TAGS,
   TAG_LOAD_TAGS_SUCCESS,
   TAG_LOAD_TAGS_FAILURE,
+  TAG_LOAD_DASHBOARD_TAGS,
+  TAG_LOAD_DASHBOARD_TAGS_SUCCESS,
+  TAG_LOAD_DASHBOARD_TAGS_FAILURE,
 } from '../variables/constants/TagConstants'
-import { getAllTagAPI } from '../api/TagApi'
+import { getAllTagAPI, getTagDashboardAPI } from '../api/TagApi'
 
 export function getTags() {
   return function(dispatch) {
@@ -22,6 +25,23 @@ export function getTags() {
       })
   }
 }
+export function getTagDashboard() {
+  return function(dispatch) {
+    dispatch(loadDashboardTagsStart())
+    return getTagDashboardAPI()
+      .then(json => {
+        if (!json.data.hasError) {
+          const data = json.data.results[0]
+          dispatch(loadDashboardTagsSuccess(data))
+        } else {
+          dispatch(loadDashboardTagsFailure())
+        }
+      })
+      .catch(err => {
+        dispatch(loadDashboardTagsFailure())
+      })
+  }
+}
 
 function loadTagsStart() {
   return {
@@ -37,5 +57,21 @@ function loadTagsSuccess(value) {
 function loadTagsFailure() {
   return {
     type: TAG_LOAD_TAGS_FAILURE,
+  }
+}
+function loadDashboardTagsStart() {
+  return {
+    type: TAG_LOAD_DASHBOARD_TAGS,
+  }
+}
+function loadDashboardTagsSuccess(value) {
+  return {
+    type: TAG_LOAD_DASHBOARD_TAGS_SUCCESS,
+    value
+  }
+}
+function loadDashboardTagsFailure() {
+  return {
+    type: TAG_LOAD_DASHBOARD_TAGS_FAILURE,
   }
 }

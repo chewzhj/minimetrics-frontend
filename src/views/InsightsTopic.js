@@ -321,10 +321,11 @@ export default class InsightsTopic extends React.Component {
     const moduleID = sessionStorage.getItem('moduleID')
     const graphData = this.cleanGraphData()
     const tagID = graphData[index].tagID
-    const { quiz } = this.props.insightsTopic
+    const { graphDropdown } = this.props.insightsTopic
     let quizID = null
-    if (quiz && quiz !== 'all') {
-      quizID = quiz
+    console.log(graphDropdown);
+    if (graphDropdown && graphDropdown !== 'all') {
+      quizID = graphDropdown
     }
 
     this.props.getQuestionsOfTopics(moduleID, quizID, tagID)
@@ -384,6 +385,7 @@ export default class InsightsTopic extends React.Component {
                   key={option.answerID}
                   size='small'
                   bodyStyle={{backgroundColor: option.isCorrect? green[1] : '#d9d9d9'}}>
+                  {/* change to disabled color */}
                   <Text disabled={!option.isCorrect}>{option.answerText}</Text>
                 </Card>
               ))}
