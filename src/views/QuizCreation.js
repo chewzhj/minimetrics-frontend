@@ -359,7 +359,6 @@ export default class QuizCreation extends React.Component {
     } = this.props.quizCreation
     const { tagList } = this.props.tags
     const datesValid = this.checkDates()
-    console.log(datesValid);
     if (growlNotification) {
       this.onNotification(growlNotification)
     }
@@ -480,7 +479,7 @@ export default class QuizCreation extends React.Component {
               <Col md={20} sm={21} xs={21}>
                 {datesValid ? <div style={{height: 22}}/> :
                   <div style={{height: 22, color: 'red'}}>
-                    Closing Date/Time cannot be the same as or after Start Date/Time
+                    Opening Date/Time cannot be the same as or after Closing Date/Time
                   </div>
                 }
               </Col>
@@ -782,7 +781,8 @@ const QuizQuestionOption = (props) => {
     width: '100%',
     lineHeight: '30px',
     marginTop: 10,
-    border: props.correct ? '4px solid rgb(24, 144, 255, 0.4)' : ''
+    // border: props.correct ? '4px solid #95de64' : '',
+    backgroundColor:  props.correct ? '#d9f7be' : '',
   };
 
   return (

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Statistic, Card, Col, Row, Typography } from 'antd';
+import { Statistic, Card, Col, Row, Typography, Spin } from 'antd';
 import SideBar from '../components/SideBar'
 import { HorizontalBar } from 'react-chartjs-2';
 import { Bar } from 'react-chartjs-2';
@@ -134,8 +134,18 @@ const confidenceChartOptions = {
 
 export default class Dashboard extends React.Component {
 
+  componentDidMount() {
+    this.props.getTagDashboard()
+    this.props.loadQuizzes()
+    this.props.loadChartData()
+  }
 
   render() {
+    const {tagDashboardLoading, tagDashboardData} = this.props.tags
+    const {quizLoading, quizzes} = this.props.quizMain
+    const {graphLoading, graphData} = this.props.tags
+    const {totalTags, usedTags} = tagDashboardData
+
     return (
       <SideBar activeTab='dashboard' title='Dashboard' subtitle='Overview'>
         <Row gutter={[16, 16]}>
@@ -176,30 +186,33 @@ export default class Dashboard extends React.Component {
             </Card>
           </Col>
           <Col span={12}>
-            <Card title="Tags" bordered={true} style={{ height: 160 }} extra={<Link to='/tags'>More</Link>}>
-              <Row type="flex" justify="space-between">
-                <Col span={8}>
-                  <Statistic
-                    title="Created"
-                    value={8}
-                    precision={0}
-                    valueStyle={{ color: '#000' }}
-                    prefix={""}
-                    suffix=""
-                  />
-                </Col>
-                <Col span={8}>
-                  <Statistic
-                    title="In Use"
-                    value={7}
-                    precision={0}
-                    valueStyle={{ color: '#000' }}
-                    prefix={""}
-                    suffix=""
-                  />
-                </Col>
-              </Row>
-            </Card>
+            <Spin spinning={tagDashboardLoading}>
+              <Card title="Tags" bordered={true} style={{ height: 160 }} extra={<Link to='/tags'>More</Link>}>
+                <Row type="flex" justify="space-between">
+                  <Col span={8}>
+                    <Statistic
+                      title="Created"
+                      value={totalTags}
+                      precision={0}
+                      valueStyle={{ color: '#000' }}
+                      prefix={""}
+                      suffix=""
+                    />
+                  </Col>
+                  <Col span={8}>
+                    <Statistic
+                      title="In Use"
+                      value={usedTags}
+                      precision={0}
+                      valueStyle={{ color: '#000' }}
+                      prefix={""}
+                      suffix=""
+                    />
+                  </Col>
+                </Row>
+              </Card>
+
+            </Spin>
           </Col>
         </Row>
 

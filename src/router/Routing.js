@@ -1,7 +1,7 @@
 import React from 'react'
 import {Route, Switch, Redirect} from 'react-router-dom'
 import LoginContainer from '../containers/LoginContainer'
-import Dashboard from '../views/Dashboard'
+import DashboardContainer from '../containers/DashboardContainer'
 import QuizMainContainer from '../containers/QuizMainContainer'
 import QuizCreationContainer from '../containers/QuizCreationContainer'
 import TagsContainer from '../containers/TagsContainer'
@@ -17,7 +17,7 @@ const Routing = () => {
     <Switch>
 
       <Route path="/login" component={LoginContainer}/>
-      <Route path="/index" component={Dashboard} />
+      <Route path="/index" component={DashboardContainer} />
 
       <Route path="/quiz/create" component={QuizCreationContainer} />
       <Route path="/quiz" component={QuizMainContainer} />

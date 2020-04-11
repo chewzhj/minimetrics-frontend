@@ -444,26 +444,26 @@ const quizQnsData = [
 ]
 
 const defaultQuestion = {
-  quizTitle: 'Mission 2 Quiz',
-  questionTitle: 'What is 1+1 ?',
-  questionNumber: 2,
-  correctOption: 2,
+  quizTitle: 'Mission 1 Quiz',
+  questionTitle: 'According to the book “A Gift of Fire, 4th Ed”, Chapter 1, Section 1.4.2, which is NOT a key idea of Deontology:',
+  questionNumber: 1,
+  correctOption: 4,
   options: [
     {
       optionNumber: 1,
-      title: '1'
+      title: 'We should follow rules of behavior that we can universally apply to everyone.'
     },
     {
       optionNumber: 2,
-      title: '2'
+      title: 'Actions are considered ethical if they follow from logic, and unethical if they are irrational.'
     },
     {
       optionNumber: 3,
-      title: '3'
+      title: 'People should be treated as ends in themselves, and not merely as means to ends.'
     },
     {
       optionNumber: 4,
-      title: '4'
+      title: 'Universal rules should be broken if the consequences of breaking the rules are more beneficial than abiding by those rules.'
     },
   ]
 }

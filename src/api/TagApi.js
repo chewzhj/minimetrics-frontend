@@ -10,3 +10,14 @@ export async function getAllTagAPI() {
     return [];
   }
 }
+
+export async function getTagDashboardAPI() {
+  try {
+    let data = await API.get('/tag/getMetrics')
+    console.log(data);
+    return data
+  } catch (e) {
+    console.log(`😱 Axios request failed: ${e}`);
+    return [];
+  }
+}
