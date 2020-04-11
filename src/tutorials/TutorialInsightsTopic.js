@@ -456,68 +456,41 @@ export default class InsightsTopic extends React.Component {
                 <Text>Click on a bar in the chart below to view a Table of Questions about the topic.</Text>
               </div>
             </Col>
-              <Popover
-                visible={step===1}
-                title="Part 1: Understanding how to identify percentage of incorrect 1st attempts"
-                content={
-                  <div style={{ width: 500 }}>
-                  <Paragraph>The graph here shows the relative percentages of incorrect 1st attempts for each topic that was used in the module.</Paragraph>
-                  <img src={Part2ChartDiagram} style={{width: '100%'}}></img>
-                  <Paragraph style={{ marginTop: 20 }}>Observe that questions from the topic '<b>Deontology</b>' were incorrectly answered <b>68%</b> of the time in students' first attempts.</Paragraph>
-                  <Paragraph>This means that '<b>Deontology</b>' is currently the most misunderstood topic amongst students.</Paragraph>
-                  <Divider/>
-                  <Row justify="space-between">
-                    <Col>
-                      <Button onClick={this.endTutorial}>
-                        End Tutorial
-                      </Button>
-                    </Col>
-                    <Col>
-                      <Button type="primary" onClick={()=>{this.changeStep(3)}}>
-                        Proceed &rarr;
-                      </Button>
-                    </Col>
-                  </Row>
-                  </div>
-                }>
-              <Spin spinning={false}>
-              <Popover
-                visible={step===6}
-                placement="top"
-                title="Part 5: Understanding how to identify percentage of incorrect 1st attempts"
-                content={
-                  <div style={{ width: 500 }}>
-                    <Paragraph>To <b>proceed</b>, click on the '<b>Deontology</b>' topic (represented by a bar) in the chart to view questions related to it.</Paragraph>
-                    <div style={{ textAlign: 'center' }}>
-                      <img src={Part6BarSelection} style={{ width: '40%' }}/>
-                    </div>
-                    <Divider/>
-                    <Row justify="space-between">
-                      <Col>
-                        <Button onClick={this.endTutorial}>
-                          End Tutorial
-                        </Button>
-                      </Col>
-                      <Col>
-                        <Button onClick={()=>{this.changeStep(5)}}>
-                          &larr; Back
-                        </Button>
-                        <Button disabled type="primary" style={{ marginLeft: 10 }} onClick={()=>{this.changeStep(8)}}>
-                        Proceed &rarr;
-                        </Button>
-                      </Col>
-                    </Row>
-                  </div>
-                }>
+            <Popover
+              visible={step===1 || step===6}
+              placement="top"
+              title={
+                <div style={{width: 350}}>
+                  {
+                    step === 1 ?
+                      "Part 1: Understanding how to identify percentage of incorrect 1st attempts"
+                    :
+                      "Part 5: Understanding how to identify percentage of incorrect 1st attempts"
+                  }
+                </div>
+              }
+              content={
+                step === 1 ?
+                  <Step1PopoverContent
+                    changeStep={this.changeStep}
+                    endTutorial={this.endTutorial}
+                  />
+                :
+                  <Step6PopoverContent
+                    changeStep={this.changeStep}
+                    endTutorial={this.endTutorial}
+                  />
+              }>
+
+                <Spin spinning={false}>
                   <HorizontalBar
                     data={chartData}
                     width={100}
                     height={400}
                     options={this.chartOptions}
                   />
-                </Popover>
-              </Spin>
-            </Popover>
+                </Spin>
+              </Popover>
           </Col>
 
           <Popover
@@ -594,4 +567,55 @@ export default class InsightsTopic extends React.Component {
       </SideBar>
     )
   }
+}
+
+const Step1PopoverContent = (props) => {
+  return (
+    <div style={{ width: 350 }}>
+      <Paragraph>The graph here shows the relative percentages of incorrect 1st attempts for each topic that was used in the module.</Paragraph>
+      <img src={Part2ChartDiagram} style={{width: '75%'}}></img>
+      <Paragraph style={{ marginTop: 20 }}>Observe that questions from the topic '<b>Deontology</b>' were incorrectly answered <b>68%</b> of the time in students' first attempts.</Paragraph>
+      <Paragraph>This means that '<b>Deontology</b>' is currently the most misunderstood topic amongst students.</Paragraph>
+      <Divider/>
+      <Row justify="space-between">
+        <Col>
+          <Button onClick={props.endTutorial}>
+            End Tutorial
+          </Button>
+        </Col>
+        <Col>
+          <Button type="primary" onClick={()=>{props.changeStep(3)}}>
+            Proceed &rarr;
+          </Button>
+        </Col>
+      </Row>
+    </div>
+  )
+}
+
+const Step6PopoverContent = (props) => {
+  return (
+    <div style={{ width: 500 }}>
+      <Paragraph>To <b>proceed</b>, click on the '<b>Deontology</b>' topic (represented by a bar) in the chart to view questions related to it.</Paragraph>
+      <div style={{ textAlign: 'center' }}>
+        <img src={Part6BarSelection} style={{ width: '40%' }}/>
+      </div>
+      <Divider/>
+      <Row justify="space-between">
+        <Col>
+          <Button onClick={props.endTutorial}>
+            End Tutorial
+          </Button>
+        </Col>
+        <Col>
+          <Button onClick={()=>{props.changeStep(5)}}>
+            &larr; Back
+          </Button>
+          <Button disabled type="primary" style={{ marginLeft: 10 }} onClick={()=>{props.changeStep(8)}}>
+            Proceed &rarr;
+          </Button>
+        </Col>
+      </Row>
+    </div>
+  )
 }

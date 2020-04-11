@@ -370,11 +370,11 @@ export default class InsightsConfidence extends React.Component {
 
         {/* Start Tutorial Modal */}
         <Modal
-          title='Introduction to Student Insights - Confidence Levels & Student Competency'
+          title={InsightsPhrases.CONFIDENCE_TUTORIAL_INTRO_HEADER}
           visible={tutorialModalVisible}
           onCancel={this.closeTutorialModal}
           footer={[
-            <Paragraph key='para' style={{ textAlign: 'center' }}>Proceed to the next step to see how you can analyse this insight.</Paragraph>,
+            <Paragraph key='para' style={{ textAlign: 'center' }}>{InsightsPhrases.CONFIDENCE_TUTORIAL_INTRO_FOOTER}</Paragraph>,
             <Row key='buttons' justify="space-between">
             <Col>
               <Button key="back" onClick={this.closeTutorialModal}>
@@ -390,9 +390,9 @@ export default class InsightsConfidence extends React.Component {
           ]}
         >
           <div>
-            <Paragraph>Curious to find out which topics are the most misunderstood?</Paragraph>
-            <Paragraph>This page provides insights of percentage of incorrect 1st attempts.</Paragraph>
-            <Paragraph>Topics with higher percentage of incorrect 1st attempts indicate misunderstanding.</Paragraph>
+            <Paragraph>{InsightsPhrases.CONFIDENCE_TUTORIAL_INTRO_PARA_1}</Paragraph>
+            <Paragraph>{InsightsPhrases.CONFIDENCE_TUTORIAL_INTRO_PARA_2}</Paragraph>
+            <Paragraph>{InsightsPhrases.CONFIDENCE_TUTORIAL_INTRO_PARA_3}</Paragraph>
           </div>
         </Modal>
 
@@ -401,11 +401,13 @@ export default class InsightsConfidence extends React.Component {
             <Title level={3}>
               {InsightsPhrases.CONFIDENCE_INSIGHTS_HEADER}&nbsp;&nbsp;
               <Popover
-                title='Confidence Level Groups'
+                title='Confidence Level Categories'
                 content={
                   <div style={{width: 480}}>
                     <img src={Confidence_Quadrants} alt="Confidence Quadrants" style={{ height: 346, width: 480 }} />
-                    <Paragraph>{InsightsPhrases.CONFIDENCE_INSIGHTS_EXPLN_GRP}</Paragraph>
+                    <Paragraph>{InsightsPhrases.CONFIDENCE_INSIGHTS_EXPLN_GRP_PARA_1}</Paragraph>
+                    <Paragraph>{InsightsPhrases.CONFIDENCE_INSIGHTS_EXPLN_GRP_PARA_2}</Paragraph>
+                    <Paragraph>{InsightsPhrases.CONFIDENCE_INSIGHTS_EXPLN_GRP_PARA_3}</Paragraph>
                   </div>
                 }><Button icon={<QuestionOutlined />} shape='circle'/>
               </Popover>
