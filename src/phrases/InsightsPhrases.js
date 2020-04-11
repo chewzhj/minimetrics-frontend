@@ -19,12 +19,22 @@ const CONFIDENCE_TUTORIAL_INTRO_FOOTER = "Proceed to the next step to see how yo
 
 const CONFIDENCE_TUTORIAL_PART_1A_HEADER = "Part 1a: Understanding the four groups of students"
 const CONFIDENCE_TUTORIAL_PART_1B_HEADER = "Part 1b: Understanding the four groups of students"
-const CONFIDENCE_TUTORIAL_PART_1B_DESC = "These 4 groups are summarized in the legend."
+const CONFIDENCE_TUTORIAL_PART_1B_DESC = "These 4 groups are summarised in the legend."
 const CONFIDENCE_TUTORIAL_PART_2_HEADER = "Part 2: Understanding how each student is categorised"
 const CONFIDENCE_TUTORIAL_PART_3_HEADER = "Part 3: Understanding how an overall category is assigned to a student"
 const CONFIDENCE_TUTORIAL_PART_4_HEADER = "Part 4: Understanding how to identify the number of students in each category"
 const CONFIDENCE_TUTORIAL_PART_4_DESC = "The graph shows the number of students assigned to each of the 4 categories."
 const CONFIDENCE_TUTORIAL_PART_5A_HEADER = "Part 5a: Understanding how to identify who the students are in each category"
+const CONFIDENCE_TUTORIAL_PART_5A_DESC = "There are 2 ways to retrieve the names of students who are in a particular category."
+const CONFIDENCE_TUTORIAL_PART_6_HEADER = "Part 6: Viewing the details of the students in the selected category"
+const CONFIDENCE_TUTORIAL_PART_7_HEADER = "Part 7: Obtaining contact information of students in a particular group"
+const CONFIDENCE_TUTORIAL_PART_8_HEADER = "Part 8: Copying Emails to Clipboard"
+const CONFIDENCE_TUTORIAL_PART_9_HEADER = "Part 9: Emailing selected students"
+const CONFIDENCE_TUTORIAL_PART_9_DESC = "You may want to reach out to students who are in a particular group to arrange for a consultation in order to better track their learning progress"
+const CONFIDENCE_TUTORIAL_PART_10_HEADER = "Part 10: Conclusion for Student Insights"
+const CONFIDENCE_TUTORIAL_PART_10_CONGRATS = "Congratulations on completing the tutorial!"
+const CONFIDENCE_TUTORIAL_PART_10_PARA_1 = "We have covered the details on the 4 categories of students and how to identify students in a particular group."
+const CONFIDENCE_TUTORIAL_PART_10_PARA_2 = "Now you are able to analyse the insights for students who are at the highest risk of failing this module and intervene early by reaching out to them through email."
 
 export default {
   CONFIDENCE_INSIGHTS_TITLE,
@@ -51,4 +61,14 @@ export default {
   CONFIDENCE_TUTORIAL_PART_4_HEADER,
   CONFIDENCE_TUTORIAL_PART_4_DESC,
   CONFIDENCE_TUTORIAL_PART_5A_HEADER,
+  CONFIDENCE_TUTORIAL_PART_5A_DESC,
+  CONFIDENCE_TUTORIAL_PART_6_HEADER,
+  CONFIDENCE_TUTORIAL_PART_7_HEADER,
+  CONFIDENCE_TUTORIAL_PART_8_HEADER,
+  CONFIDENCE_TUTORIAL_PART_9_HEADER,
+  CONFIDENCE_TUTORIAL_PART_9_DESC,
+  CONFIDENCE_TUTORIAL_PART_10_HEADER,
+  CONFIDENCE_TUTORIAL_PART_10_CONGRATS,
+  CONFIDENCE_TUTORIAL_PART_10_PARA_1,
+  CONFIDENCE_TUTORIAL_PART_10_PARA_2,
 }
