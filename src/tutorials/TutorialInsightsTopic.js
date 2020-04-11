@@ -3,14 +3,17 @@ import SideBar from '../components/SideBar'
 import {
   Row,
   Col,
+  Divider,
   Select,
   Table,
   Button,
   Typography,
+  Popover,
   Spin,
   Modal,
   Card,
   Radio,
+  Result,
 } from 'antd';
 import { EyeOutlined } from '@ant-design/icons'
 import { ResponsiveBar } from '@nivo/bar'
@@ -20,8 +23,15 @@ import 'chartjs-plugin-style';
 import GlobalConstants from '../variables/GlobalConstants'
 import InsightsTopicData from '../variables/InsightsTopicData'
 
+import Part2ChartDiagram from '../assets/img/tutorials/topicInsights/part2chartdiagram.jpg'
+import Part3FilterQuizzes from '../assets/img/tutorials/topicInsights/part3filterquizzes.gif'
+import Part5ClickBar from '../assets/img/tutorials/topicInsights/part5clickbar.gif'
+import Part6BarSelection from '../assets/img/tutorials/topicInsights/part6barselection.jpg'
+import Part7TableData from '../assets/img/tutorials/topicInsights/part7tabledata.jpg'
+import Part8ViewQuiz from '../assets/img/tutorials/topicInsights/part8viewquiz.gif'
+
 const { Option } = Select;
-const { Title, Text } = Typography;
+const { Title, Paragraph, Text } = Typography;
 
 const percentage1dp = (number) => {
   const thousandtimes = Math.round(number * 1000)
@@ -94,8 +104,8 @@ export default class InsightsTopic extends React.Component {
         backgroundColor: '#428bca',
         borderColor: '#428bca',
         borderWidth: 1,
-        hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-        hoverBorderColor: 'rgba(255,99,132,1)',
+        hoverBackgroundColor: 'rgba(158, 158, 158, 0.7)',
+        hoverBorderColor: 'rgba(158, 158, 158, 0.7)',
         data: prevChartData.map(line => line.percentage),
         shadowOffsetX: 2,
         shadowOffsetY: 2,
@@ -143,7 +153,11 @@ export default class InsightsTopic extends React.Component {
     legend: {
       display: false
     },
-    onClick: (e,arr) => this.clickBar(arr[0]._index),
+    events: ['mousemove','click'],
+    onHover: (event, chartElement) => {
+    event.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
+    },
+    onClick: (e,arr) => this.clickBar(arr),
   }
   generateTableData = () => {
     const { selectedTag, selectedQuiz } = this.state
@@ -192,6 +206,7 @@ export default class InsightsTopic extends React.Component {
       render: (text, record, index) => {
         return (
           <Button
+            disabled={this.state.step !== 8}
             shape='circle'
             icon={<EyeOutlined />}
             onClick={() => this.clickViewQuestion(record.key)}
@@ -202,15 +217,65 @@ export default class InsightsTopic extends React.Component {
   ];
   changeStep = (step) => this.setState({step})
   changeGraphDropdown = (value) => this.setState({graphDropdown: value})
-  clickBar = (index) => {
+  clickBar = (arr) => {
+    let index = -1
+    if (arr && arr.length > 0) {
+      index = arr[0]._index
+    } else {
+      return
+    }
     const graphData = this.cleanGraphData()
     const quiz = this.state.graphDropdown
     const tag = graphData[index].tag
 
     this.setState({selectedTag: tag, selectedQuiz: quiz})
+
+    if (this.state.step === 6) {
+      this.changeStep(7)
+    }
   }
-  clickViewQuestion = (questionID) => this.setState({viewQuestion: questionID})
-  closeModal = () => this.setState({viewQuestion: ''})
+  clickViewQuestion = (questionID) => {
+    this.setState({viewQuestion: questionID})
+
+    if (this.state.step === 8) {
+      this.changeStep(9)
+    }
+  }
+  closeModal = () => {
+    if (this.state.step !== 9) {
+      this.setState({viewQuestion: ''})
+    }
+  }
+  closeAndBack = () => {
+    if (this.state.step === 9) {
+      this.setState({viewQuestion: ''})
+      this.changeStep(8)
+    }
+  }
+  closeAndForward = () => {
+    if (this.state.step === 9) {
+      this.setState({viewQuestion: ''})
+      this.changeStep(10)
+    }
+  }
+  showEndTutorialButton = () => {
+    if (this.state.step === 9) {
+      return (
+        <Row justify="end">
+        <Col>
+          <Button onClick={this.closeAndBack}>
+           &larr; Back
+          </Button>
+          <Button type="primary" onClick={this.closeAndForward}>
+            Proceed &rarr;
+          </Button>
+        </Col>
+        </Row>
+      )
+    } else {
+      return null
+    }
+  }
 
   render() {
     const tableData = this.generateTableData()
@@ -227,7 +292,8 @@ export default class InsightsTopic extends React.Component {
         <Modal
           title={modalQuestion ? `View ${modalQuestion.quizTitle} Question ${modalQuestion.questionNumber}`: "View Question"}
           visible={viewQuestion !== ''}
-          footer={null}
+          footer={this.showEndTutorialButton()}
+          closable={this.state.step !== 9}
           onCancel={this.closeModal}
         >
           {modalQuestion &&
@@ -246,32 +312,132 @@ export default class InsightsTopic extends React.Component {
           }
         </Modal>
 
-        {/* Step 2 Modal */}
+        {/* Part 4 Modal */}
         <Modal
-          title="Step 2 Modal"
-          visible={step===2}
-          onCancel={this.closeModal}
+          title="Part 3: Introduction to Topic Insights – Misunderstood Questions"
+          visible={step===4}
+          closable={false}
+          footer={
+            <div>
+              <Paragraph style={{ textAlign: 'center' }}>Proceed to the next step to find out how to get deeper insights.</Paragraph>
+              <Row justify="space-between">
+                <Col>
+                  <Button onClick={()=>{this.props.history.push('/insights/topic')}}>
+                    End Tutorial
+                  </Button>
+                </Col>
+                <Col>
+                  <Button onClick={()=>{this.changeStep(3)}}>
+                    &larr; Back
+                  </Button>
+                  <Button type="primary" onClick={()=>{this.changeStep(5)}}>
+                    Proceed &rarr;
+                  </Button>
+                </Col>
+              </Row>
+            </div>
+          }
         >
-          <p>Hihihihi</p>
+          <Paragraph>Given that ’<b>Deontology</b>’ had the highest number of incorrect 1st attempts, we know that it is the <b>most misunderstood topic</b> at the present.</Paragraph>
+          <Paragraph>But why is that so?</Paragraph>
+        </Modal>
+
+        {/* Part 5 Modal */}
+        <Modal
+          title="Part 4: Understanding how to identify misunderstood questions in a topic"
+          visible={step===5}
+          closable={ false }
+          footer={
+            <div>
+              <Row justify="space-between">
+                <Col>
+                  <Button onClick={()=>{this.props.history.push('/insights/topic')}}>
+                    End Tutorial
+                  </Button>
+                </Col>
+                <Col>
+                  <Button onClick={()=>{this.changeStep(4)}}>
+                    &larr; Back
+                  </Button>
+                  <Button type="primary" onClick={()=>{this.changeStep(6)}}>
+                    Proceed &rarr;
+                  </Button>
+                </Col>
+              </Row>
+            </div>
+          }
+        >
+          <Paragraph>To find out what exactly is causing the high rate of misunderstanding for ‘Deontology’, mouse-over the bar and click on it.</Paragraph>
+          <img src={ Part5ClickBar } style={{ width: '100%' }}></img>
+        </Modal>
+
+        {/* Part 10 Modal */}
+        <Modal
+          title="Part 8: Conclusion for Topic Insights"
+          visible={step===10}
+          closable={ false }
+          footer={null}
+        >
+        <Result
+          status="success"
+          title="Congratulations on completing the tutorial!"
+        />
+        <Paragraph style={{ textAlign: 'center' }}>We have covered how to identify the most misunderstood topic and what has caused it.</Paragraph>
+        <Paragraph style={{ textAlign: 'center' }}>Now you are able to analyse the insights for misunderstood topics and misunderstood questions on your own.</Paragraph>
+        <Row justify="center">
+          <Col>
+            <Button type="primary" style={{ marginTop: 20 }} onClick={()=>{this.props.history.push('/insights/topic')}}>
+              End Tutorial
+            </Button>
+          </Col>
+        </Row>
         </Modal>
 
         <Row>
           <Col md={24} xs={24} style={{ marginTop: 20, marginLeft: 20, marginRight: 20 }}>
-            <Title level={3}>Misunderstood Topics & Questions&nbsp;&nbsp;<Button onClick={()=>{this.props.history.goBack()}}>End Tutorial</Button></Title>
+            <Title level={3}>Misunderstood Topics & Questions&nbsp;&nbsp;<Button onClick={()=>{this.props.history.push('/insights/topic')}}>End Tutorial</Button></Title>
             <Text>by percentage of incorrect 1st attempts</Text>
           </Col>
         </Row>
+        
         <Row gutter={[15, 15]} justify="end" style={{ marginTop: 10, marginRight: 20 }}>
           <Col md={6} xs={24}>
             <span style={{ float: 'right', marginTop: 5 }}>Showing Results For:</span>
-          </Col>
-          <Col md={8} xs={24}>
-            <Select value={graphDropdown} onChange={this.changeGraphDropdown} style={{ width: '100%', paddingLeft: 20 }}>
-              <Option value="all">All Quizzes</Option>
-              <Option value={1}>Mission 1 Quiz</Option>
-              <Option value={2}>Mission 2 Quiz</Option>
-            </Select>
-          </Col>
+          </Col>            
+          <Popover
+            visible={step===3}
+            placement="bottom"
+            title="Part 2: Understanding how to drill down to specific quizzes"
+            content={
+              <div style={{ width: 500 }}>
+              <Paragraph>To drill down to the specific quizzes, change the filter that is found on the right side of the page.</Paragraph>
+              <img src={Part3FilterQuizzes} style={{width: '100%'}}></img>
+              <Divider/>
+              <Row justify="space-between">
+                <Col>
+                  <Button onClick={()=>{this.props.history.push('/insights/topic')}}>
+                    End Tutorial
+                  </Button>
+                </Col>
+                <Col>
+                  <Button onClick={()=>{this.changeStep(1)}}>
+                    &larr; Back
+                  </Button>
+                  <Button type="primary" style={{ marginLeft: 10 }} onClick={()=>{this.changeStep(4)}}>
+                    Proceed &rarr;
+                  </Button>
+                </Col>
+              </Row>
+              </div>
+            }>
+            <Col md={8} xs={24}>
+              <Select value={graphDropdown} onChange={this.changeGraphDropdown} style={{ width: '100%', paddingLeft: 20 }}>
+                <Option value="all">All Quizzes</Option>
+                <Option value={1}>Mission 1 Quiz</Option>
+                <Option value={2}>Mission 2 Quiz</Option>
+              </Select>
+            </Col>
+          </Popover>
         </Row>
 
         <Row>
@@ -284,16 +450,99 @@ export default class InsightsTopic extends React.Component {
                 <Text>Click on a bar in the chart below to view a Table of Questions about the topic.</Text>
               </div>
             </Col>
-            <Spin spinning={false}>
-              <HorizontalBar
-                data={chartData}
-                width={100}
-                height={400}
-                options={this.chartOptions}
-              />
-            </Spin>
+              <Popover 
+                visible={step===1}
+                title="Part 1: Understanding how to identify percentage of incorrect 1st attempts"
+                content={
+                  <div style={{ width: 500 }}>
+                  <Paragraph>The graph here shows the relative percentages of incorrect 1st attempts for each topic that was used in the module.</Paragraph>
+                  <img src={Part2ChartDiagram} style={{width: '100%'}}></img>
+                  <Paragraph style={{ marginTop: 20 }}>Observe that questions from the topic '<b>Deontology</b>' were incorrectly answered <b>68%</b> of the time in students' first attempts.</Paragraph>
+                  <Paragraph>This means that '<b>Deontology</b>' is currently the most misunderstood topic amongst students.</Paragraph>
+                  <Divider/>
+                  <Row justify="space-between">
+                    <Col>
+                      <Button onClick={()=>{this.props.history.push('/insights/topic')}}>
+                        End Tutorial
+                      </Button>
+                    </Col>
+                    <Col>
+                      <Button type="primary" onClick={()=>{this.changeStep(3)}}>
+                        Proceed &rarr;
+                      </Button>
+                    </Col>
+                  </Row>
+                  </div>
+                }>
+              <Spin spinning={false}>
+              <Popover 
+                visible={step===6}
+                placement="top"
+                title="Part 5: Understanding how to identify percentage of incorrect 1st attempts"
+                content={
+                  <div style={{ width: 500 }}>
+                    <Paragraph>To <b>proceed</b>, click on the '<b>Deontology</b>' topic (represented by a bar) in the chart to view questions related to it.</Paragraph>
+                    <div style={{ textAlign: 'center' }}>
+                      <img src={Part6BarSelection} style={{ width: '40%' }}/>
+                    </div>
+                    <Divider/>
+                    <Row justify="space-between">
+                      <Col>
+                        <Button onClick={()=>{this.props.history.push('/insights/topic')}}>
+                          End Tutorial
+                        </Button>
+                      </Col>
+                      <Col>
+                        <Button onClick={()=>{this.changeStep(5)}}>
+                          &larr; Back
+                        </Button>
+                        <Button disabled type="primary" style={{ marginLeft: 10 }} onClick={()=>{this.changeStep(8)}}>
+                        Proceed &rarr;
+                        </Button>
+                      </Col>
+                    </Row>
+                  </div>
+                }>
+                  <HorizontalBar
+                    data={chartData}
+                    width={100}
+                    height={400}
+                    options={this.chartOptions}
+                  />
+                </Popover>
+              </Spin>
+            </Popover>
           </Col>
 
+          <Popover 
+            visible={step===7}
+            placement="left"
+            title="Part 6: Understanding how to analyse misunderstood questions"
+            content={
+              <div style={{ width: 500 }}>
+              <Paragraph>We can now see that the ‘Table of Questions is populated’ with the topic's questions.</Paragraph>
+              <Paragraph> It shows us the different questions in the different quizzes that were labelled as ‘Deontology’.</Paragraph>
+              <img src={Part7TableData} style={{width: '100%'}}></img>
+              <Paragraph style={{ marginTop: 20 }}>If you selected '<b>Deontology</b>', <b>Question 1 from Mission 1 Quiz</b> was incorrectly answered <b>83.3%</b> in all first attempts by students.</Paragraph>
+              <Paragraph>It could be that this is the most misunderstood question by students or that the question was phrased wrongly.</Paragraph>
+              <Divider/>
+              <Row justify="space-between">
+                <Col>
+                  <Button onClick={()=>{this.props.history.push('/insights/topic')}}>
+                    End Tutorial
+                  </Button>
+                </Col>
+                <Col>
+                  <Button onClick={()=>{this.changeStep(6)}}>
+                    &larr; Back
+                  </Button>
+                  <Button type="primary" style={{ marginLeft: 10 }} onClick={()=>{this.changeStep(8)}}>
+                    Proceed &rarr;
+                  </Button>
+                </Col>
+              </Row>
+              </div>
+            }>
           <Col lg={12} md={24} xs={24} style={{ marginTop: 20, paddingLeft: 10, paddingRight: 20 }}>
             <Col>
               <div align="center">
@@ -303,8 +552,38 @@ export default class InsightsTopic extends React.Component {
                 <Text>This table will populate with questions from the topics selected.</Text>
               </div>
             </Col>
-            <Table columns={this.columns} dataSource={tableData} bordered/>
+              <Popover 
+              visible={step===8}
+              placement="left"
+              title="Part 7: Understanding how to analyse misunderstood questions"
+              content={
+                <div style={{ width: 500 }}>
+                <Paragraph>Fret not if you are unable to recall the question details at the top of your mind!</Paragraph>
+                <img src={Part8ViewQuiz} style={{width: '100%'}}></img>
+                <Paragraph style={{ marginTop: 20 }}>To <b>proceed</b> and find out the question details, click on the eye icon.</Paragraph>
+                <Divider/>
+                <Row justify="space-between">
+                  <Col>
+                    <Button onClick={()=>{this.props.history.push('/insights/topic')}}>
+                      End Tutorial
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Button onClick={()=>{this.changeStep(7)}}>
+                      &larr; Back
+                    </Button>
+                    <Button disabled type="primary" style={{ marginLeft: 10 }} onClick={()=>{this.changeStep(8)}}>
+                    Proceed &rarr;
+                    </Button>
+                  </Col>
+                </Row>
+                </div>
+              }>
+                <Table columns={this.columns} dataSource={tableData} bordered/>
+              </Popover>
           </Col>
+          </Popover>
+
         </Row>
       </SideBar>
     )
