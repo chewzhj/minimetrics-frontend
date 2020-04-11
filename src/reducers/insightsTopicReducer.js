@@ -12,6 +12,8 @@ import {
   INSIGHTS_TOPIC_CLICK_BAR,
   INSIGHTS_TOPIC_CLICK_VIEW_QUESTION,
   INSIGHTS_TOPIC_CLOSE_MODAL,
+  INSIGHTS_TOPIC_OPEN_TUTORIAL_MODAL,
+  INSIGHTS_TOPIC_CLOSE_TUTORIAL_MODAL,
 } from '../variables/constants/InsightsTopicConstants'
 
 const initialState = {
@@ -26,6 +28,7 @@ const initialState = {
   viewQuestionModalVisible: false,
   viewQuestion: {},
   viewQuestionLoading: false,
+  tutorialModalVisible: false,
 }
 
 export function insightsTopicReducer(state = initialState, action) {
@@ -56,6 +59,10 @@ export function insightsTopicReducer(state = initialState, action) {
       return {...state, viewQuestionID: action.value}
     case INSIGHTS_TOPIC_CLOSE_MODAL:
       return {...state, viewQuestionID: '', viewQuestionModalVisible: false, viewQuestion: {}}
+    case INSIGHTS_TOPIC_OPEN_TUTORIAL_MODAL:
+      return {...state, tutorialModalVisible: true}
+    case INSIGHTS_TOPIC_CLOSE_TUTORIAL_MODAL:
+      return {...state, tutorialModalVisible: false}
     default:
       return state
   }
