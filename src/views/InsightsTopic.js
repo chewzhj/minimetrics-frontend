@@ -387,7 +387,7 @@ export default class InsightsTopic extends React.Component {
                   size='small'
                   bodyStyle={{backgroundColor: option.isCorrect? green[1] : '#d9d9d9'}}>
                   {/* change to disabled color */}
-                  <Text disabled={!option.isCorrect}>{option.answerText}</Text>
+                  <Text style={{color: option.isCorrect? 'rgba(0,0,0,0.65)': 'rgba(0,0,0,0.25)'}}>{option.answerText}</Text>
                 </Card>
               ))}
             </div>

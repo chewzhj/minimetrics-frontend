@@ -16,6 +16,7 @@ import {
   Result,
 } from 'antd';
 import { EyeOutlined } from '@ant-design/icons'
+import { green } from '@ant-design/colors'
 import { ResponsiveBar } from '@nivo/bar'
 import { HorizontalBar } from 'react-chartjs-2';
 import { ChartDataLabels } from 'chartjs-plugin-datalabels';
@@ -298,14 +299,15 @@ export default class InsightsTopic extends React.Component {
         >
           {modalQuestion &&
             <div>
-              <Title level={3}>{modalQuestion.questionTitle}</Title>
+              <Title level={4}>{modalQuestion.questionTitle}</Title>
               {modalQuestion.options.map(option => (
-                <Card key={option.optionNumber}>
-                  <Radio
-                    checked={option.optionNumber === modalQuestion.correctOption}
-                    disabled={option.optionNumber !== modalQuestion.correctOption}>
+                <Card
+                  key={option.optionNumber}
+                  size='small'
+                  bodyStyle={{backgroundColor: option.optionNumber === modalQuestion.correctOption ? green[1] : '#d9d9d9'}}>
+                  <Text style={{color: option.optionNumber === modalQuestion.correctOption ? 'rgba(0,0,0,0.65)': 'rgba(0,0,0,0.25)'}}>
                     {option.title}
-                  </Radio>
+                  </Text>
                 </Card>
               ))}
             </div>
@@ -399,11 +401,11 @@ export default class InsightsTopic extends React.Component {
             <Text>by percentage of incorrect 1st attempts</Text>
           </Col>
         </Row>
-        
+
         <Row gutter={[15, 15]} justify="end" style={{ marginTop: 10, marginRight: 20 }}>
           <Col md={6} xs={24}>
             <span style={{ float: 'right', marginTop: 5 }}>Showing Results For:</span>
-          </Col>            
+          </Col>
           <Popover
             visible={step===3}
             placement="bottom"
@@ -450,7 +452,7 @@ export default class InsightsTopic extends React.Component {
                 <Text>Click on a bar in the chart below to view a Table of Questions about the topic.</Text>
               </div>
             </Col>
-              <Popover 
+              <Popover
                 visible={step===1}
                 title="Part 1: Understanding how to identify percentage of incorrect 1st attempts"
                 content={
@@ -475,7 +477,7 @@ export default class InsightsTopic extends React.Component {
                   </div>
                 }>
               <Spin spinning={false}>
-              <Popover 
+              <Popover
                 visible={step===6}
                 placement="top"
                 title="Part 5: Understanding how to identify percentage of incorrect 1st attempts"
@@ -514,7 +516,7 @@ export default class InsightsTopic extends React.Component {
             </Popover>
           </Col>
 
-          <Popover 
+          <Popover
             visible={step===7}
             placement="left"
             title="Part 6: Understanding how to analyse misunderstood questions"
@@ -552,7 +554,7 @@ export default class InsightsTopic extends React.Component {
                 <Text>This table will populate with questions from the topics selected.</Text>
               </div>
             </Col>
-              <Popover 
+              <Popover
               visible={step===8}
               placement="left"
               title="Part 7: Understanding how to analyse misunderstood questions"

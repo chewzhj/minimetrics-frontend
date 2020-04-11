@@ -444,7 +444,7 @@ const quizQnsData = [
 ]
 
 const defaultQuestion = {
-  quizTitle: 'Mission 0 Quiz',
+  quizTitle: 'Mission 1 Quiz',
   questionTitle: 'According to the book “A Gift of Fire, 4th Ed”, Chapter 1, Section 1.4.2, which is NOT a key idea of Deontology:',
   questionNumber: 1,
   correctOption: 4,
