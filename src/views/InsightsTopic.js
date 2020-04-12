@@ -59,11 +59,13 @@ export default class InsightsTopic extends React.Component {
       }
       let graphData = []
       for (const tag in accumulateIncorrect) {
-        graphData.push({
-          tag: tag,
-          tagID: holdingTagID[tag],
-          percentage: percentage1dp(accumulateIncorrect[tag] / (accumulateIncorrect[tag]+accumulateCorrect[tag]))
-        })
+        if (accumulateIncorrect[tag]+accumulateCorrect[tag] > 0) {
+          graphData.push({
+            tag: tag,
+            tagID: holdingTagID[tag],
+            percentage: percentage1dp(accumulateIncorrect[tag] / (accumulateIncorrect[tag]+accumulateCorrect[tag]))
+          })
+        }
       }
       graphData.sort((t1, t2) => {
         if (t1.percentage !== t2.percentage) {
@@ -79,7 +81,9 @@ export default class InsightsTopic extends React.Component {
         return []
       }
       const quizTopicData = topicDataFiltered[0]
-      return quizTopicData.tagList.map(tag => ({
+      return quizTopicData.tagList.filter(tag => (
+        tag.correct + tag.incorrect > 0
+      )).map(tag => ({
         tag: tag.tagName,
         tagID: tag.tagID,
         percentage: percentage1dp(tag.incorrect / (tag.correct+tag.incorrect))
@@ -209,12 +213,14 @@ export default class InsightsTopic extends React.Component {
     // })
     for (const quiz of questionTableData) {
       for (const qn of quiz.questionList) {
-        processed.push({
-          key: qn.questionID,
-          quizTitle: quiz.title,
-          questionNumber: qn.sequence,
-          percentage: percentage1dp(qn.incorrect/(qn.incorrect+qn.correct))
-        })
+        if (qn.incorrect+qn.correct > 0) {
+          processed.push({
+            key: qn.questionID,
+            quizTitle: quiz.title,
+            questionNumber: qn.sequence,
+            percentage: percentage1dp(qn.incorrect/(qn.incorrect+qn.correct))
+          })
+        }
       }
     }
 
