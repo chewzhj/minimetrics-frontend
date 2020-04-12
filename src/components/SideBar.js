@@ -32,6 +32,7 @@ export default class SideBar extends React.Component {
     const phsubtitle = subtitle || "Subtitle"
     const bpCallBack = this.props.onBreakpoint || (() => null)
     const insightsOpen = activeTab.substring(0,8)
+    const displayName = sessionStorage.getItem('name') || 'Manager'
 
     return (
       <Layout style={{ minHeight: '100vh' }}>
@@ -109,7 +110,7 @@ export default class SideBar extends React.Component {
               >
                 <div style={{ marginRight: 20 }}>
                   <Avatar icon={<UserOutlined />} style={{ marginRight: 12 }} />
-                  <span>Manager</span>
+                  <span>{displayName}</span>
                   <DownOutlined style={{ marginLeft: 12 }} />
                 </div>
               </Popover>
