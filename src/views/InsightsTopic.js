@@ -148,6 +148,10 @@ export default class InsightsTopic extends React.Component {
     legend: {
       display: false
     },
+    events: ['mousemove','click'],
+    onHover: (event, chartElement) => {
+      event.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
+    },
     onClick: (e,arr) => this.clickBar(arr),
   }
 
@@ -222,6 +226,7 @@ export default class InsightsTopic extends React.Component {
     const moduleID = sessionStorage.getItem('moduleID')
     const graphData = this.cleanGraphData()
     const tagID = graphData[index].tagID
+    const tag = graphData[index].tag
     const { graphDropdown } = this.props.insightsTopic
     let quizID = null
     console.log(graphDropdown);
@@ -230,7 +235,7 @@ export default class InsightsTopic extends React.Component {
     }
 
     this.props.getQuestionsOfTopics(moduleID, quizID, tagID)
-    // this.props.clickBar(tag, quiz);
+    this.props.clickBar(tag, quizID);
   }
   //Set the question ID to view for the View Question Modal
   clickViewQuestion = (questionID) => this.props.clickViewQuestion(questionID)
@@ -249,6 +254,9 @@ export default class InsightsTopic extends React.Component {
       graphDropdown,
       graphLoading,
       viewQuestion,
+      selectedTag,
+      questionTableLoading,
+      viewQuestionLoading,
       viewQuestionModalVisible,
       tutorialModalVisible,
     } = this.props.insightsTopic
@@ -272,18 +280,20 @@ export default class InsightsTopic extends React.Component {
           onCancel={this.closeModal}
         >
           {viewQuestion.answerList &&
-            <div>
-              <Title level={4}>{viewQuestion.questionText}</Title>
-              {viewQuestion.answerList.map(option => (
-                <Card
-                  key={option.answerID}
-                  size='small'
-                  bodyStyle={{backgroundColor: option.isCorrect? green[1] : '#d9d9d9'}}>
-                  {/* change to disabled color */}
-                  <Text style={{color: option.isCorrect? 'rgba(0,0,0,0.65)': 'rgba(0,0,0,0.25)'}}>{option.answerText}</Text>
-                </Card>
-              ))}
-            </div>
+            <Spin spinning={viewQuestionLoading}>
+              <div>
+                <Title level={4}>{viewQuestion.questionText}</Title>
+                {viewQuestion.answerList.map(option => (
+                  <Card
+                    key={option.answerID}
+                    size='small'
+                    bodyStyle={{backgroundColor: option.isCorrect? green[1] : '#d9d9d9'}}>
+                    {/* change to disabled color */}
+                    <Text style={{color: option.isCorrect? 'rgba(0,0,0,0.65)': 'rgba(0,0,0,0.25)'}}>{option.answerText}</Text>
+                  </Card>
+                ))}
+              </div>
+            </Spin>
           }
         </Modal>
 
@@ -367,13 +377,13 @@ export default class InsightsTopic extends React.Component {
           <Col lg={12} md={24} xs={24} style={{ marginTop: 20, paddingLeft: 10, paddingRight: 20 }}>
             <Col>
               <div align="center">
-                <Text strong>Table of Questions</Text>
+                <Text strong>Table of Questions {selectedTag?`(${selectedTag})`:""}</Text>
               </div>
               <div align="center" style={{ marginTop: 10, marginBottom: 20 }}>
                 <Text>This table will populate with questions from the topics selected.</Text>
               </div>
             </Col>
-            <Table columns={this.columns} dataSource={tableData} bordered />
+            <Table loading={questionTableLoading} columns={this.columns} dataSource={tableData} bordered />
           </Col>
         </Row>
       </SideBar>

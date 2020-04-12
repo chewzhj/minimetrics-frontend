@@ -259,7 +259,7 @@ export default class InsightsTopic extends React.Component {
   }
   changeStep = (step) => this.setState({step})
   setViewport = (viewportWidth) => this.setState({viewportWidth})
-  changeGraphDropdown = (value) => this.setState({graphDropdown: value})
+  changeGraphDropdown = (value) => this.setState({graphDropdown: value, selectedTag: '', selectedQuiz: ''})
   closeModal = () => {
     if (this.state.step !== 9) {
       this.setState({viewQuestion: ''})
@@ -303,7 +303,7 @@ export default class InsightsTopic extends React.Component {
     const chartData = this.generateChartData(graphData)
     const modalQuestion = InsightsTopicData.defaultQuestion
 
-    const { graphDropdown, viewQuestion, step, viewportWidth } = this.state
+    const { graphDropdown, viewQuestion, step, viewportWidth, selectedTag } = this.state
 
     console.log(viewportWidth)
 
@@ -563,7 +563,7 @@ export default class InsightsTopic extends React.Component {
           <Col lg={12} md={24} xs={24} style={{ marginTop: 20, paddingLeft: 10, paddingRight: 20 }}>
             <Col>
               <div align="center">
-                <Text strong>Table of Questions</Text>
+                <Text strong>Table of Questions {selectedTag?`(${selectedTag})`:""}</Text>
               </div>
               <div align="center" style={{ marginTop: 10, marginBottom: 20 }}>
                 <Text>This table will populate with questions from the topics selected.</Text>

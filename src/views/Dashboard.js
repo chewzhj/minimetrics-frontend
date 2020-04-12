@@ -271,7 +271,7 @@ export default class Dashboard extends React.Component {
           {/* Topic Statistic Card */}
           <Col sm={9} xs={24}>
             <Spin spinning={tagDashboardLoading}>
-              <Card title="Topics" bordered={true} style={{ height: 160 }} extra={<Link to='/tags'>More</Link>}>
+              <Card title="Topics" bordered={true} style={{ height: 160 }} extra={<Link to='/topic'>More</Link>}>
                 <Row type="flex" justify="space-between">
                   <Col span={8}>
                     <Statistic
@@ -295,7 +295,6 @@ export default class Dashboard extends React.Component {
                   </Col>
                 </Row>
               </Card>
-
             </Spin>
           </Col>
         </Row>
