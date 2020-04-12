@@ -22,10 +22,12 @@ export default class SideBar extends React.Component {
     visible: false
   }
 
+  // to change the state of the sidebar, open or closed
   onVisibleChange = (visible) => this.setState({ visible })
 
   render() {
     const { activeTab, title, subtitle, disabled } = this.props
+    // reading in props, and setting default values if not provided
     const phtitle = title || "Title"
     const phsubtitle = subtitle || "Subtitle"
     const bpCallBack = this.props.onBreakpoint || (() => null)
@@ -33,35 +35,48 @@ export default class SideBar extends React.Component {
 
     return (
       <Layout style={{ minHeight: '100vh' }}>
+
+        {/* Sider Component */}
         <Sider
           breakpoint="md"
           collapsedWidth="0"
           onBreakpoint={bpCallBack}
         >
+          {/* MiniMetrics Logo */}
           <div style={{ height: 40, margin: 24 }}>
             <Link to='/index'>
               <img src={Wordless_Logo} alt="MiniMetrics" style={{ height: 39, width: 152 }} />
             </Link>
           </div>
+
+          {/* Menu */}
           <Menu theme="dark" mode="inline" defaultSelectedKeys={[activeTab]} defaultOpenKeys={[insightsOpen]}>
+
+            {/* Dashboard Tab */}
             <Menu.Item key="dashboard" disabled={disabled}>
               <BarChartOutlined />
               <Link to="/index">
                 <span className="nav-text">Dashboard</span>
               </Link>
             </Menu.Item>
+
+            {/* Quizzes Tab */}
             <Menu.Item key="quiz" disabled={disabled}>
               <BulbOutlined />
               <Link to="/quiz">
                 <span className="nav-text">Quizzes</span>
               </Link>
             </Menu.Item>
-            <Menu.Item key="tags" disabled={disabled}>
+
+            {/* Topics Tab */}
+            <Menu.Item key="topic" disabled={disabled}>
               <TagOutlined />
-              <Link to="/tags">
+              <Link to="/topic">
                 <span className="nav-text">Topics</span>
               </Link>
             </Menu.Item>
+
+            {/* Insights Tab */}
             <SubMenu
               key="insights"
               disabled={disabled}
@@ -72,15 +87,18 @@ export default class SideBar extends React.Component {
                 </span>
               }
             >
-              {/* <Menu.Item key="insights/overview"><Link to='/insights/overview'>Overview</Link></Menu.Item> */}
+              {/* Topic Insights Tab */}
               <Menu.Item key="insights/topic" disabled={disabled}><Link to='/insights/topic'>Topic Insights</Link></Menu.Item>
-              {/* <Menu.Item key="insights/quiz"><Link to='/insights/quiz'>Quiz Insights</Link></Menu.Item>
-              <Menu.Item key="insights/student"><Link to='/insights/student'>Student Insights</Link></Menu.Item> */}
+              {/* Student/Confidence Insights Tab */}
               <Menu.Item key="insights/confidence" disabled={disabled}><Link to='/insights/confidence'>Student Insights</Link></Menu.Item>
             </SubMenu>
           </Menu>
         </Sider>
+
+        {/* Layout for Header, PageHeader, Content, Footer */}
         <Layout>
+
+          {/* Header */}
           <Header style={{ padding: 0, background: '#fff', boxShadow: '1px 1px 4px 0px #bcbcbc', zIndex: 1 }}>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', height: '100%' }}>
               <Popover
@@ -96,19 +114,24 @@ export default class SideBar extends React.Component {
                 </div>
               </Popover>
             </div>
-
           </Header>
+
+          {/* PageHeader */}
           <PageHeader
             className="site-page-header"
             title={phtitle}
             subTitle={phsubtitle}
             style= {{ background: '#fff', paddingLeft: 50, zIndex: 0 }}
           />
+
+          {/* Content */}
           <Content style={{ margin: '16px 0' }}>
             <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
               {this.props.children}
             </div>
           </Content>
+
+          {/* Footer */}
           <Footer style={{ textAlign: 'center' }}>Copyright &copy; 2020 MiniMetrics</Footer>
         </Layout>
       </Layout>
