@@ -1,33 +1,19 @@
 import React from 'react'
 import SideBar from '../components/SideBar'
 import {
-  Tabs,
-  Row,
-  Col,
-  Select,
   Table,
-  Button
+  Typography
 } from 'antd';
-import { EyeOutlined } from '@ant-design/icons'
-import { getAllTagAPI } from '../api/TagApi'
+import TopicPhrases from '../phrases/TopicPhrases'
+
+const { Paragraph } = Typography;
 
 const columns = [
   {
-    title: 'Tag',
+    title: (<b>Topic</b>),
     dataIndex: 'tagName',
   },
-  // {
-  //   title: 'View',
-  //   render: (text, record, index) => {
-  //     return (
-  //       <Button shape='circle' icon={<EyeOutlined />} />
-  //     )
-  //   }
-  // }
 ];
-
-const { TabPane } = Tabs;
-const { Option } = Select;
 
 export default class TagsMain extends React.Component {
 
@@ -39,7 +25,15 @@ export default class TagsMain extends React.Component {
     const { tagList, tagsLoading } = this.props.tags
 
     return (
-      <SideBar activeTab='tags' title='Tags' subtitle='This is the tags page'>
+      <SideBar activeTab='Topic' title='Topic' subtitle='View topics'>
+
+        <Paragraph>
+          {TopicPhrases.TOPIC_PAGE_DESC}
+        </Paragraph>
+        <Paragraph>
+          {TopicPhrases.TOPIC_PAGE_SUGGEST_ADD_TOPIC}
+        </Paragraph>
+
         <Table
           rowKey='tagID'
           loading={tagsLoading}

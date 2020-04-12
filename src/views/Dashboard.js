@@ -10,7 +10,8 @@ import 'chartjs-plugin-style';
 
 const { Title, Text } = Typography;
 
-
+// number of bars shown in topic graph
+const topicLimit = 5;
 
 export default class Dashboard extends React.Component {
 
@@ -103,7 +104,7 @@ export default class Dashboard extends React.Component {
         return t1.tag.localeCompare(t2.tag)
       }
     })
-    return graphData
+    return graphData.slice(0, topicLimit)
   }
   generateTopicChartData = (topicData) => {
     const cleanedTopicData = this.cleanInsightTopicGraphData(topicData)
@@ -114,13 +115,9 @@ export default class Dashboard extends React.Component {
         backgroundColor: '#428bca',
         borderColor: '#428bca',
         borderWidth: 1,
-        hoverBackgroundColor: 'rgba(158, 158, 158, 0.7)',
-        hoverBorderColor: 'rgba(158, 158, 158, 0.7)',
+        hoverBackgroundColor: '#428bca',
+        hoverBorderColor: '#428bca',
         data: cleanedTopicData.map(line => line.percentage),
-        shadowOffsetX: 4,
-        shadowOffsetY: 4,
-        shadowBlur: 4,
-        shadowColor: 'rgba(0, 0, 0, 0.4)'
       }]
     };
   }
@@ -154,7 +151,8 @@ export default class Dashboard extends React.Component {
         ticks: {
           beginAtZero: true,
           suggestedMin: 0,
-          stepSize: 5
+          suggestedMax: 100,
+          stepSize: 20,
         }
       }]
     },
@@ -191,13 +189,9 @@ export default class Dashboard extends React.Component {
         backgroundColor: chartColors,
         borderColor: chartColors,
         borderWidth: 1,
-        hoverBackgroundColor: 'rgba(158, 158, 158, 0.7)',
-        hoverBorderColor: 'rgba(158, 158, 158, 0.7)',
+        hoverBackgroundColor: chartColors,
+        hoverBorderColor: chartColors,
         data: aggregatedData,
-        shadowOffsetX: 4,
-        shadowOffsetY: 4,
-        shadowBlur: 4,
-        shadowColor: 'rgba(0, 0, 0, 0.4)'
       }]
     };
   }
@@ -312,7 +306,7 @@ export default class Dashboard extends React.Component {
           {/* Topic Insights Chart */}
           <Col lg={12} md={24} sm={24} xs={24}>
             <Spin spinning={graphLoading}>
-              <Card title="Misunderstood Topics" bordered={true} style={{ height: 'auto' }} extra={<Link to='/insights/topic'>More</Link>}>
+              <Card title={`Top ${topicLimit} Misunderstood Topics`} bordered={true} style={{ height: 'auto' }} extra={<Link to='/insights/topic'>More</Link>}>
               <HorizontalBar
                 data={topicInsightsChartData}
                 width={'auto'}
