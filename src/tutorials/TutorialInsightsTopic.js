@@ -52,6 +52,11 @@ export default class InsightsTopic extends React.Component {
     viewportWidth: window.innerWidth,
   }
 
+  /* 
+  
+  GRAPH CONFIGURATION FUNCTIONS 
+  
+  */
   cleanGraphData = () => {
     const { graphDropdown } = this.state
     const topicData = InsightsTopicData.topicData
@@ -162,6 +167,12 @@ export default class InsightsTopic extends React.Component {
     },
     onClick: (e,arr) => this.clickBar(arr),
   }
+
+  /* 
+  
+  TABLE OF QUESTIONS CONFIGURATION FUNCTIONS 
+  
+  */
   generateTableData = () => {
     const { selectedTag, selectedQuiz } = this.state
     const rawData = InsightsTopicData.quizQnsData
@@ -218,9 +229,7 @@ export default class InsightsTopic extends React.Component {
       }
     }
   ];
-  changeStep = (step) => this.setState({step})
-  setViewport = (viewportWidth) => this.setState({viewportWidth})
-  changeGraphDropdown = (value) => this.setState({graphDropdown: value})
+
   clickBar = (arr) => {
     let index = -1
     if (arr && arr.length > 0) {
@@ -238,13 +247,23 @@ export default class InsightsTopic extends React.Component {
       this.changeStep(7)
     }
   }
-  clickViewQuestion = (questionID) => {
+
+
+  /* 
+  
+  MODAL CONFIGURATION FUNCTIONS 
+  
+  */
+ clickViewQuestion = (questionID) => {
     this.setState({viewQuestion: questionID})
 
     if (this.state.step === 8) {
       this.changeStep(9)
     }
   }
+  changeStep = (step) => this.setState({step})
+  setViewport = (viewportWidth) => this.setState({viewportWidth})
+  changeGraphDropdown = (value) => this.setState({graphDropdown: value})
   closeModal = () => {
     if (this.state.step !== 9) {
       this.setState({viewQuestion: ''})
@@ -320,7 +339,7 @@ export default class InsightsTopic extends React.Component {
           }
         </Modal>
 
-        {/* Part 4 Modal */}
+        {/* Part 3 Modal */}
         <Modal
           title="Part 3: Introduction to Topic Insights – Misunderstood Questions"
           visible={step===4}
@@ -350,7 +369,7 @@ export default class InsightsTopic extends React.Component {
           <Paragraph>But why is that so?</Paragraph>
         </Modal>
 
-        {/* Part 5 Modal */}
+        {/* Part 4 Modal */}
         <Modal
           title="Part 4: Understanding how to identify misunderstood questions in a topic"
           visible={step===5}
@@ -379,7 +398,7 @@ export default class InsightsTopic extends React.Component {
           <img src={ Part5ClickBar } style={{ width: '100%' }}></img>
         </Modal>
 
-        {/* Part 10 Modal */}
+        {/* Part 8 Modal */}
         <Modal
           title="Part 8: Conclusion for Topic Insights"
           visible={step===10}
@@ -415,6 +434,8 @@ export default class InsightsTopic extends React.Component {
           <Col md={6} xs={24}>
             <span style={{ float: 'right', marginTop: 5 }}>Showing Results For:</span>
           </Col>
+
+          {/* Part 2 Popover */}
           <Popover
             visible={step===3}
             placement="bottom"
@@ -455,6 +476,7 @@ export default class InsightsTopic extends React.Component {
           </Popover>
         </Row>
 
+        {/* Topic Bar Chart */}
         <Row>
           <Col lg={12} md={24} xs={24} style={{ marginTop: 20, paddingLeft: 20 }}>
             <Col>
@@ -465,6 +487,8 @@ export default class InsightsTopic extends React.Component {
                 <Text>Click on a bar in the chart below to view a Table of Questions about the topic.</Text>
               </div>
             </Col>
+
+            {/* Part 1 and 5 Popover */}
             <Popover
               visible={step===1 || step===6}
               placement="top"
@@ -506,6 +530,7 @@ export default class InsightsTopic extends React.Component {
               </Popover>
           </Col>
 
+          {/* Part 6 Popover */}
           <Popover
             visible={step===7}
             placement={viewportWidth>700 ? "left" : "top"}
@@ -548,6 +573,8 @@ export default class InsightsTopic extends React.Component {
                 <Text>This table will populate with questions from the topics selected.</Text>
               </div>
             </Col>
+
+              {/* Part 7 Popover */}
               <Popover
               visible={step===8}
               placement={viewportWidth>700 ? "left" : "top"}
@@ -590,6 +617,7 @@ export default class InsightsTopic extends React.Component {
   }
 }
 
+{/* Part 1 Popover */}
 const Step1PopoverContent = (props) => {
   return (
     <div style={{ width: props.viewportWidth>700 ? 500 : "100%"}}>
@@ -614,6 +642,7 @@ const Step1PopoverContent = (props) => {
   )
 }
 
+{/* Part 5 Popover */}
 const Step6PopoverContent = (props) => {
   return (
     <div style={{ width: props.viewportWidth>500 ? 500 : "100%"}}>

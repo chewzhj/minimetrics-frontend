@@ -37,6 +37,11 @@ export default class InsightsTopic extends React.Component {
     this.props.loadChartData(GlobalConstants.ModuleID)
   }
 
+  /*
+  
+  GRAPH CONFIGURATION FUNCTIONS
+
+  */
   cleanGraphData = () => {
     const { graphDropdown, graphData } = this.props.insightsTopic
     const { tagList } = this.props.tags
@@ -198,15 +203,17 @@ export default class InsightsTopic extends React.Component {
     },
     onClick: (e,arr) => this.clickBar(arr),
   }
+
+  /*
+
+  TABLE OF QUESTIONS CONFIGURATION FUNCTIONS
+
+  */
   generateTableData = () => {
     const { questionTableData } = this.props.insightsTopic
 
     const processed = []
-    // const filtered = rawData.filter(qn => {
-    //   const quizOk = selectedQuiz === 'all' || qn.quiz === selectedQuiz
-    //   const tagOk = qn.tag === selectedTag
-    //   return quizOk && tagOk
-    // })
+
     for (const quiz of questionTableData) {
       for (const qn of quiz.questionList) {
         processed.push({
@@ -217,13 +224,6 @@ export default class InsightsTopic extends React.Component {
         })
       }
     }
-
-    // const processed = filtered.map(qn => ({
-    //   key: qn.questionID,
-    //   quizTitle: qn.quizTitle,
-    //   questionNumber: qn.questionNumber,
-    //   percentage: percentage1dp(qn.incorrect/qn.total)
-    // }))
 
     const sorted = processed.sort((q1, q2) => {
       if (q1.percentage !== q2.percentage) {
@@ -292,6 +292,12 @@ export default class InsightsTopic extends React.Component {
       }
     }
   ];
+
+  /*
+
+  VIEW QUESTION MODAL CONFIGURATION FUNCTIONS
+
+  */
   cleanViewQuestion = () => {
     const { viewQuestion } = this.props.insightsTopic
 
@@ -306,12 +312,10 @@ export default class InsightsTopic extends React.Component {
 
     return rawData.filter(qn => qn.questionID === viewQuestionID)[0]
   }
-  openTutorial = () => {
-    this.closeTutorialModal()
-    this.props.history.push('/tutorials/insights/topic')
-  }
 
+  //Update current quiz value stored in the system upon a dropdown selection
   changeGraphDropdown = (value) => this.props.changeDropdown(value)
+  //Function that runs after clicking on a bar in the chart
   clickBar = (arr) => {
     let index = -1
     if (arr && arr.length > 0) {
@@ -345,8 +349,20 @@ export default class InsightsTopic extends React.Component {
 
     this.props.clickBar(tag, quiz);
   }
+  //Set the question ID to view for the View Question Modal
   clickViewQuestion = (questionID) => this.props.clickViewQuestion(questionID)
+
+  /*
+
+  MODAL CONFIGURATION FUNCTIONS
+
+  */
+  openTutorial = () => {
+    this.closeTutorialModal()
+    this.props.history.push('/tutorials/insights/topic')
+  }
   closeModal = () => this.props.closeModal()
+
   openTutorialModal = () => this.props.openTutorialModal()
   closeTutorialModal = () => this.props.closeTutorialModal()
 
@@ -420,6 +436,8 @@ export default class InsightsTopic extends React.Component {
             <Paragraph>Topics with higher percentage of incorrect 1st attempts indicate misunderstanding.</Paragraph>
           </div>
         </Modal>
+
+        {/* MAIN PAGE - TITLE */}
         <Row>
           <Col md={24} xs={24} style={{ marginTop: 20, marginLeft: 20, marginRight: 20 }}>
             <Title level={3}>
@@ -445,11 +463,7 @@ export default class InsightsTopic extends React.Component {
           </Col>
         </Row>
 
-        <Row style={{ marginTop: 20 }}>
-
-
-        </Row>
-
+        {/* MAIN PAGE - BAR CHART */}
         <Row>
           <Col lg={12} md={24} xs={24} style={{ marginTop: 20, paddingLeft: 20 }}>
             <Col>
@@ -470,6 +484,7 @@ export default class InsightsTopic extends React.Component {
             </Spin>
           </Col>
 
+        {/* MAIN PAGE - TABLE OF QUESTIONS */}
           <Col lg={12} md={24} xs={24} style={{ marginTop: 20, paddingLeft: 10, paddingRight: 20 }}>
             <Col>
               <div align="center">
