@@ -3,7 +3,6 @@ import SideBar from '../components/SideBar'
 import {
   Row,
   Col,
-  Divider,
   Select,
   Table,
   Button,
@@ -11,21 +10,16 @@ import {
   Spin,
   Modal,
   Card,
-  Radio,
 } from 'antd';
 import { EyeOutlined, PlayCircleOutlined } from '@ant-design/icons'
 import { green } from '@ant-design/colors'
-import { ResponsiveBar } from '@nivo/bar'
 import { HorizontalBar } from 'react-chartjs-2';
-import { ChartDataLabels } from 'chartjs-plugin-datalabels';
-import { Link } from 'react-router-dom'
 import 'chartjs-plugin-style';
-import GlobalConstants from '../variables/GlobalConstants'
-import InsightsTopicData from '../variables/InsightsTopicData'
 
 const { Option } = Select;
 const { Title, Paragraph, Text } = Typography;
 
+// reused function for calculating percentage
 const percentage1dp = (number) => {
   const thousandtimes = Math.round(number * 1000)
   return thousandtimes / 10
@@ -34,17 +28,12 @@ const percentage1dp = (number) => {
 export default class InsightsTopic extends React.Component {
 
   componentDidMount() {
-    this.props.loadChartData(GlobalConstants.ModuleID)
+    this.props.loadChartData()
   }
 
-  /*
-  
-  GRAPH CONFIGURATION FUNCTIONS
-
-  */
+  // data processing and graph configuration
   cleanGraphData = () => {
     const { graphDropdown, graphData } = this.props.insightsTopic
-    const { tagList } = this.props.tags
     const topicData = graphData
 
     if (graphDropdown === 'all') {
@@ -92,52 +81,6 @@ export default class InsightsTopic extends React.Component {
         tag: tag.tagName,
         tagID: tag.tagID,
         percentage: percentage1dp(tag.incorrect / (tag.correct+tag.incorrect))
-      })).sort((t1, t2) => {
-        if (t1.percentage !== t2.percentage) {
-          return t2.percentage - t1.percentage
-        } else {
-          return t1.tag.localeCompare(t2.tag)
-        }
-      })
-    }
-  }
-  cleanGraphTempData = () => {
-    const { graphDropdown } = this.props.insightsTopic
-    const topicData = InsightsTopicData.topicData
-
-    if (graphDropdown === 'all') {
-      let accumulateIncorrect = {}
-      let accumulateTotal = {}
-      for (const quiz of topicData) {
-        for (const tag of quiz.tagData) {
-          if (!accumulateTotal[tag.tag]) {
-            accumulateTotal[tag.tag] = 0
-            accumulateIncorrect[tag.tag] = 0
-          }
-          accumulateIncorrect[tag.tag] += tag.incorrect
-          accumulateTotal[tag.tag] += tag.total
-        }
-      }
-      let graphData = []
-      for (const tag in accumulateIncorrect) {
-        graphData.push({
-          tag: tag,
-          percentage: percentage1dp(accumulateIncorrect[tag] / accumulateTotal[tag])
-        })
-      }
-      graphData.sort((t1, t2) => {
-        if (t1.percentage !== t2.percentage) {
-          return t2.percentage - t1.percentage
-        } else {
-          return t1.tag.localeCompare(t2.tag)
-        }
-      })
-      return graphData
-    } else {
-      const quizTopicData = topicData.filter(quiz => quiz.id === graphDropdown)[0]
-      return quizTopicData.tagData.map(tag => ({
-        tag: tag.tag,
-        percentage: percentage1dp(tag.incorrect / tag.total)
       })).sort((t1, t2) => {
         if (t1.percentage !== t2.percentage) {
           return t2.percentage - t1.percentage
@@ -208,11 +151,7 @@ export default class InsightsTopic extends React.Component {
     onClick: (e,arr) => this.clickBar(arr),
   }
 
-  /*
-
-  TABLE OF QUESTIONS CONFIGURATION FUNCTIONS
-
-  */
+  // filter and configure table of questions
   generateTableData = () => {
     const { questionTableData } = this.props.insightsTopic
 
@@ -230,35 +169,6 @@ export default class InsightsTopic extends React.Component {
         }
       }
     }
-
-    const sorted = processed.sort((q1, q2) => {
-      if (q1.percentage !== q2.percentage) {
-        return q2.percentage - q1.percentage
-      } else if (q1.quizTitle !== q2.quizTitle) {
-        return q1.quizTitle.localeCompare(q2.quizTitle)
-      } else {
-        return q1.questionNumber - q2.questionNumber
-      }
-    })
-
-    return sorted
-  }
-  generateTableDataTemp = () => {
-    const { selectedTag, selectedQuiz } = this.props.insightsTopic
-    const rawData = InsightsTopicData.quizQnsData
-
-    const filtered = rawData.filter(qn => {
-      const quizOk = selectedQuiz === 'all' || qn.quiz === selectedQuiz
-      const tagOk = qn.tag === selectedTag
-      return quizOk && tagOk
-    })
-
-    const processed = filtered.map(qn => ({
-      key: qn.questionID,
-      quizTitle: qn.quizTitle,
-      questionNumber: qn.questionNumber,
-      percentage: percentage1dp(qn.incorrect/qn.total)
-    }))
 
     const sorted = processed.sort((q1, q2) => {
       if (q1.percentage !== q2.percentage) {
@@ -299,26 +209,6 @@ export default class InsightsTopic extends React.Component {
     }
   ];
 
-  /*
-
-  VIEW QUESTION MODAL CONFIGURATION FUNCTIONS
-
-  */
-  cleanViewQuestion = () => {
-    const { viewQuestion } = this.props.insightsTopic
-
-  }
-  filterQuestion = () => {
-    const rawData = InsightsTopicData.quizQnsData
-    const { viewQuestionID } = this.props.insightsTopic
-
-    if (viewQuestionID === '') {
-      return null
-    }
-
-    return rawData.filter(qn => qn.questionID === viewQuestionID)[0]
-  }
-
   //Update current quiz value stored in the system upon a dropdown selection
   changeGraphDropdown = (value) => this.props.changeDropdown(value)
   //Function that runs after clicking on a bar in the chart
@@ -342,53 +232,34 @@ export default class InsightsTopic extends React.Component {
     this.props.getQuestionsOfTopics(moduleID, quizID, tagID)
     // this.props.clickBar(tag, quiz);
   }
-  clickBarTemp = (arr) => {
-    let index = -1
-    if (arr && arr.length > 0) {
-      index = arr[0]._index
-    } else {
-      return
-    }
-    const graphData = this.cleanGraphData()
-    const quiz = this.props.insightsTopic.graphDropdown
-    const tag = graphData[index].tag
-
-    this.props.clickBar(tag, quiz);
-  }
   //Set the question ID to view for the View Question Modal
   clickViewQuestion = (questionID) => this.props.clickViewQuestion(questionID)
 
-  /*
-
-  MODAL CONFIGURATION FUNCTIONS
-
-  */
+  // modal config
   openTutorial = () => {
     this.closeTutorialModal()
     this.props.history.push('/tutorials/insights/topic')
   }
   closeModal = () => this.props.closeModal()
-
   openTutorialModal = () => this.props.openTutorialModal()
   closeTutorialModal = () => this.props.closeTutorialModal()
 
   render() {
-    const tableData = this.generateTableData()
-    const graphData = this.cleanGraphData()
-    const chartData = this.generateChartData(graphData)
-    const modalQuestion = this.filterQuestion()
-
     const {
       graphDropdown,
-      viewQuestionID,
       graphLoading,
       viewQuestion,
-      viewQuestionLoading,
       viewQuestionModalVisible,
       tutorialModalVisible,
     } = this.props.insightsTopic
-    const { tagsLoading, tagList } = this.props.tags
+    const { tagsLoading } = this.props.tags
     const { quizLoading, quizzes } = this.props.quizMain
+
+    // generate data for table of questions
+    const tableData = this.generateTableData()
+    // geneate chart Data
+    const graphData = this.cleanGraphData()
+    const chartData = this.generateChartData(graphData)
 
     return (
       <SideBar activeTab='insights/topic' title="Topic Insights" subtitle="Identify the most troublesome topics for students">
@@ -415,6 +286,7 @@ export default class InsightsTopic extends React.Component {
             </div>
           }
         </Modal>
+
         {/* Start Tutorial Modal */}
         <Modal
           title='Introduction to Topic Insights - Misunderstood Topics'
@@ -469,8 +341,9 @@ export default class InsightsTopic extends React.Component {
           </Col>
         </Row>
 
-        {/* MAIN PAGE - BAR CHART */}
+        {/* Bar Chart and Table of Questions */}
         <Row>
+          {/* MAIN PAGE - BAR CHART */}
           <Col lg={12} md={24} xs={24} style={{ marginTop: 20, paddingLeft: 20 }}>
             <Col>
               <div align="center">
@@ -490,7 +363,7 @@ export default class InsightsTopic extends React.Component {
             </Spin>
           </Col>
 
-        {/* MAIN PAGE - TABLE OF QUESTIONS */}
+          {/* MAIN PAGE - TABLE OF QUESTIONS */}
           <Col lg={12} md={24} xs={24} style={{ marginTop: 20, paddingLeft: 10, paddingRight: 20 }}>
             <Col>
               <div align="center">

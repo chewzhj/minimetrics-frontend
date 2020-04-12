@@ -13,26 +13,25 @@ import {
   Switch,
   Select,
   Radio,
-  Card,
   notification,
   Steps,
   Popover,
   Popconfirm,
-  Collapse
+  Collapse,
+  Tooltip
 } from 'antd'
 import moment from 'moment'
 import { blue, green, red } from '@ant-design/colors'
 import SideBar from '../components/SideBar'
 import CommonPhrases from '../phrases/CommonPhrases'
 import QuizPhrases from '../phrases/QuizPhrases'
-import GlobalConstants from '../variables/GlobalConstants'
 import Tooltip_Image from '../assets/img/confidence_tooltip.jpg'
 import {
   QuestionOutlined,
 } from '@ant-design/icons';
 
 const { TextArea } = Input;
-const { Title, Text, Paragraph } = Typography;
+const { Title, Text } = Typography;
 const { Option } = Select;
 const { Step } = Steps;
 const { Panel } = Collapse;
@@ -43,6 +42,7 @@ export default class QuizCreation extends React.Component {
     this.props.getTags()
   }
 
+  // functions that call redux functions
   changeTab = (tab) => this.props.changeTab(tab)
   changeStep = (step) => this.props.changeStep(step)
   nextStep = () => {
@@ -70,6 +70,7 @@ export default class QuizCreation extends React.Component {
     this.props.history.push('/quiz')
   }
 
+  // question functions
   addQuestion = () => {
     const { quizQuestions } = this.props.quizCreation
     const updatedQuestions = quizQuestions.slice(0)
@@ -114,57 +115,7 @@ export default class QuizCreation extends React.Component {
     this.changeQuestions(updatedQuestions)
   }
 
-  checkSubmit = () => {
-    const checks = this.enableSubmit()
-    let i = 0
-    const outputs = []
-    if (!checks[0]) {
-      outputs.push(`${++i}. Quiz Title is empty`)
-    }
-    if (!checks[1]) {
-      outputs.push(`\n${++i}. Quiz Opening Date is invalid`)
-    }
-    if (!checks[2]) {
-      outputs.push(`\n${++i}. Quiz Opening Time is invalid`)
-    }
-    if (!checks[3]) {
-      outputs.push(`\n${++i}. Quiz Closing Date is invalid`)
-    }
-    if (!checks[4]) {
-      outputs.push(`\n${++i}. Quiz Closing Time is invalid`)
-    }
-    if (!checks[5]) {
-      outputs.push(`\n${++i}. Quiz Opening Date/Time is same as or after Closing Date/Time`)
-    }
-    if (!checks[6]) {
-      outputs.push(`\n${++i}. Maximum Attempts is invalid`)
-    }
-    if (!checks[7]) {
-      outputs.push(`\n${++i}. Question or Options are invalid`)
-    }
-
-    const messageNodeBuilder = (errors) => {
-      return (
-        <div>
-          There were errors in the following
-          {errors.map((msg, idx) => (
-            <div key={idx}>
-              {msg}
-            </div>
-          ))}
-        </div>
-      )
-    }
-
-    if (i === 0) {
-      this.submitQuiz()
-    } else {
-      notification.warning({
-        message: 'Quiz Creation Error',
-        description: messageNodeBuilder(outputs)
-      })
-    }
-  }
+  // quiz creation submission functions
   enableSubmit = () => {
     const {
       quizTitle,
@@ -233,6 +184,57 @@ export default class QuizCreation extends React.Component {
     checks[7] = qnCheck
 
     return checks
+  }
+  checkSubmit = () => {
+    const checks = this.enableSubmit()
+    let i = 0
+    const outputs = []
+    if (!checks[0]) {
+      outputs.push(`${++i}. Quiz Title is empty`)
+    }
+    if (!checks[1]) {
+      outputs.push(`\n${++i}. Quiz Opening Date is invalid`)
+    }
+    if (!checks[2]) {
+      outputs.push(`\n${++i}. Quiz Opening Time is invalid`)
+    }
+    if (!checks[3]) {
+      outputs.push(`\n${++i}. Quiz Closing Date is invalid`)
+    }
+    if (!checks[4]) {
+      outputs.push(`\n${++i}. Quiz Closing Time is invalid`)
+    }
+    if (!checks[5]) {
+      outputs.push(`\n${++i}. Quiz Opening Date/Time is same as or after Closing Date/Time`)
+    }
+    if (!checks[6]) {
+      outputs.push(`\n${++i}. Maximum Attempts is invalid`)
+    }
+    if (!checks[7]) {
+      outputs.push(`\n${++i}. Question or Options are invalid`)
+    }
+
+    const messageNodeBuilder = (errors) => {
+      return (
+        <div>
+          There were errors in the following
+          {errors.map((msg, idx) => (
+            <div key={idx}>
+              {msg}
+            </div>
+          ))}
+        </div>
+      )
+    }
+
+    if (i === 0) {
+      this.submitQuiz()
+    } else {
+      notification.warning({
+        message: 'Quiz Creation Error',
+        description: messageNodeBuilder(outputs)
+      })
+    }
   }
   submitQuiz = () => {
     const {
@@ -306,7 +308,6 @@ export default class QuizCreation extends React.Component {
     }
 
     const dateFormat = 'YYYY-MM-DD'
-    const dtf = 'YYYY-MM-DD HH:mm:ss'
     const startCopy = moment(quizStartDate.format(dateFormat))
     startCopy.hour(quizStartTime.substring(0,2)).minute(quizStartTime.substring(3,5))
     const endCopy = moment(quizEndDate.format(dateFormat))
@@ -365,21 +366,22 @@ export default class QuizCreation extends React.Component {
     }
 
     return (
-      <SideBar activeTab='quiz' title="Quiz" subtitle="Create New Quiz">
-        {/* Quiz Preview Modal */}
+      <SideBar activeTab='quiz' title="Quiz Creation" subtitle="Create New Quiz">
+        {/* (NOT IMPLEMENTED) Quiz Preview Modal */}
         <Modal
-          title="Basic Modal"
+          title="Quiz Preview Modal"
           visible={quizPreviewVisible}
           onOk={this.closePreview}
           onCancel={this.closePreview}
         >
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
+          <p>Not implemented</p>
         </Modal>
 
+        {/* Top Row Action Buttons - Discard, Previous, Next */}
         <Row justify="space-between">
+          {/* Discard button */}
           <Col lg={6} md={6} sm={24} xs={24} style={{ marginTop: 10 }}>
+            {/* Safety Check for Discard */}
             <Popconfirm
               title="Are you sure you want to discard this quiz?"
               onConfirm={this.discardQuizCreation}
@@ -393,6 +395,7 @@ export default class QuizCreation extends React.Component {
             </Popconfirm>
           </Col>
 
+          {/* Previous and Next Buttons for Stepper - Visibility */}
           <Col lg={18} md={18} sm={24} xs={24} style={{ marginTop: 10 }}>
             <Button onClick={this.nextStep} disabled={currentStep===1} type='primary' style={{ float: 'right', marginLeft: 10, marginTop: 10, width: 125}}>
               Next &rarr;
@@ -403,6 +406,7 @@ export default class QuizCreation extends React.Component {
           </Col>
         </Row>
 
+        {/* Clickable Stepper to Guide User */}
         <Row gutter={[5, 5]} justify="center">
           <Col lg={16} md={16} sm={16} xs={24}>
             <Steps type='navigation' size="small" direction="horizontal" onChange={this.changeStep} current={currentStep} style={{ marginRight: 20, marginTop: 40 }} >
@@ -413,6 +417,7 @@ export default class QuizCreation extends React.Component {
         </Row>
 
         <div style={{ height: 20, width: '100%', borderBottom: '1px solid #ddd', marginBottom: 8 }} />
+        {/* Quiz Settings Step */}
         {currentStep === 0 &&
           <div>
             <Row>
@@ -549,6 +554,8 @@ export default class QuizCreation extends React.Component {
             </Row>
           </div>
         }
+
+        {/* Create Questions Step */}
         {currentStep === 1 &&
           <div>
             <Row>
@@ -588,10 +595,14 @@ export default class QuizCreation extends React.Component {
         }
 
         <Divider/>
+
+        {/* Create Quiz & (NOT IMPLEMENTED) Preview Quiz Buttons */}
         <Row justify="end">
-          <Button onClick={this.openPreview} disabled={currentStep === 0} style={{ marginTop: 10, marginLeft: 10 }}>
-                Preview Quiz
-              </Button>
+          <Tooltip title='Not implemented'>
+            <Button onClick={this.openPreview} disabled style={{ marginTop: 10, marginLeft: 10 }}>
+              Preview Quiz
+            </Button>
+          </Tooltip>
           <Button onClick={this.checkSubmit} disabled={currentStep===0} loading={submitting} type='primary' style={{ marginTop: 10, marginLeft: 10 }}>
             Create Quiz
           </Button>
@@ -601,6 +612,7 @@ export default class QuizCreation extends React.Component {
   }
 }
 
+// Header for Question Card
 const CollapseHeader = (props) => {
   return (
     <div style={{width: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'}}>
@@ -609,6 +621,7 @@ const CollapseHeader = (props) => {
   )
 }
 
+// Question Card for Build Questions
 const QuestionCard = (props) => {
 
   const onChange = (field, value) => {
@@ -764,6 +777,7 @@ const QuestionCard = (props) => {
   )
 }
 
+// Question Option for Question Card
 const QuizQuestionOption = (props) => {
 
   const onChange = (field, value) => {

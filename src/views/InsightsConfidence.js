@@ -3,39 +3,27 @@ import SideBar from '../components/SideBar'
 import {
   Row,
   Col,
-  Select,
-  Card,
   Table,
   Button,
   Typography,
   Tooltip,
-  Divider,
   Modal,
   Popover,
   Spin,
 } from 'antd';
 import {
   MailOutlined,
-  CopyOutlined,
   QuestionCircleFilled,
-  SmileTwoTone,
-  CloseCircleTwoTone,
-  CheckCircleTwoTone,
-  EyeOutlined,
   CheckOutlined,
   CloseOutlined,
   PlayCircleOutlined,
   QuestionOutlined,
 } from '@ant-design/icons'
-import CommonPhrases from '../phrases/CommonPhrases'
 import InsightsPhrases from '../phrases/InsightsPhrases'
 import { Bar } from 'react-chartjs-2';
-import { ChartDataLabels } from 'chartjs-plugin-datalabels';
-import InsightsConfidenceData from '../variables/InsightsConfidenceData'
 import Confidence_Quadrants from '../assets/img/confidence_quadrants.jpg'
 import 'chartjs-plugin-style';
 
-const { Option } = Select;
 const { Title, Text, Paragraph } = Typography;
 
 const pageSize = 1;
@@ -48,7 +36,11 @@ export default class InsightsConfidence extends React.Component {
     this.props.loadConfidenceInsightsData()
   }
 
+  // ref to jump for tables
   selectedTableRef = null
+  scrollToTable = () => this.selectedTableRef.scrollIntoView({behavior: 'smooth'})
+
+  // connection to redux functions
   clickGroup = (value) => {
     this.props.clickGroup(value)
     this.scrollToTable()
@@ -71,8 +63,8 @@ export default class InsightsConfidence extends React.Component {
 
     this.clickGroup(index)
   }
-  scrollToTable = () => this.selectedTableRef.scrollIntoView({behavior: 'smooth'})
 
+  // data processing for chart
   quadToIndex(quadGroup) {
     const quadToIndex = {
       "MISINFORMED": 0,
@@ -145,6 +137,8 @@ export default class InsightsConfidence extends React.Component {
     },
     onClick: (e,arr) => this.clickBar(arr),
   }
+
+  // data processing for student detail table
   filterStudents = (apiData) => {
     const { selectedGroup } = this.props.insightsConfidence
     if (selectedGroup < 0 || selectedGroup >= 4 ) {
@@ -165,6 +159,8 @@ export default class InsightsConfidence extends React.Component {
 
     return sorted
   }
+
+  // legend table configuration
   generateLegendTableData = () => {
     const legendTableData = [
       {
@@ -212,19 +208,14 @@ export default class InsightsConfidence extends React.Component {
       dataIndex: 'groupTitle',
       render: text => {
         let title = ""
-        let color = ""
         if (text === "Misinformed") {
           title = InsightsPhrases.CONFIDENCE_INSIGHTS_EXPLN_GRP_MIS
-          color = '#fcdbd9'
         } else if (text === "Uninformed") {
           title = InsightsPhrases.CONFIDENCE_INSIGHTS_EXPLN_GRP_UNI
-          color = '#fccca7'
         } else if (text === "Almost There") {
           title = InsightsPhrases.CONFIDENCE_INSIGHTS_EXPLN_GRP_ALM
-          color = '#fff3cf'
         } else {
           title = InsightsPhrases.CONFIDENCE_INSIGHTS_EXPLN_GRP_KNO
-          color = '#cfefdf'
         }
         return (
           <Tooltip placement="topLeft" title={title} arrowPointAtCenter>
@@ -275,6 +266,8 @@ export default class InsightsConfidence extends React.Component {
       }
     }
   ];
+
+  // if-else for labels of table and export modal
   generateSelectedLabel = () => {
     const { selectedGroup } = this.props.insightsConfidence
     if (selectedGroup >= 0 && selectedGroup < 4 ) {
@@ -322,11 +315,15 @@ export default class InsightsConfidence extends React.Component {
       tutorialModalVisible
     } = this.props.insightsConfidence
 
+    // process chart data
     const aggregated = this.aggregateChartData(confidenceData)
     const chartData = this.generateChartData(aggregated)
+    // process student details data
     const tableData = this.filterStudents(confidenceData)
     const emailList = this.generateStudentEmailList(tableData)
+    // legend table configuration
     const legendTableData = this.generateLegendTableData()
+    // generate labels
     const selectedTableColumns = this.generateSelectedTableColumns()
     const selectedLabel = this.generateSelectedLabel()
 

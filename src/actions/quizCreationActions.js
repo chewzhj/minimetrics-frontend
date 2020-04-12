@@ -19,27 +19,8 @@ import {
   QUIZ_CREATION_RESET_NOTIFICATION,
   QUIZ_CREATION_RESET,
 } from '../variables/constants/QuizCreationConstants'
-import {notification} from 'antd'
 import {postCreateNewQuizAPI} from '../api/QuizAPI'
 
-function onNotification(notifType) {
-  const alerts = {
-    success: {
-      message: `Success`,
-      description: "Your quiz has been successfully created!"
-    },
-    error: {
-      message: `Error`,
-      description: "There has been an unexpected error!"
-    }
-  }
-
-  const openNotificationWithIcon = type => {
-    notification[type](alerts[type]);
-  };
-
-  openNotificationWithIcon(notifType)
-}
 export function createQuiz(quiz) {
   return function(dispatch) {
     dispatch(createQuizStart())

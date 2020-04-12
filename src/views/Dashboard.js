@@ -1,14 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Statistic, Card, Col, Row, Typography, Spin } from 'antd';
+import { Statistic, Card, Col, Row, Spin } from 'antd';
 import moment from 'moment';
 import SideBar from '../components/SideBar'
 import { HorizontalBar } from 'react-chartjs-2';
 import { Bar } from 'react-chartjs-2';
-import { ChartDataLabels } from 'chartjs-plugin-datalabels';
 import 'chartjs-plugin-style';
-
-const { Title, Text } = Typography;
 
 // number of bars shown in topic graph
 const topicLimit = 5;
@@ -70,7 +67,6 @@ export default class Dashboard extends React.Component {
     return thousandtimes / 10
   }
   cleanInsightTopicGraphData = (apiData) => {
-    const { tagList } = this.props.tags
     const topicData = apiData
 
     let accumulateIncorrect = {}

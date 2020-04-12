@@ -6,7 +6,6 @@ import {
   viewQuestion,
   changeDropdown,
   clickBar,
-  clickViewQuestion,
   closeModal,
   openTutorialModal,
   closeTutorialModal,
@@ -19,9 +18,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  loadChartData: value => dispatch(loadChartData(value)),
+  loadChartData: () => dispatch(loadChartData()),
   getQuestionsOfTopics: (moduleID, quizID, tagID) => dispatch(getQuestionsOfTopics(moduleID, quizID, tagID)),
-  // viewQuestion: (questionID) => dispatch(viewQuestion(questionID)),
   changeDropdown: value => dispatch(changeDropdown(value)),
   clickBar: (tag, quiz) => dispatch(clickBar(tag, quiz)),
   clickViewQuestion: value => dispatch(viewQuestion(value)),
