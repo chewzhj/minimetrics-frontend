@@ -3,8 +3,6 @@ import SideBar from '../components/SideBar'
 import {
   Row,
   Col,
-  Select,
-  Card,
   Table,
   Button,
   Typography,
@@ -16,21 +14,13 @@ import {
 } from 'antd';
 import {
   MailOutlined,
-  CopyOutlined,
   QuestionCircleFilled,
-  SmileTwoTone,
-  CloseCircleTwoTone,
-  CheckCircleTwoTone,
-  EyeOutlined,
   CheckOutlined,
   CloseOutlined,
-  PlayCircleOutlined,
   QuestionOutlined,
 } from '@ant-design/icons'
-import CommonPhrases from '../phrases/CommonPhrases'
 import InsightsPhrases from '../phrases/InsightsPhrases'
 import { Bar } from 'react-chartjs-2';
-import { ChartDataLabels } from 'chartjs-plugin-datalabels';
 import InsightsConfidenceData from '../variables/InsightsConfidenceData'
 import Confidence_Quadrants from '../assets/img/confidence_quadrants.jpg'
 import Part2CountGroups from '../assets/img/tutorials/confidenceInsights/part2countgroups.png'
@@ -43,7 +33,6 @@ import Part8CopyClipboard from '../assets/img/tutorials/confidenceInsights/part8
 import Part9PasteInEmail from '../assets/img/tutorials/confidenceInsights/part9pasteinemail.gif'
 import 'chartjs-plugin-style';
 
-const { Option } = Select;
 const { Title, Text, Paragraph } = Typography;
 
 const pageSize = 1;
@@ -264,19 +253,14 @@ export default class InsightsConfidence extends React.Component {
       dataIndex: 'groupTitle',
       render: text => {
         let title = ""
-        let color = ""
         if (text === "Misinformed") {
           title = InsightsPhrases.CONFIDENCE_INSIGHTS_EXPLN_GRP_MIS
-          color = '#fcdbd9'
         } else if (text === "Uninformed") {
           title = InsightsPhrases.CONFIDENCE_INSIGHTS_EXPLN_GRP_UNI
-          color = '#fccca7'
         } else if (text === "Almost There") {
           title = InsightsPhrases.CONFIDENCE_INSIGHTS_EXPLN_GRP_ALM
-          color = '#fff3cf'
         } else {
           title = InsightsPhrases.CONFIDENCE_INSIGHTS_EXPLN_GRP_KNO
-          color = '#cfefdf'
         }
         return (
           <Tooltip placement="topLeft" title={title} arrowPointAtCenter>

@@ -12,16 +12,12 @@ import {
   Spin,
   Modal,
   Card,
-  Radio,
   Result,
 } from 'antd';
 import { EyeOutlined } from '@ant-design/icons'
 import { green } from '@ant-design/colors'
-import { ResponsiveBar } from '@nivo/bar'
 import { HorizontalBar } from 'react-chartjs-2';
-import { ChartDataLabels } from 'chartjs-plugin-datalabels';
 import 'chartjs-plugin-style';
-import GlobalConstants from '../variables/GlobalConstants'
 import InsightsTopicData from '../variables/InsightsTopicData'
 
 import Part2ChartDiagram from '../assets/img/tutorials/topicInsights/part2chartdiagram.jpg'
@@ -52,10 +48,10 @@ export default class InsightsTopic extends React.Component {
     viewportWidth: window.innerWidth,
   }
 
-  /* 
-  
-  GRAPH CONFIGURATION FUNCTIONS 
-  
+  /*
+
+  GRAPH CONFIGURATION FUNCTIONS
+
   */
   cleanGraphData = () => {
     const { graphDropdown } = this.state
@@ -168,10 +164,10 @@ export default class InsightsTopic extends React.Component {
     onClick: (e,arr) => this.clickBar(arr),
   }
 
-  /* 
-  
-  TABLE OF QUESTIONS CONFIGURATION FUNCTIONS 
-  
+  /*
+
+  TABLE OF QUESTIONS CONFIGURATION FUNCTIONS
+
   */
   generateTableData = () => {
     const { selectedTag, selectedQuiz } = this.state
@@ -249,10 +245,10 @@ export default class InsightsTopic extends React.Component {
   }
 
 
-  /* 
-  
-  MODAL CONFIGURATION FUNCTIONS 
-  
+  /*
+
+  MODAL CONFIGURATION FUNCTIONS
+
   */
  clickViewQuestion = (questionID) => {
     this.setState({viewQuestion: questionID})
@@ -395,7 +391,7 @@ export default class InsightsTopic extends React.Component {
           }
         >
           <Paragraph>To find out what exactly is causing the high rate of misunderstanding for ‘Deontology’, mouse-over the bar and click on it.</Paragraph>
-          <img src={ Part5ClickBar } style={{ width: '100%' }}></img>
+          <img src={ Part5ClickBar } alt='Click Bar GIF' style={{ width: '100%' }}></img>
         </Modal>
 
         {/* Part 8 Modal */}
@@ -447,7 +443,7 @@ export default class InsightsTopic extends React.Component {
             content={
               <div style={{ width: viewportWidth>700 ? 500 : "100%"}}>
                   <Paragraph>To drill down to the specific quizzes, change the filter that is found on the right side of the page.</Paragraph>
-                  <img src={Part3FilterQuizzes} style={{width: '100%'}}></img>
+                  <img src={Part3FilterQuizzes} alt='Filter Quizzes' style={{width: '100%'}}></img>
                   <Divider/>
                   <Row justify="space-between">
                     <Col>
@@ -543,7 +539,7 @@ export default class InsightsTopic extends React.Component {
               <div style={{ width: viewportWidth>700 ? 350 : "100%"}}>
                 <Paragraph>We can now see that the ‘Table of Questions is populated’ with the topic's questions.</Paragraph>
                 <Paragraph> It shows us the different questions in the different quizzes that were labelled as ‘Deontology’.</Paragraph>
-                <img src={Part7TableData} style={{width: '100%'}}></img>
+                <img src={Part7TableData} alt='Table Data' style={{width: '100%'}}></img>
                 <Paragraph style={{ marginTop: 20 }}>If you selected '<b>Deontology</b>', <b>Question 1 from Mission 1 Quiz</b> was incorrectly answered <b>83.3%</b> in all first attempts by students.</Paragraph>
                 <Paragraph>It could be that this is the most misunderstood question by students or that the question was phrased wrongly.</Paragraph>
                 <Divider/>
@@ -586,7 +582,7 @@ export default class InsightsTopic extends React.Component {
               content={
                 <div style={{ width: viewportWidth>700 ? 350 : "100%"}}>
                 <Paragraph>Fret not if you are unable to recall the question details at the top of your mind!</Paragraph>
-                <img src={Part8ViewQuiz} style={{width: '100%'}}></img>
+                <img src={Part8ViewQuiz} alt='View Quiz' style={{width: '100%'}}></img>
                 <Paragraph style={{ marginTop: 20 }}>To <b>proceed</b> and find out the question details, click on the eye icon.</Paragraph>
                 <Divider/>
                 <Row justify="space-between">
@@ -617,12 +613,12 @@ export default class InsightsTopic extends React.Component {
   }
 }
 
-{/* Part 1 Popover */}
+// Part 1 Popover
 const Step1PopoverContent = (props) => {
   return (
     <div style={{ width: props.viewportWidth>700 ? 500 : "100%"}}>
         <Paragraph>The graph here shows the relative percentages of incorrect 1st attempts for each topic that was used in the module.</Paragraph>
-        <div style={{ textAlign: 'center' }}><img src={Part2ChartDiagram} style={{ width: '75%'}}></img></div>
+        <div style={{ textAlign: 'center' }}><img src={Part2ChartDiagram} alt='Chart Diagram' style={{ width: '75%'}}></img></div>
         <Paragraph style={{ marginTop: 20 }}>Observe that questions from the topic '<b>Deontology</b>' were incorrectly answered <b>68%</b> of the time in students' first attempts.</Paragraph>
         <Paragraph>This means that '<b>Deontology</b>' is currently the most misunderstood topic amongst students.</Paragraph>
         <Divider/>
@@ -642,13 +638,13 @@ const Step1PopoverContent = (props) => {
   )
 }
 
-{/* Part 5 Popover */}
+// Part 5 Popover
 const Step6PopoverContent = (props) => {
   return (
     <div style={{ width: props.viewportWidth>500 ? 500 : "100%"}}>
       <Paragraph>To <b>proceed</b>, click on the '<b>Deontology</b>' topic (represented by a bar) in the chart to view questions related to it.</Paragraph>
       <div style={{ textAlign: 'center' }}>
-        <img src={Part6BarSelection} style={{ width: '40%' }}/>
+        <img src={Part6BarSelection} alt="Bar Selection GIF" style={{ width: '40%' }}/>
       </div>
       <Divider/>
       <Row justify="space-between">
