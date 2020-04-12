@@ -38,11 +38,11 @@ export default class Login extends React.Component {
           </div>
           <Form>
             <Form.Item
-              name="username"
+              name="email"
               rules={[
                 {
                   required: true,
-                  message: 'Please input your username!',
+                  message: 'Please input your email!',
                 },
               ]}
             >

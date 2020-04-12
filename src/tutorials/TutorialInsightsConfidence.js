@@ -314,8 +314,11 @@ export default class InsightsConfidence extends React.Component {
   ];
   generateSelectedLabel = () => {
     const { selectedGroup } = this.state
-    const labels = ["Misinformed", "Uninformed", "Almost There", "Knowledgeable"]
-    return labels[selectedGroup-1]
+    if (selectedGroup > 0 && selectedGroup < 5 ) {
+      const labels = ["Misinformed", "Uninformed", "Almost There", "Knowledgeable"]
+      return labels[selectedGroup-1]
+    }
+    return 'selected group'
   }
   generateSelectedTableColumns = () => {
     const { selectedGroup } = this.state
@@ -712,7 +715,7 @@ export default class InsightsConfidence extends React.Component {
           <Col md={24} xs={24} style={{ marginTop: 40, marginLeft: 20, paddingRight: 20 }}>
             <div ref={(table) => this.selectedTableRef = table}>
               <Title level={3}>
-                Students in selected group
+                Students in {selectedLabel}
                 {/* Tutorial Part 7 (step 9) Popover */}
                 <Popover
                   visible={step === 9}

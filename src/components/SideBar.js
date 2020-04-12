@@ -32,7 +32,7 @@ export default class SideBar extends React.Component {
     const phsubtitle = subtitle || "Subtitle"
     const bpCallBack = this.props.onBreakpoint || (() => null)
     const insightsOpen = activeTab.substring(0,8)
-    const displayName = sessionStorage.getItem('name') || 'Manager'
+    const displayName = sessionStorage.getItem('name') || ''
 
     return (
       <Layout style={{ minHeight: '100vh' }}>
