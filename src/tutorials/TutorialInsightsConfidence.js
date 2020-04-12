@@ -21,7 +21,8 @@ import {
 } from '@ant-design/icons'
 import InsightsPhrases from '../phrases/InsightsPhrases'
 import { Bar } from 'react-chartjs-2';
-import InsightsConfidenceData from '../variables/InsightsConfidenceData'
+import InsightsConfidenceData from '../variables/tutorialData/InsightsConfidenceData'
+
 import Confidence_Quadrants from '../assets/img/confidence_quadrants.jpg'
 import Part2CountGroups from '../assets/img/tutorials/confidenceInsights/part2countgroups.png'
 import Part3Scenario1 from '../assets/img/tutorials/confidenceInsights/part3scenario1.png'

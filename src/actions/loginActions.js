@@ -65,7 +65,7 @@ export function clickLogin(username, password) {
            sessionStorage.setItem('sessionKey', json.data.results[0].sessionKey);
            sessionStorage.setItem('name', userDetails.givenName);
            sessionStorage.setItem('userId', userDetails.id);
-           sessionStorage.setItem('moduleId', is1103moduleId);
+           sessionStorage.setItem('moduleID', is1103moduleId);
            window.location.href = 'http://localhost:3000/';
          } else {
            alert('Not a manager or owner of IS1103!');

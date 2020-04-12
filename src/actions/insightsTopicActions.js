@@ -18,9 +18,7 @@ import {
 import {getTags} from '../actions/tagActions'
 import {loadQuizzes} from '../actions/quizMainActions'
 import {getTopicInsightsAPI, getQuestionsOfTopicsAPI, getQuestionAPI} from '../api/InsightsAPI'
-import {getAllModules} from '../api/LoginAPI'
 
-// TODO: clean this up after login is made
 export function loadChartData() {
   return function(dispatch) {
     dispatch(loadChartStart())
@@ -37,33 +35,10 @@ export function loadChartData() {
         }
       })
       .catch(err => {
-        // console.log('hi');
-        sessionStorage.removeItem('moduleID') //TODO: fix this properly
         dispatch(loadChartFailure())
       })
-    } else { // TODO: fix this properly
-      return getAllModules()
-        .then(json => {
-          if (!json.data.hasError) {
-            sessionStorage.setItem('moduleID', json.data.results[0][0].id)
-            return getTopicInsightsAPI(json.data.results[0][0].id)
-            .then(json => {
-              if (!json.data.hasError) {
-                dispatch(loadChartSuccess(json.data.tagInsights))
-              } else {
-                dispatch(loadChartFailure())
-              }
-            })
-            .catch(err => {
-              dispatch(loadChartFailure())
-            })
-          } else {
-            dispatch(loadChartFailure())
-          }
-        })
-        .catch(err => {
-          dispatch(loadChartFailure())
-        })
+    } else {
+      dispatch(loadChartFailure())
     }
   }
 }

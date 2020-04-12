@@ -9,9 +9,7 @@ import {
   INSIGHTS_CONFIDENCE_CLOSE_TUTORIAL_MODAL,
 } from '../variables/constants/InsightsConfidenceConstants'
 import {getConfidenceInsightsAPI} from '../api/InsightsAPI'
-import {getAllModules} from '../api/LoginAPI'
 
-// TODO: clean this up after login is made
 export function loadConfidenceInsightsData() {
   return function(dispatch) {
     dispatch(loadDataStart())
@@ -26,32 +24,10 @@ export function loadConfidenceInsightsData() {
         }
       })
       .catch(err => {
-        sessionStorage.removeItem('moduleID') //TODO: fix this properly
         dispatch(loadDataFailure())
       })
-    } else { // TODO: fix this properly
-      return getAllModules()
-        .then(json => {
-          if (!json.data.hasError) {
-            sessionStorage.setItem('moduleID', json.data.results[0][0].id)
-            return getConfidenceInsightsAPI(moduleID)
-            .then(json => {
-              if (!json.data.hasError) {
-                dispatch(loadDataSuccess(json.data.results[0]))
-              } else {
-                dispatch(loadDataFailure())
-              }
-            })
-            .catch(err => {
-              dispatch(loadDataFailure())
-            })
-          } else {
-            dispatch(loadDataFailure())
-          }
-        })
-        .catch(err => {
-          dispatch(loadDataFailure())
-        })
+    } else {
+      dispatch(loadDataFailure())
     }
   }
 }
