@@ -24,7 +24,7 @@ import Part2ChartDiagram from '../assets/img/tutorials/topicInsights/part2chartd
 import Part3FilterQuizzes from '../assets/img/tutorials/topicInsights/part3filterquizzes.gif'
 import Part5ClickBar from '../assets/img/tutorials/topicInsights/part5clickbar.gif'
 import Part6BarSelection from '../assets/img/tutorials/topicInsights/part6barselection.jpg'
-import Part7TableData from '../assets/img/tutorials/topicInsights/part7tabledata.jpg'
+import Part7TableData from '../assets/img/tutorials/topicInsights/part7tabledata.png'
 import Part8ViewQuiz from '../assets/img/tutorials/topicInsights/part8viewquiz.gif'
 
 const { Option } = Select;
