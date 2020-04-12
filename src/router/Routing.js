@@ -29,23 +29,33 @@ const Routing = () => {
   } else {
     return (
       <Switch>
+        {/* Dashboard (Main) Page */}
         <Route path="/index" component={DashboardContainer} />
 
+        {/* Quiz Pages and Fallthrough */}
         <Route path="/quiz/create" component={QuizCreationContainer} />
-        <Route path="/quiz" component={QuizMainContainer} />
-        <Route path="/tags" component={TagsContainer} />
-        <Route path="/insights/topic" component={InsightsTopicContainer} />
-        <Route path="/insights/confidence" component={InsightsConfidenceContainer} />
+        <Route exact path="/quiz" component={QuizMainContainer} />
+        <Route path="/quiz" component={QuizFallthrough} />
 
-        <Route path="/tutorials/insights/topic" component={TutorialInsightsTopic} />
-        <Route path="/tutorials/insights/confidence" component={TutorialInsightsConfidence} />
+        {/* Topic Page */}
+        <Route exact path="/topic" component={TagsContainer} />
 
-        {/* fall through */}
+        {/* Insights Pages */}
+        <Route exact path="/insights/topic" component={InsightsTopicContainer} />
+        <Route exact path="/insights/confidence" component={InsightsConfidenceContainer} />
+
+        {/* Tutorial Pages for Insight */}
+        <Route exact path="/tutorials/insights/topic" component={TutorialInsightsTopic} />
+        <Route exact path="/tutorials/insights/confidence" component={TutorialInsightsConfidence} />
+
+        {/* fall through component to redirect back to index*/}
         <Route path="/" component={Fallthrough} />
       </Switch>
     )
   }
 }
+
+const QuizFallthrough = () => <Redirect push to='/quiz' />
 
 const FallthroughLoggedOut = () => <Redirect push to='/login' />
 const Fallthrough = () => <Redirect push to='/index' />

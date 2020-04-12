@@ -260,6 +260,7 @@ export default class Dashboard extends React.Component {
                   {quizStatistics.map(stat => (
                     <QuizStatistic
                       {...stat}
+                      key={stat.label}
                     />
                   ))}
                 </Row>
@@ -306,13 +307,13 @@ export default class Dashboard extends React.Component {
           <Col lg={12} md={24} sm={24} xs={24}>
             <Spin spinning={graphLoading}>
               <Card title={`Top ${topicLimit} Misunderstood Topics`} bordered={true} style={{ height: 'auto' }} extra={<Link to='/insights/topic'>More</Link>}>
-              <HorizontalBar
-                data={topicInsightsChartData}
-                width={'auto'}
-                height={'250'}
-                options={this.misunderstoodTopicsOptions}
-              />
-            </Card>
+                <HorizontalBar
+                  data={topicInsightsChartData}
+                  width='auto'
+                  height={250}
+                  options={this.misunderstoodTopicsOptions}
+                />
+              </Card>
             </Spin>
           </Col>
 
@@ -322,8 +323,8 @@ export default class Dashboard extends React.Component {
               <Card title="Student Insights" bordered={true} style={{ height: 'auto' }} extra={<Link to='/insights/confidence'>More</Link>}>
                 <Bar
                   data={confidenceInsightsChartData}
-                  width={'auto'}
-                  height={'250'}
+                  width='auto'
+                  height={250}
                   options={this.confidenceChartOptions}
                 />
               </Card>

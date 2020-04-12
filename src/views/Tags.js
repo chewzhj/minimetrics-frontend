@@ -8,18 +8,19 @@ import TopicPhrases from '../phrases/TopicPhrases'
 
 const { Paragraph } = Typography;
 
-const columns = [
-  {
-    title: (<b>Topic</b>),
-    dataIndex: 'tagName',
-  },
-];
-
 export default class TagsMain extends React.Component {
 
   componentDidMount() {
     this.props.getTags()
   }
+
+  // Topic Table Config
+  columns = [
+    {
+      title: (<b>Topic</b>),
+      dataIndex: 'tagName',
+    },
+  ];
 
   render() {
     const { tagList, tagsLoading } = this.props.tags
@@ -34,11 +35,12 @@ export default class TagsMain extends React.Component {
           {TopicPhrases.TOPIC_PAGE_SUGGEST_ADD_TOPIC}
         </Paragraph>
 
+        {/* Topic table */}
         <Table
           rowKey='tagID'
           loading={tagsLoading}
           dataSource={tagList}
-          columns={columns}
+          columns={this.columns}
           bordered
           size='small'
         />

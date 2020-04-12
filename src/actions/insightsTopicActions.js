@@ -66,7 +66,15 @@ export function viewQuestion(questionID) {
       .then(json => {
         console.log(json.data);
         if (!json.data.hasError) {
-          dispatch(viewQuestionSuccess(json.data.question))
+          const data = json.data.question
+          data.answerList = data.answerList.sort((a1, a2) => {
+            if (a1.sequence !== a2.sequence) {
+              return a1.sequence - a2.sequence
+            } else {
+              return a1.answerID.localeCompare(a2.answerID)
+            }
+          })
+          dispatch(viewQuestionSuccess(data))
         } else {
           dispatch(viewQuestionFailure())
         }
