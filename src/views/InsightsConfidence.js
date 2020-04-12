@@ -12,6 +12,7 @@ import {
   Divider,
   Modal,
   Popover,
+  Spin,
 } from 'antd';
 import {
   MailOutlined,
@@ -43,6 +44,10 @@ const chartColors = ['#f79992', '#f78e3d', '#ffdd76', '#76d0a3'];
 
 export default class InsightsConfidence extends React.Component {
 
+  componentDidMount() {
+    this.props.loadConfidenceInsightsData()
+  }
+
   selectedTableRef = null
   clickGroup = (value) => {
     this.props.clickGroup(value)
@@ -64,62 +69,23 @@ export default class InsightsConfidence extends React.Component {
       return
     }
 
-    this.clickGroup(index+1)
+    this.clickGroup(index)
   }
   scrollToTable = () => this.selectedTableRef.scrollIntoView({behavior: 'smooth'})
 
-  generateStudentData = () => {
-    const names = InsightsConfidenceData.studentNames
-
-    function getRandomInt(min, max) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+  quadToIndex(quadGroup) {
+    const quadToIndex = {
+      "MISINFORMED": 0,
+      "UNINFORMED": 1,
+      "ALMOST_THERE": 2,
+      "KNOWLEDGEABLE": 3
     }
-    function randZerotoFifty() {
-      return getRandomInt(0,50)
-    }
-
-    const tableData = names.map((name, index) => {
-      let email = name.replace(" ", "").toLowerCase()
-
-      return {
-        studentName: name,
-        studentEmail: email+"@minimetrics.com",
-        studentID: index+1,
-        freqMisinformed: randZerotoFifty(),
-        freqUninformed: randZerotoFifty(),
-        freqAlmostThere: randZerotoFifty(),
-        freqKnowledgeable: randZerotoFifty(),
-      }
-    })
-
-    console.log(JSON.stringify(tableData));
+    return quadToIndex[quadGroup]
   }
-  processStudentData = (studentData) => {
-    return studentData.map((student) => {
-      const most = Math.max(student.freqMisinformed, student.freqUninformed, student.freqAlmostThere, student.freqKnowledgeable)
-      let group = 0
-      if (most === student.freqMisinformed) {
-        group = 1
-      } else if (most === student.freqUninformed) {
-        group = 2
-      } else if (most === student.freqAlmostThere) {
-        group = 3
-      } else {
-        group = 4
-      }
-
-      return {
-        ...student,
-        group
-      }
-    })
-  }
-  aggregateChartData = (processedStudentData) => {
+  aggregateChartData = (apiData) => {
     const chartGroupData = [0,0,0,0]
-    for (const student of processedStudentData) {
-      chartGroupData[student.group - 1] += 1
+    for (const student of apiData) {
+      chartGroupData[this.quadToIndex(student.confidenceQuadrantGroup)] += 1
     }
     return chartGroupData
   }
@@ -179,19 +145,21 @@ export default class InsightsConfidence extends React.Component {
     },
     onClick: (e,arr) => this.clickBar(arr),
   }
-  filterStudents = (processedStudentData) => {
+  filterStudents = (apiData) => {
     const { selectedGroup } = this.props.insightsConfidence
-    if (selectedGroup <= 0 || selectedGroup >= 5 ) {
+    if (selectedGroup < 0 || selectedGroup >= 4 ) {
       return []
     }
     const sortKeys = ["freqMisinformed", "freqUninformed", "freqAlmostThere", "freqKnowledgeable"]
-    const sortKey = sortKeys[selectedGroup-1]
-    const filtered = processedStudentData.filter(student => student.group === selectedGroup)
+    const sortKey = sortKeys[selectedGroup]
+    const filtered = apiData.filter(student =>
+      this.quadToIndex(student.confidenceQuadrantGroup) === selectedGroup
+    )
     const sorted = filtered.sort((s1, s2) => {
       if (s1[sortKey] !== s2[sortKey]) {
         return s2[sortKey] - s1[sortKey]
       } else {
-        return s1.studentName.localeCompare(s2.studentName)
+        return s1.givenName.localeCompare(s2.givenName)
       }
     })
 
@@ -302,31 +270,35 @@ export default class InsightsConfidence extends React.Component {
       align: 'center',
       render: (text, record, index) => {
         return (
-          <Button onClick={() => this.clickGroup(index+1)}>View</Button>
+          <Button onClick={() => this.clickGroup(index)}>View</Button>
         )
       }
     }
   ];
   generateSelectedLabel = () => {
     const { selectedGroup } = this.props.insightsConfidence
-    const labels = ["Misinformed", "Uninformed", "Almost There", "Knowledgeable"]
-    return labels[selectedGroup-1]
+    if (selectedGroup >= 0 && selectedGroup < 4 ) {
+      const labels = ["Misinformed", "Uninformed", "Almost There", "Knowledgeable"]
+      return labels[selectedGroup]
+    }
+    return 'selected group'
   }
   generateSelectedTableColumns = () => {
     const { selectedGroup } = this.props.insightsConfidence
     let label = 'Freq. in Group'
     let sortKey = 'freqMisinformed'
-    if (selectedGroup > 0 && selectedGroup < 5 ) {
+    if (selectedGroup >= 0 && selectedGroup < 4 ) {
       const labels = ["Misinformed", "Uninformed", "Almost There", "Knowledgeable"]
-      label = 'Freq. in ' + labels[selectedGroup-1]
+      label = 'Freq. in ' + labels[selectedGroup]
       const sortKeys = ["freqMisinformed", "freqUninformed", "freqAlmostThere", "freqKnowledgeable"]
-      sortKey = sortKeys[selectedGroup-1]
+      sortKey = sortKeys[selectedGroup]
     }
 
     return [
       {
         title: 'Name',
-        dataIndex: 'studentName',
+        dataIndex: 'givenName',
+        width: '60%'
       },
       {
         title: label,
@@ -337,21 +309,22 @@ export default class InsightsConfidence extends React.Component {
   generateStudentEmailList = (studentList) => {
     let output = ""
     studentList.forEach(student => {
-      output += student.studentEmail + "; "
+      output += student.email + "; "
     })
     return output
   }
 
   render() {
     const {
+      confidenceData,
+      dataLoading,
       exportGroupModalVisible,
       tutorialModalVisible
     } = this.props.insightsConfidence
 
-    const processedStudentData = this.processStudentData(InsightsConfidenceData.studentConfidenceData)
-    const aggregated = this.aggregateChartData(processedStudentData)
+    const aggregated = this.aggregateChartData(confidenceData)
     const chartData = this.generateChartData(aggregated)
-    const tableData = this.filterStudents(processedStudentData)
+    const tableData = this.filterStudents(confidenceData)
     const emailList = this.generateStudentEmailList(tableData)
     const legendTableData = this.generateLegendTableData()
     const selectedTableColumns = this.generateSelectedTableColumns()
@@ -367,13 +340,12 @@ export default class InsightsConfidence extends React.Component {
           onCancel={this.closeExportModal}
           title={`Export ${selectedLabel} Students' Emails`}>
 
-          {/* <Button icon={<CopyOutlined/>}>Copy to Clipboard</Button> */}
           <Paragraph copyable={{text: emailList}} strong>
             Copy Emails to Clipboard
           </Paragraph>
 
           {tableData.map(student => (
-            <p key={student.studentID}>{student.studentEmail}</p>
+            <p key={student.id}>{student.email}</p>
           ))}
         </Modal>
 
@@ -405,6 +377,7 @@ export default class InsightsConfidence extends React.Component {
           </div>
         </Modal>
 
+        {/* Title, Info Popover, Tutorial Button */}
         <Row>
           <Col md={24} xs={24} style={{ marginTop: 20, marginLeft: 20, paddingRight: 20 }}>
             <Title level={3}>
@@ -430,15 +403,18 @@ export default class InsightsConfidence extends React.Component {
           </Col>
         </Row>
 
+        {/* Student/Confidence Level Bar Chart and Legend Table */}
         <Row>
           <Col lg={12} md={24} xs={24} style={{ paddingLeft: 20, paddingRight: 20 }}>
-            <Bar
-              data={chartData}
-              width={100}
-              height={400}
-              style={{paddingTop: 10}}
-              options={this.chartOptions}
-            />
+            <Spin spinning={dataLoading}>
+              <Bar
+                data={chartData}
+                width={100}
+                height={400}
+                style={{paddingTop: 10}}
+                options={this.chartOptions}
+              />
+            </Spin>
           </Col>
           <Col lg={12} md={24} xs={24}>
             <Table
@@ -446,6 +422,7 @@ export default class InsightsConfidence extends React.Component {
               columns={this.legendTableColumns}
               rowClassName={(record) => record.color.replace('#', '')}
               dataSource={legendTableData}
+              loading={dataLoading}
               rowKey='groupTitle'
               pagination={chartData.length > pageSize && { pageSize }}
               size="middle"
@@ -453,11 +430,12 @@ export default class InsightsConfidence extends React.Component {
           </Col>
         </Row>
 
+        {/* Selected Group Table Label and Export Emails Button */}
         <Row>
           <Col md={24} xs={24} style={{ marginTop: 40, marginLeft: 20, paddingRight: 20 }}>
             <div ref={(table) => this.selectedTableRef = table}>
               <Title level={3}>
-                Students in selected group
+                Students in {selectedLabel}
                 <Button
                   disabled={tableData.length === 0}
                   onClick={this.openExportModal}
@@ -471,12 +449,13 @@ export default class InsightsConfidence extends React.Component {
           </Col>
         </Row>
 
+        {/* Selected Group Table */}
         <Row style={{ marginTop: 20, marginLeft: 20, marginRight: 20 }}>
           <Col lg={12} md={18} xs={24}>
             <Table
               columns={selectedTableColumns}
               dataSource={tableData}
-              rowKey='studentID'
+              rowKey='id'
               bordered
               size='small'
             />

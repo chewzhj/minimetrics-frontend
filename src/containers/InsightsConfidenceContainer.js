@@ -1,5 +1,6 @@
 import {connect} from 'react-redux'
 import {
+  loadConfidenceInsightsData,
   clickGroup,
   exportGroup,
   closeExportModal,
@@ -13,6 +14,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  loadConfidenceInsightsData: () => dispatch(loadConfidenceInsightsData()),
   clickGroup: (value) => dispatch(clickGroup(value)),
   exportGroup: () => dispatch(exportGroup()),
   closeExportModal: () => dispatch(closeExportModal()),
