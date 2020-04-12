@@ -7,6 +7,9 @@ import { HorizontalBar } from 'react-chartjs-2';
 import { Bar } from 'react-chartjs-2';
 import 'chartjs-plugin-style';
 
+// eslint-disable-next-line
+import { ChartDataLabels } from 'chartjs-plugin-datalabels'; // needed for data labels
+
 // number of bars shown in topic graph
 const topicLimit = 5;
 

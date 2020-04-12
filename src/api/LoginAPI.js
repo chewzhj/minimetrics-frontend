@@ -2,10 +2,9 @@ import API from './APIConfig'
 
 export async function loginAPI(username, password) {
   try {
-    console.log(username + ", " + password)
-    let data = await API.get('/session/login', {
+    let data = await API.get('/session/loginWithEmail', {
       params: {
-        'username': username,
+        'email': username,
         'password': password,
       }
     });
@@ -14,6 +13,15 @@ export async function loginAPI(username, password) {
   } catch (e) {
     console.log(`😱 Axios request failed: ${e}`);
     return [];
+  }
+}
+
+export async function logoutAPI() {
+  try {
+    let data = await API.get('/session/logout');
+    console.log(data);
+  } catch (e) {
+    console.log(`😱 Axios request failed: ${e}`);
   }
 }
 

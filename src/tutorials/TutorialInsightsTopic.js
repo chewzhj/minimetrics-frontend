@@ -18,7 +18,7 @@ import { EyeOutlined } from '@ant-design/icons'
 import { green } from '@ant-design/colors'
 import { HorizontalBar } from 'react-chartjs-2';
 import 'chartjs-plugin-style';
-import InsightsTopicData from '../variables/InsightsTopicData'
+import InsightsTopicData from '../variables/tutorialData/InsightsTopicData'
 
 import Part2ChartDiagram from '../assets/img/tutorials/topicInsights/part2chartdiagram.jpg'
 import Part3FilterQuizzes from '../assets/img/tutorials/topicInsights/part3filterquizzes.gif'
