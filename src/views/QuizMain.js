@@ -1,6 +1,6 @@
 import React from 'react'
 import SideBar from '../components/SideBar'
-import {Table, Tag, Button} from 'antd'
+import {Table, Tag, Button, Tooltip} from 'antd'
 import {Link} from 'react-router-dom'
 import moment from 'moment'
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
@@ -78,7 +78,9 @@ const columns2 = [
     title: 'Edit',
     render: (text, record, index) => {
       return (
-        <Button shape='circle' icon={<EditOutlined/>}/>
+        <Tooltip title='Not implemented'>
+          <Button shape='circle' disabled icon={<EditOutlined/>}/>
+        </Tooltip>
       )
     }
   }
