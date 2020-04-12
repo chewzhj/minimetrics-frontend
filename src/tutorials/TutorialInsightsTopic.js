@@ -259,7 +259,7 @@ export default class InsightsTopic extends React.Component {
   }
   changeStep = (step) => this.setState({step})
   setViewport = (viewportWidth) => this.setState({viewportWidth})
-  changeGraphDropdown = (value) => this.setState({graphDropdown: value})
+  changeGraphDropdown = (value) => this.setState({graphDropdown: value, selectedTag: '', selectedQuiz: ''})
   closeModal = () => {
     if (this.state.step !== 9) {
       this.setState({viewQuestion: ''})

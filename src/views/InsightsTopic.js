@@ -148,6 +148,10 @@ export default class InsightsTopic extends React.Component {
     legend: {
       display: false
     },
+    events: ['mousemove','click'],
+    onHover: (event, chartElement) => {
+      event.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
+    },
     onClick: (e,arr) => this.clickBar(arr),
   }
 
@@ -249,6 +253,8 @@ export default class InsightsTopic extends React.Component {
       graphDropdown,
       graphLoading,
       viewQuestion,
+      questionTableLoading,
+      viewQuestionLoading,
       viewQuestionModalVisible,
       tutorialModalVisible,
     } = this.props.insightsTopic
@@ -272,18 +278,20 @@ export default class InsightsTopic extends React.Component {
           onCancel={this.closeModal}
         >
           {viewQuestion.answerList &&
-            <div>
-              <Title level={4}>{viewQuestion.questionText}</Title>
-              {viewQuestion.answerList.map(option => (
-                <Card
-                  key={option.answerID}
-                  size='small'
-                  bodyStyle={{backgroundColor: option.isCorrect? green[1] : '#d9d9d9'}}>
-                  {/* change to disabled color */}
-                  <Text style={{color: option.isCorrect? 'rgba(0,0,0,0.65)': 'rgba(0,0,0,0.25)'}}>{option.answerText}</Text>
-                </Card>
-              ))}
-            </div>
+            <Spin spinning={viewQuestionLoading}>
+              <div>
+                <Title level={4}>{viewQuestion.questionText}</Title>
+                {viewQuestion.answerList.map(option => (
+                  <Card
+                    key={option.answerID}
+                    size='small'
+                    bodyStyle={{backgroundColor: option.isCorrect? green[1] : '#d9d9d9'}}>
+                    {/* change to disabled color */}
+                    <Text style={{color: option.isCorrect? 'rgba(0,0,0,0.65)': 'rgba(0,0,0,0.25)'}}>{option.answerText}</Text>
+                  </Card>
+                ))}
+              </div>
+            </Spin>
           }
         </Modal>
 
@@ -373,7 +381,7 @@ export default class InsightsTopic extends React.Component {
                 <Text>This table will populate with questions from the topics selected.</Text>
               </div>
             </Col>
-            <Table columns={this.columns} dataSource={tableData} bordered />
+            <Table loading={questionTableLoading} columns={this.columns} dataSource={tableData} bordered />
           </Col>
         </Row>
       </SideBar>
