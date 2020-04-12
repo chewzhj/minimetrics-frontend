@@ -426,7 +426,7 @@ export default class InsightsConfidence extends React.Component {
           <Paragraph>
             Based on the <b>answer accuracy</b> and <b>chosen confidence level</b>, students are classified into one of these 4 groups.
           </Paragraph>
-          <img src={Confidence_Quadrants} alt="Confidence Quadrants" style={{ height: 346, width: 480 }} />
+          <img src={Confidence_Quadrants} alt="Confidence Quadrants" style={{ width: '100%' }} />
         </Modal>
 
         {/* Tutorial Part 2 (step 3) Modal */}

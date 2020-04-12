@@ -437,7 +437,7 @@ export default class InsightsTopic extends React.Component {
             placement="bottom"
             title={
               <div style={{ width: viewportWidth>700 ? 500 : "100%"}}>
-                "Part 2: Understanding how to drill down to specific quizzes"
+                Part 2: Understanding how to drill down to specific quizzes
               </div>
               }
             content={
