@@ -20,7 +20,6 @@ export function loadConfidenceInsightsData() {
       return getConfidenceInsightsAPI(moduleID)
       .then(json => {
         if (!json.data.hasError) {
-          console.log(json.data.results[0]);
           dispatch(loadDataSuccess(json.data.results[0]))
         } else {
           dispatch(loadDataFailure())
@@ -38,7 +37,6 @@ export function loadConfidenceInsightsData() {
             return getConfidenceInsightsAPI(moduleID)
             .then(json => {
               if (!json.data.hasError) {
-                console.log(json.data.results[0]);
                 dispatch(loadDataSuccess(json.data.results[0]))
               } else {
                 dispatch(loadDataFailure())

@@ -136,14 +136,16 @@ export default class Dashboard extends React.Component {
 
   componentDidMount() {
     this.props.getTagDashboard()
-    this.props.loadQuizzes()
+    // this.props.loadQuizzes()
     this.props.loadChartData()
+    this.props.loadConfidenceInsightsData()
   }
 
   render() {
     const {tagDashboardLoading, tagDashboardData} = this.props.tags
     const {quizLoading, quizzes} = this.props.quizMain
-    const {graphLoading, graphData} = this.props.tags
+    const {graphLoading, graphData} = this.props.insightsTopic
+    const {confidenceData, dataLoading} = this.props.insightsConfidence
     const {totalTags, usedTags} = tagDashboardData
 
     return (

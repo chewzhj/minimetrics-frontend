@@ -6,49 +6,6 @@ import moment from 'moment'
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import {getAllQuizAPI} from '../api/QuizAPI' // move to actions
 
-const columns = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-  },
-  {
-    title: 'Opening Date',
-    dataIndex: 'opening',
-  },
-  {
-    title: 'Closing Date',
-    dataIndex: 'closing',
-  },
-  {
-    title: 'No. of Students Attempted',
-    dataIndex: 'attempted',
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status',
-    render: (status, rec, index) => {
-      let color = 'error'
-      if (status === 'Active') { color = 'success' }
-      else if (status === 'Pending') { color = 'warning' }
-
-      return (
-        <Tag color='success'>
-          {/* {status} */}
-          Active
-        </Tag>
-      )
-    }
-  },
-  {
-    title: 'Edit',
-    render: (text, record, index) => {
-      return (
-        <Button shape='circle' icon={<EditOutlined/>}/>
-      )
-    }
-  }
-];
-
 const columns2 = [
   {
     title: 'Title',
@@ -83,16 +40,36 @@ const columns2 = [
   },
   {
     title: 'Status',
-    dataIndex: 'status',
-    render: (status, rec, index) => {
-      let color = 'error'
+    render: (text, rec, index) => {
+      const now = moment()
+      const openDate = moment(rec.startDate)
+      const closDate = moment(rec.endDate)
+      let status = 'Pending'
+
+      // if now > end, closed
+      if (now.isSameOrAfter(closDate)) {
+        status = 'Closed'
+      } else if (rec.isPublished) {
+        // if Published & start < now < end, active
+        if (now.isSameOrAfter(openDate)) {
+          status = 'Active'
+        } else {
+          // if Published & now < start, published
+          status = 'Published'
+        }
+      }
+      // if not published, now < end, pending
+      // no more else
+
+      let color = 'default'
       if (status === 'Active') { color = 'success' }
       else if (status === 'Pending') { color = 'warning' }
+      else if (status === 'Closed') { color = 'error' }
+      else if (status === 'Published') { color = 'processing' }
 
       return (
-        <Tag color='success'>
-          {/* {status} */}
-          Active
+        <Tag color={color}>
+          {status}
         </Tag>
       )
     }
@@ -166,15 +143,6 @@ export default class QuizMain extends React.Component {
           rowKey='quizID'
           bordered
         />
-        {/* <Table
-          rowSelection = {{
-            type: 'checkbox',
-            ...rowSelection
-          }}
-          columns={columns}
-          dataSource={tableData}
-          bordered={true}
-        /> */}
       </SideBar>
     )
   }

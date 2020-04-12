@@ -247,6 +247,7 @@ export default class QuizCreation extends React.Component {
       quizQuestions,
     } = this.props.quizCreation
 
+    const moduleID = sessionStorage.getItem('moduleID')
     let questionFormat = quizQuestions.map(qn => {
       let answerList = qn.options.map(op => {
         return {
@@ -272,7 +273,7 @@ export default class QuizCreation extends React.Component {
 
     const quizObject = {
       "title": quizTitle,
-      "moduleID": GlobalConstants.ModuleID,
+      "moduleID": moduleID,
       "description": "", // not included
       "isPublished": true,
       "password": "", // not included
