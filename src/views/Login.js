@@ -2,11 +2,12 @@ import React from 'react'
 import {
   Button,
   Input,
-  Checkbox,
+  Form,
+  // Checkbox,
 } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import LoginPhrases from '../phrases/LoginPhrases'
-import {Link} from 'react-router-dom'
+// import {Link} from 'react-router-dom'
 import background from '../assets/img/Login_Background_Elements.png'
 import MMLogo from '../assets/img/MiniMetrics_Full_Logo.png'
 
@@ -19,12 +20,14 @@ export default class Login extends React.Component {
   }
   onClickLogin = () => {
     const {email, password} = this.props.login
-    console.log(email, password);
-    this.props.clickLogin(email, password)
+
+    if (email !== '' && password !== '') {
+      this.props.clickLogin(email, password)
+    }
   }
 
   render() {
-    const {email, password, rmbme} = this.props.login
+    const {email, password} = this.props.login
 
     return (
       <div style={{width: '100%', backgroundImage:`url(${background})`}}>
@@ -33,30 +36,64 @@ export default class Login extends React.Component {
           <div style={{marginBottom: 50}}>
             <span style={{color: 'rgb(0,0,0,0.45)', fontSize: 14}}>{LoginPhrases.APP_SUBTITLE}</span>
           </div>
-          <Input
-            placeholder={LoginPhrases.INPUT_EMAIL_PLACEHOLDER}
-            prefix={<UserOutlined />}
-            style={{margin: '8px 0'}}
-            onChange={this.onChangeEmail}
-            value={email}
-          />
-          <Input.Password
-            placeholder={LoginPhrases.INPUT_PASSWORD_PLACEHOLDER}
-            prefix={<LockOutlined />}
-            style={{margin: '8px 0'}}
-            onChange={this.onChangePassword}
-            value={password}
-          />
-          <div style={{width: '100%', margin: '8px 0', display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Checkbox onChange={this.onCheckRememberMe} checked={rmbme}>{LoginPhrases.INPUT_RMBME}</Checkbox>
-            <Link to='#'>{LoginPhrases.LINK_FORGOT_PW}</Link>
-          </div>
-          <Button type='primary' onClick={this.onClickLogin} style={{width: '100%', margin: '8px 0'}}>
-            {LoginPhrases.BUTTON_LOGIN}
-          </Button>
-          <div style={{width: '100%', margin: '8px 0', display: 'flex', justifyContent: 'flex-end'}}>
+          <Form>
+            <Form.Item
+              name="username"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your username!',
+                },
+              ]}
+            >
+              <Input
+                placeholder={LoginPhrases.INPUT_EMAIL_PLACEHOLDER}
+                prefix={<UserOutlined />}
+                // style={{margin: '8px 0'}}
+                onChange={this.onChangeEmail}
+                value={email}
+              />
+            </Form.Item>
+            <Form.Item
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your password!',
+                },
+              ]}
+            >
+              <Input.Password
+                placeholder={LoginPhrases.INPUT_PASSWORD_PLACEHOLDER}
+                prefix={<LockOutlined />}
+                // style={{margin: '8px 0'}}
+                onChange={this.onChangePassword}
+                value={password}
+              />
+            </Form.Item>
+            {/*
+              <div style={{width: '100%', margin: '8px 0', display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Checkbox onChange={this.onCheckRememberMe} checked={rmbme}>{LoginPhrases.INPUT_RMBME}</Checkbox>
+                <Link to='#'>{LoginPhrases.LINK_FORGOT_PW}</Link>
+              </div>
+            */}
+            <Form.Item>
+              <Button
+                type='primary'
+                htmlType='submit'
+                onClick={this.onClickLogin}
+                style={{width: '100%', margin: '8px 0'}}>
+                {LoginPhrases.BUTTON_LOGIN}
+              </Button>
+            </Form.Item>
+
+          </Form>
+          {/*
+            <div style={{width: '100%', margin: '8px 0', display: 'flex', justifyContent: 'flex-end'}}>
             <Link to='/#'>{LoginPhrases.LINK_NUSNET_LOGIN}</Link>
           </div>
+          */}
+
 
           <div style={{marginTop: 100}}>
             <span style={{color: 'rgb(0,0,0,0.45)'}}>Copyright &copy; 2020 MiniMetrics</span>

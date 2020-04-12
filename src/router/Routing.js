@@ -13,28 +13,41 @@ import TutorialInsightsConfidence from '../tutorials/TutorialInsightsConfidence'
 import 'antd/dist/antd.css'
 import '../assets/css/App.css';
 
+const sessionKey = sessionStorage.getItem('sessionKey')
+
 const Routing = () => {
-  return (
-    <Switch>
 
-      <Route path="/login" component={LoginContainer}/>
-      <Route path="/index" component={DashboardContainer} />
+  if (sessionKey === null) {
+    return (
+      <Switch>
+        <Route path="/login" component={LoginContainer}/>
 
-      <Route path="/quiz/create" component={QuizCreationContainer} />
-      <Route path="/quiz" component={QuizMainContainer} />
-      <Route path="/tags" component={TagsContainer} />
-      <Route path="/insights/topic" component={InsightsTopicContainer} />
-      <Route path="/insights/confidence" component={InsightsConfidenceContainer} />
+        {/* fall through */}
+        <Route path="/" component={FallthroughLoggedOut} />
+      </Switch>
+    )
+  } else {
+    return (
+      <Switch>
+        <Route path="/index" component={DashboardContainer} />
 
-      <Route path="/tutorials/insights/topic" component={TutorialInsightsTopic} />
-      <Route path="/tutorials/insights/confidence" component={TutorialInsightsConfidence} />
+        <Route path="/quiz/create" component={QuizCreationContainer} />
+        <Route path="/quiz" component={QuizMainContainer} />
+        <Route path="/tags" component={TagsContainer} />
+        <Route path="/insights/topic" component={InsightsTopicContainer} />
+        <Route path="/insights/confidence" component={InsightsConfidenceContainer} />
 
-      {/* fall through */}
-      <Route path="/" component={Fallthrough} />
-    </Switch>
-  )
+        <Route path="/tutorials/insights/topic" component={TutorialInsightsTopic} />
+        <Route path="/tutorials/insights/confidence" component={TutorialInsightsConfidence} />
+
+        {/* fall through */}
+        <Route path="/" component={Fallthrough} />
+      </Switch>
+    )
+  }
 }
 
+const FallthroughLoggedOut = () => <Redirect push to='/login' />
 const Fallthrough = () => <Redirect push to='/index' />
 
 export default Routing

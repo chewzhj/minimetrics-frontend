@@ -9,6 +9,7 @@ import {
   DownOutlined,
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom'
+import {logout} from '../actions/loginActions'
 import Wordless_Logo from '../assets/img/mm_wordless_logo.png'
 import '../assets/css/Sidebar.css'
 
@@ -83,7 +84,7 @@ export default class SideBar extends React.Component {
           <Header style={{ padding: 0, background: '#fff', boxShadow: '1px 1px 4px 0px #bcbcbc', zIndex: 1 }}>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', height: '100%' }}>
               <Popover
-                content={<Link to='/login'><Button>Logout</Button></Link>}
+                content={<Link to='/login'><Button onClick={logout}>Logout</Button></Link>}
                 trigger='click'
                 visible={this.state.visible}
                 onVisibleChange={this.onVisibleChange}
